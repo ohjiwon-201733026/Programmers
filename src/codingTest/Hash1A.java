@@ -38,6 +38,7 @@ public class Hash1A {
 		String answer=solution(participant,completion);
 		System.out.println(answer);
 
+
 	}
 
 
