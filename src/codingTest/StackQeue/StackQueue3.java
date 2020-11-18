@@ -9,8 +9,12 @@ public class StackQueue3 {
         int answer = 0;
         Queue<Integer> q=new LinkedList<>();
 
+        int max=0;
+        for(int w:truck_weights) {
+        	while(q.isEmpty()) {
 
-
+        	}
+        }
 
 
 
