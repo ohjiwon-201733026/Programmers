@@ -1,4 +1,4 @@
-package codingTest;
+package codingTest.Hash;
 
 import java.util.Arrays;
 import java.util.Scanner;
