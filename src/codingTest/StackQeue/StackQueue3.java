@@ -11,10 +11,26 @@ public class StackQueue3 {
 
         int max=0;
         for(int w:truck_weights) {
-        	while(q.isEmpty()) {
+
+        	while(true) {
+        		if(q.isEmpty()) {
+        		q.offer(w);
+        		max+=w;
+        		answer++;
+        		break;
 
         	}
+        		else if(q.size()==bridge_length) {
+        			max-=q.poll();
+        		}else {
+        			q.offer(w);
+        			max+=w;
+        			answer++;
+        			break;
+        		}
+        	}
         }
+
 
 
 
