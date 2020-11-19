@@ -18,7 +18,7 @@ public class QuickSort {
 		int[] answer=quick_sort(array,0,array.length-1);
 		System.out.print("[");
 		for(int i=0;i<answer.length;i++) {
-			System.out.println(array[i]+" ");
+			System.out.print(array[i]+" ");
 		}
 		System.out.print("]");
 
