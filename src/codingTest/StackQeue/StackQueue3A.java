@@ -2,24 +2,27 @@ package codingTest.StackQeue;
 
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Scanner;
+
+class Truck{
+	int weight;
+	int move; // 트럭의 다리 위에서 위치
+
+	public Truck(int weight) {
+		this.weight=weight;
+		this.move=1;
+	}
+
+	public void moving() {
+		move++;
+	}
+}
 
 public class StackQueue3A {
 
-	class Truck{
-		int weight;
-		int move; // 트럭의 다리 위에서 위치
 
-		public Truck(int weight) {
-			this.weight=weight;
-			this.move=1;
-		}
 
-		public void moving() {
-			move++;
-		}
-	}
-
-	public int solution(int bridgeLength,int weight,int [] truckWeights) {
+	public static int solution(int bridgeLength,int weight,int [] truckWeights) {
 		Queue<Truck> waitQ=new LinkedList<>();
 		Queue<Truck> moveQ=new LinkedList<>();
 
@@ -60,6 +63,20 @@ public class StackQueue3A {
 
 		return answer;
 
+	}
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		Scanner sc=new Scanner(System.in);
+		int bridge_length=sc.nextInt();
+		int weight=sc.nextInt();
+		int num=sc.nextInt();
+		int [] truck_weights=new int[num];
+		for(int i=0;i<num;i++) {
+			truck_weights[i]=sc.nextInt();
+		}
+
+		int answer=solution(bridge_length,weight,truck_weights);
+		System.out.println(answer);
 	}
 
 }
