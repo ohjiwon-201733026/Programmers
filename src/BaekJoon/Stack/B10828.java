@@ -1,4 +1,4 @@
-//스택
+//스택( 다시풀기 )
 package BaekJoon.Stack;
 
 import java.io.BufferedReader;
