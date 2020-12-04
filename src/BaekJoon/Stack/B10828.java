@@ -50,7 +50,7 @@ public class B10828 {
 
 			}
 		}
-
+		bw.flush();
 	}
 
 }
