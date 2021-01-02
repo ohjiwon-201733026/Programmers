@@ -1,4 +1,4 @@
-package codingTest.Hash;
+package Programmers.Hash;
 
 import java.util.Scanner;
 

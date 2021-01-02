@@ -1,4 +1,4 @@
-package codingTest.StackQeue;
+package Programmers.StackQeue;
 
 import java.util.Scanner;
 import java.util.Stack;

@@ -1,4 +1,4 @@
-package codingTest.StackQeue;
+package Programmers.StackQeue;
 /*기능 개발*/
 
 import java.util.Scanner;

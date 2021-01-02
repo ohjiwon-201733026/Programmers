@@ -1,4 +1,4 @@
-package codingTest.Sort;
+package Programmers.Sort;
 
 import java.util.Arrays;
 import java.util.Scanner;

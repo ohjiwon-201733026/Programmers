@@ -1,5 +1,5 @@
 // 문자열 압축
-package codingTest.Kakao;
+package Programmers.Kakao;
 
 public class Kakao2020_1 {
 
