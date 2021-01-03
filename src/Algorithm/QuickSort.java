@@ -1,6 +1,6 @@
 /*퀵 정렬*/
 
-package Programmers.Algorithm;
+package Algorithm;
 
 import java.util.Scanner;
 
