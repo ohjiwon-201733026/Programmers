@@ -1,5 +1,5 @@
 // 비슷한 단어
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

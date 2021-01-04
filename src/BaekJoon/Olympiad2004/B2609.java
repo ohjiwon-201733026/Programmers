@@ -1,5 +1,5 @@
 //최대공약수와 최소공배수
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.util.Scanner;
 

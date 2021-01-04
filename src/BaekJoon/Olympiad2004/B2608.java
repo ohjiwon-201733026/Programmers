@@ -1,5 +1,5 @@
 // 로마숫자
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.util.HashMap;
 import java.util.Scanner;

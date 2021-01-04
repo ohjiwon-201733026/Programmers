@@ -1,5 +1,5 @@
 // 줄세우기
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.util.ArrayList;
 import java.util.Scanner;

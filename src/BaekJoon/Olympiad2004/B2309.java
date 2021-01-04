@@ -1,5 +1,5 @@
 // 일곱 난쟁이
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.util.Arrays;
 import java.util.Scanner;

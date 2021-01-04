@@ -1,5 +1,5 @@
 // 바이러스
-package BaekJoon;
+package BaekJoon.Olympiad2004;
 
 import java.util.Scanner;
 
