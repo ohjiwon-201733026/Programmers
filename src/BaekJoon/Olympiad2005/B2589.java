@@ -1,5 +1,5 @@
 package BaekJoon.Olympiad2005;
-
+// 보물섬
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -68,7 +68,7 @@ public class B2589 {
 		for(int i=0;i<n;i++) { // 육지(L)인 부분 중에서 다 bfs 값 알아와 최대값 구하기
 			for(int j=0;j<m;j++) {
 				if(array[i][j]=='L') {
-					check=new boolean[n][m];
+					check=new boolean[n][m]; // 매번 새로 초기화 시켜야한다!!!!!!!!
 					int val=bfs(i,j);
 					result=Math.max(result, val);
 				}
