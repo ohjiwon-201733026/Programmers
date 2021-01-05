@@ -16,10 +16,10 @@ public class HeapSort {
 		int smaller;
 		if(right<=n) { // 자식 2개인 경우
 
-			if(A[left]<A[right]) smaller=A[left];
-			else smaller=A[right];
+			if(A[left]<A[right]) smaller=left;
+			else smaller=right;
 		}
-		else if(left<=n) smaller=A[left]; // 자식 1개인경우
+		else if(left<=n) smaller=left; // 자식 1개인경우
 		else return; // 리프노드인 경우
 
 		if(A[smaller]<A[k]) {
