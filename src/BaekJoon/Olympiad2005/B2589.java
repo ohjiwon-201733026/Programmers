@@ -1,5 +1,6 @@
-package BaekJoon.Olympiad2005;
 // 보물섬
+package BaekJoon.Olympiad2005;
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
