@@ -1,88 +1,62 @@
 package BaekJoon;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
-
 public class Review {
-	private static int n,m;
-	private static boolean [][] visit;
-	private static char [][] map;
-	private static int [] dx= {1,0,-1,0};
-	private static int [] dy= {0,1,0,-1};
+	static class Solution{
+		int [][] key, lock;
 
-	private static class Point{
-		int x;
-		int y;
-		int cnt;
+		int getKey(int 회전,int 행이동,int 열이동, int 행, int 열) {
+			행-=행이동;
+			열-=열이동;
+			if(행<0 || key.length-1<행) return 0;
+			if(열<0 || key.length-1<열) return 0;
 
-		public Point(int x, int y,int cnt) {
-			this.x=x;
-			this.y=y;
-			this.cnt=cnt;
-		}
-
-	}
-
-
-
-	private static int bfs(int i, int j) {
-		// TODO Auto-generated method stub
-		int val=0;
-		visit[i][j]=true;
-		Queue<Point> q=new LinkedList<>();
-		q.add(new Point(i,j,0));
-
-		while(!q.isEmpty()) {
-			Point p=q.poll();
-		for(int k=0;k<4;k++) {
-			int x=p.x+dx[k];
-			int y=p.y+dy[k];
-			if(0<=x&&x<n&&0<=y&&y<m&&!visit[x][y]&&map[x][y]=='L') {
-				visit[x][y]=true;
-				q.add(new Point(x,y,p.cnt+1));
-				val=Math.max(val, p.cnt+1);
-
+			if(회전==0) { // 90도
+				int t=행;
+				행=key.length-1-열;
+				열=t;
 			}
-		}
+			else if(회전==1) { //180도
+				행=key.length-1-행;
+				열=key.length-1-열;
+			}
+			else if(회전==2) { // 270도
+				int t=행;
+				행=열;
+				열=key.length-1-t;
+			}
+
+			return key[행][열];
 		}
 
+		boolean solution(int 회전, int 행이동, int 열이동) {
+			for(int 행=0;행<lock.length;++행) {
+				for(int 열=0;열<lock.length;++열)
+					if(getKey(회전,행이동,열이동,행,열)==lock[행][열]) return false; //?
+			}
+			return true;
+		}
 
-		return val;
+		boolean solution(int[][] key, int[][] lock) {
+			this.key=key;
+			this.lock=lock;
+			for(int 회전=0;회전<4;회전++) {
+				for(int 행이동=-(key.length-1);행이동<lock.length;++행이동) {
+					for(int 열이동=-(key.length-1);열이동<lock.length;++열이동) {
+						if(solution(회전,행이동,열이동)) return true;
+					}
+				}
+			}
+			return false;
+		}
 	}
+
 
 	public static void main(String[] args) {
-		Scanner sc=new Scanner(System.in);
-		n=sc.nextInt();
-		m=sc.nextInt();
-		map=new char[n][m];
-
-
-		for(int i=0;i<n;i++)
-		{
-			String s=sc.next();
-			for(int j=0;j<m;j++) {
-				map[i][j]=s.charAt(j);
-			}
-		}
-
-
-		int val=0;
-		for(int i=0;i<n;i++) {
-			for(int j=0;j<m;j++) {
-				if(map[i][j]=='L') {
-					visit=new boolean[n][m];
-					int c=bfs(i,j);
-					val=Math.max(val, c);
-				}
-
-			}
-		}
-
-
-		System.out.println(val);
-
-
+		int[][] key = {{0, 0, 0}, {1, 0, 0}, {0, 1, 1}};
+		 int[][] lock = {{1, 1, 1}, {1, 1, 0}, {1, 0, 1}};
+		 System.out.println(new Solution().solution(key, lock));
 	}
+
+
 
 }
