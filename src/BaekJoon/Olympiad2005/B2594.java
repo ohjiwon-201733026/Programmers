@@ -21,39 +21,41 @@ public class B2594 {
 //			System.out.println(this.start+" ~ "+this.end);
 //		}
 
+		public int jeon(int a) { //시작시간 -10분
+			int si=a/100;
+			int bun=a%100;
+
+			if(bun<=10) {
+				si=si-1;
+				bun=50+bun;
+			}
+			else {
+				bun-=10;
+			}
+			String answer=Integer.toString(si)+Integer.toString(bun);
+
+			return Integer.parseInt(answer);
+		}
+
+		public int hu(int a) { // 마감시간 +10분
+			int si=a/100;
+			int bun=a%100;
+
+			if(bun>=50) {
+				si+=1;
+				bun=bun+10-60;
+			}
+			else {
+				bun+=10;
+			}
+
+			return si*100+bun;
+		}
+
 
 	}
 
-	public static int jeon(int a) { //시작시간 -10분
-		int si=a/100;
-		int bun=a%100;
 
-		if(bun<=10) {
-			si=si-1;
-			bun=50+bun;
-		}
-		else {
-			bun-=10;
-		}
-		String answer=Integer.toString(si)+Integer.toString(bun);
-
-		return Integer.parseInt(answer);
-	}
-
-	public static int hu(int a) { // 마감시간 +10분
-		int si=a/100;
-		int bun=a%100;
-
-		if(bun>=50) {
-			si+=1;
-			bun=bun+10-60;
-		}
-		else {
-			bun+=10;
-		}
-
-		return si*100+bun;
-	}
 
 	public static int minus(int x,int y) {
 		int xSi=x/100;
