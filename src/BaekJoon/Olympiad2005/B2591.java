@@ -9,17 +9,14 @@ public class B2591 {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		String s=sc.next();
-
-		System.out.println(solution(s));
-	}
-
-	private static char[] solution(String s) {
-		// TODO Auto-generated method stub
-		char [] arr=s.toCharArray();
-		for(int i=0;i<arr.length-1;i++) {
+		char [] arr=new char[s.length()];
+		for(int i=0;i<arr.length;i++) {
+			arr[i]=s.charAt(i);
 		}
 
-		return null;
+
 	}
+
+
 
 }
