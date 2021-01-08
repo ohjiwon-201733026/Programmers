@@ -51,7 +51,6 @@ public class B2592 {
 		System.out.println(sum(arr));
 		System.out.println(numberFrequncy(arr));
 
-
 	}
 
 }
