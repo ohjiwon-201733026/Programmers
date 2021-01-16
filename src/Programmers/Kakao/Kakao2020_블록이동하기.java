@@ -41,7 +41,7 @@ public class Kakao2020_블록이동하기 {
 
 		Node 회전(Node node, int i) {
 			final int[][] d = {{0,0,1},{-1,0,1},{-1,+1,1},{0,+1,1},{0,-1,0},{0,0,0},{+1,0,0},{+1,-1,0}};
-			return new Node(node.y+d[i][0],node.x+d[i][1],d[i][2],node.distance+1]);
+			return new Node(node.y+d[i][0],node.x+d[i][1],d[i][2],node.distance+1);
 		}
 
 		public int solution(int [][] board) {
