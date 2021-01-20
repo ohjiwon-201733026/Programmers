@@ -14,25 +14,22 @@ public class B2156 {
 		dp=new Integer[N+1];
 
 		for(int i=1;i<=N;i++) score[i]=sc.nextInt();
-
+		dp[0]=0;
 		dp[1]=score[1];
-		dp[2]=score[1]+score[2];
 
+		if(N>1) {
+			dp[2]=score[1]+score[2];
+		}
 		int result=recur(N);
 		System.out.println(result);
 
-		for(int i=1;i<=N;i++) {
-			System.out.println(dp[i]);
-		}
 
 	}
 	private static int recur(int n) {
 		// TODO Auto-generated method stub
 
-		if(n==1) return dp[n];
-
 		if(dp[n]==null) {
-			dp[n]=Math.max(recur(n-1)+score[n], recur(n-2)+score[n]);
+			dp[n]=Math.max(Math.max(recur(n-3)+score[n-1], recur(n-2))+score[n], recur(n-1));
 		}
 
 		return dp[n];
