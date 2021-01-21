@@ -1,4 +1,3 @@
-// 2007년
 package Review;
 
 import java.util.Scanner;
@@ -13,11 +12,11 @@ public class B1924 {
 
 		int [] months= {0,31,28,31,30,31,30,31,31,30,31,30,31};
 		int sum=0;
-
-		for(int i=1;i<=12;i++) {
+		for(int i=1;i<=12;++i) {
 			if(month==i) break;
 			sum+=months[i];
 		}
+
 		sum+=day;
 
 		switch(sum%7) {
@@ -28,7 +27,6 @@ public class B1924 {
 		case 4: System.out.println("THU"); break;
 		case 5: System.out.println("FRI"); break;
 		case 6: System.out.println("SAT"); break;
-
 		}
 
 	}
