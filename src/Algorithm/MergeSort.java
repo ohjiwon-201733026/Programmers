@@ -29,10 +29,10 @@ public class MergeSort {
 			tmp[k++]=A[i++];
 		while(j<=r)
 			tmp[k++]=A[j++];
-		i=p;k=p;
-		while(i<=r) {
-			A[i++]=tmp[k++];
-		}
+//		i=p;k=p;
+//		while(i<=r) {
+//			A[i++]=tmp[k++];
+//		}
 
 		for(int t=p;t<=r;t++) A[t]=tmp[t];
 
