@@ -1,32 +1,31 @@
-// 시간 초과 남
 package BaekJoon.DynamicProgramming;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class B14852 {
+public class C14852_2 {
 
-	public static int [] dp;
+	public static long [][] dp;
 
-	public static int dp(int n) {
-		if(n==0) return 1;
-		if(n==1) return 2;
-		if(n==2) return 7;
-		if(dp[n]!=0) return dp[n];
-		int result=dp(n-1)*2+dp(n-2)*3;
+	public static long dp(int n) {
+		dp[0][0]=0;
+		dp[1][0]=2;
+		dp[2][0]=7;
+		dp[2][1]=1;
 		for(int i=3;i<=n;++i) {
-			result+=(dp(n-i)*2)%1000000007;
+			dp[i][1]=dp[i-3][0]+dp[i-1][1]%1000000007;
+			dp[i][0]=(3*dp[i-2][0]+2*dp[i-1][0]+2*dp[i][1])%1000000007;
 		}
+		return dp[n][0];
 
-		return dp[n]=result%1000000007;
 	}
 
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// TODO Auto-generated method stub
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		int n=Integer.parseInt(br.readLine());
-		dp=new int[n+1];
+		dp=new long[1000001][2];
 
 		System.out.println(dp(n));
 	}
