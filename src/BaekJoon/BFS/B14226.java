@@ -1,5 +1,5 @@
 // 이모티콘
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.util.LinkedList;
 import java.util.Queue;

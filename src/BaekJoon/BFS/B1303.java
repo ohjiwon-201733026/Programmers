@@ -1,5 +1,5 @@
 // 전쟁-전투
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.util.HashMap;
 import java.util.LinkedList;

@@ -1,6 +1,5 @@
 // 바이러스 문제  union find로 풀기
-package BaekJoon.Graph;
-
+package BaekJoon.BFS;
 import java.util.Scanner;
 
 public class B2606_ver2 {
