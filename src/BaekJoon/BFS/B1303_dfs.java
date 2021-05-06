@@ -1,4 +1,4 @@
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.util.HashMap;
 import java.util.Scanner;

@@ -1,5 +1,5 @@
 // 바이러스
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.util.LinkedList;
 import java.util.Queue;

@@ -1,5 +1,5 @@
 // 숨바꼭질 2
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.util.LinkedList;
 import java.util.Queue;

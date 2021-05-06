@@ -1,5 +1,5 @@
 // A->B
-package BaekJoon.Graph;
+package BaekJoon.BFS;
 
 import java.io.BufferedReader;
 import java.io.IOException;
