@@ -3,7 +3,7 @@ package BaekJoon.Greedy;
 
 import java.util.Scanner;
 
-public class B11047 {
+public class B11047_동전0 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
