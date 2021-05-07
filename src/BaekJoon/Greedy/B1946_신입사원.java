@@ -3,7 +3,8 @@ package BaekJoon.Greedy;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class B1946_신입사원 {
 	public static class Person implements Comparable<Person>{
@@ -30,29 +31,25 @@ public class B1946_신입사원 {
 
 		while(T-->0) {
 			int N=Integer.parseInt(br.readLine());
-			Person [] score=new Person [N];
+			ArrayList<Person> score=new ArrayList<>();
 			for(int i=0;i<N;++i) {
 				String[] str = br.readLine().split(" ");
 				int first = Integer.parseInt(str[0]);
 				int sec = Integer.parseInt(str[1]);
-				score[i]=new Person(first,sec);
+				score.add(new Person(first,sec));
 			}
-			Arrays.sort(score);
+			Collections.sort(score);
 			int cnt=1;
+			int minInterViewRank=score.get(0).B;
 
-				int B=score[0].B;
-
-				for(int j=2;j<N;++j) {
-					if(score[j].B<B) {
-						B=score[j].B;
-						cnt++;
-					}
+			for(Person p:score) {
+				if(p.B<minInterViewRank) {
+					cnt++;
+					minInterViewRank=p.B;
 				}
-
-			sb.append(cnt+"\n");
+			}
+			System.out.println(cnt);
 		}
-
-		System.out.println(sb);
 	}
 
 }
