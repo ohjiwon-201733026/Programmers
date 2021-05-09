@@ -23,7 +23,6 @@ public class B11000_강의실배정 {
 			return this.start-o1.start;
 		}
 
-
 	}
 
 	public static void main(String[] args) {
