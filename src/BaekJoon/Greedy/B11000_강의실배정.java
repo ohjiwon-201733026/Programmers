@@ -17,10 +17,8 @@ public class B11000_강의실배정 {
 			T[i]=sc.nextLong();
 		}
 		int cnt=1;
-		a[0]=cnt;
-		long s=T[0];
 		for(int i=0;i<N;++i) {
-			if(a[i]==0) check(i,cnt);
+			if()
 		}
 
 
