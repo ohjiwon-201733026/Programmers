@@ -3,7 +3,7 @@ package BaekJoon.Greedy;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class B11388_ATM {
+public class B11399_ATM {
 
 	public static int [] arr;
 	public static int [] dp;
