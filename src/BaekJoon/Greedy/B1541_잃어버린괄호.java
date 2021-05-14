@@ -1,6 +1,5 @@
 package BaekJoon.Greedy;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class B1541_잃어버린괄호 {
@@ -11,7 +10,6 @@ public class B1541_잃어버린괄호 {
 		String s=sc.next();
 		int result=0;
 		String [] a=s.split("-");
-		ArrayList<Integer> list=new ArrayList<>();
 		for(int j=0;j<a.length;++j) {
 			int calcNum=calc(a[j]);
 
