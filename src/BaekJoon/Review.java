@@ -37,7 +37,7 @@ public class Review {
 			}
 			Arrays.sort(p);
 			int min=p[0].b;
-			for(int i=0;i<N;++i) {
+			for(int i=0;i<N;++i) {M
 				if(min>p[i].b) {
 					cnt++;
 					min=p[i].b;
