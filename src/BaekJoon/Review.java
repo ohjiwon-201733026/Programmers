@@ -1,9 +1,11 @@
 package BaekJoon;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Review {
+
 	public static class Person implements Comparable<Person>{
 		int a;
 		int b;
@@ -16,12 +18,14 @@ public class Review {
 		@Override
 		public int compareTo(Person o) {
 			// TODO Auto-generated method stub
-			if(o.a==this.a) return o.b-this.b;
-			return o.a-this.a;
+			if(this.a==o.a) {
+				return this.b-o.b;
+			}
+			return this.a-o.a;
 		}
 
-
 	}
+
 
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
@@ -29,25 +33,29 @@ public class Review {
 
 		while(T-->0) {
 			int N=sc.nextInt();
-			Person [] p=new Person[N];
 			int cnt=0;
 
+			ArrayList<Person> persons=new ArrayList<>();
 			for(int i=0;i<N;++i) {
-				p[i]=new Person(sc.nextInt(),sc.nextInt());
+				int a=sc.nextInt();
+				int b=sc.nextInt();
+				persons.add(new Person(a,b));
 			}
-			Arrays.sort(p);
-			int min=p[0].b;
-			for(int i=0;i<N;++i) {M
-				if(min>p[i].b) {
+
+			Collections.sort(persons);
+
+			cnt++;
+			int minValue=persons.get(0).b;
+			for(Person p:persons) {
+				if(p.b<minValue) {
 					cnt++;
-					min=p[i].b;
+					minValue=p.b;
 				}
 			}
 
 			System.out.println(cnt);
+
 		}
-
-
 	}
 
 }
