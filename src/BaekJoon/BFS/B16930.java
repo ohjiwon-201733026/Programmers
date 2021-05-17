@@ -56,7 +56,7 @@ public class B16930 {
 		while(!q.isEmpty()) {
 			Node cur=q.poll();
 			
-			if(cur.i==x2&&cur.j==y2) return cur.cnt; // 도착지에 오면 count 리턴 
+			
 			
 			for(int k=0;k<4;++k) { // 위,아래,오른,왼쪽
 				for(int r=0;r<K;++r) { // 최대 K초까지 반복
