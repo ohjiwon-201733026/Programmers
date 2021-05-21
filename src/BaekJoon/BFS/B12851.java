@@ -7,75 +7,70 @@ import java.util.Scanner;
 
 public class B12851 {
 
-	static int min;
-	static int cnt;
-
-	static class Pair{
-		int a;
-		int time;
-
-		Pair(int a, int time){
-			this.a=a;
-			this.time=time;
-		}
-	}
+	public static boolean [] visit;
+	public static int N,K;
+	public static int min;
+	public static int cnt;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
-		int N=sc.nextInt();
-		int K=sc.nextInt();
+		N=sc.nextInt();
+		K=sc.nextInt();
 
 		min=Integer.MAX_VALUE;
-		cnt=1;
+		cnt=0;
 
-		//N이 K보다 큰 경우에는 -1씩 N-K만큼 뒤로 가야함
-		// 이 방법 한가지 뿐이다
+		visit=new boolean [100001];
+
 		if(N>K) {
 			System.out.println(N-K);
 			System.out.println(1);
 		}else {
-			bfs(N,K);
+			bfs(N);
 			System.out.println(min);
-			System.out.println(cnt);;
+			System.out.println(cnt);
 		}
 
 	}
 
-	private static void bfs(int n, int k) {
+	public static class Node{
+		int x;
+		int cnt;
+
+		public Node(int x, int cnt) {
+			this.x=x;
+			this.cnt=cnt;
+		}
+	}
+
+
+
+	private static void bfs(int v) {
 		// TODO Auto-generated method stub
-		Queue<Pair> q=new LinkedList<>();
-		boolean [] visit=new boolean[100001];
-		int time=0;
+		Queue<Node> q=new LinkedList<>();
+		q.add(new Node(v,0));
+		visit[v]=true;
 
-		// 초기설정
-		visit[n]=true;
-		q.offer(new Pair(n,time));
-
-		// q가 빌 떄 까지 반복
 		while(!q.isEmpty()) {
-			Pair p=q.poll();
-			int aa=p.a;
-			int tt=p.time;
-			visit[aa]=true;
-
-			if(aa==k) {
-				if(min>tt)min=tt;
-				else if(min==tt) cnt++;
+			Node n=q.poll();
+			visit[n.x]=true;
+			if(n.x==K) {
+				if(min>n.cnt) min=n.cnt;
+				if(min==n.cnt) cnt++;
 				continue;
 			}
 
-			// 이동할 수 있는 세가지 위치 모두 확인
-			int dx1=aa-1;
-			int dx2=aa+1;
-			int dx3=2*aa;
+			for(int i=0;i<3;++i) {
+				int x = 0;
+				if(i==0) x=n.x-1;
+				if(i==1) x=n.x+1;
+				if(i==2) x=2*n.x;
 
-			// 이동할 수 있는 경우 큐에 넣고 방문처리
-			if(dx1>=0 && !visit[dx1]) q.offer(new Pair(dx1,tt+1));
-			if(dx2>=0 && !visit[dx2]) q.offer(new Pair(dx2,tt+1));
-			if(dx3>=0 && !visit[dx3]) q.offer(new Pair(dx3,tt+1));
+				if(0<=x && x<=100000 && !visit[x]) {
+					q.add(new Node(x,n.cnt+1));
+				}
+			}
 		}
-
 	}
 
 }
