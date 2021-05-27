@@ -1,61 +1,50 @@
 package BaekJoon;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 public class Review {
+	public static class Person implements Comparable<Person>{
+		int a;
+		int b;
 
-	public static long A,B;
-	public static boolean [] visit;
+		Person(int a, int b){
+			this.a=a;
+			this.b=b;
+		}
+
+		@Override
+		public int compareTo(Person o) {
+			// TODO Auto-generated method stub
+			return this.a-o.a;
+		}
+
+
+	}
 
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
-		A=sc.nextLong();
-		B=sc.nextLong();
-		visit=new boolean [1000000001];
-
-		bfs(A);
-
-	}
-	public static class Node{
-		long x;
-		long cnt;
-
-		public Node(long x, long cnt) {
-			this.x=x;
-			this.cnt=cnt;
-		}
-	}
-
-	private static void bfs(long a) {
-		// TODO Auto-generated method stub
-		Queue<Node> q=new LinkedList<>();
-		q.add(new Node(a,0));
-		visit[(int) a]=true;
-
-		while(!q.isEmpty()) {
-			Node now=q.poll();
-
-			if(now.x==B) {
-				System.out.println(now.cnt);
-				return;
+		int T=sc.nextInt();
+		while(T-->0) {
+			int N=sc.nextInt();
+			ArrayList<Person> persons=new ArrayList<>();
+			for(int i=0;i<N;++i) {
+				persons.add(new Person(sc.nextInt(),sc.nextInt()));
 			}
 
-			for(int i=0;i<2;++i) {
-				long x=0;
-				if(i==0) {
-					x=10*now.x+1;
-				}
+			Collections.sort(persons);
 
-				if(i==1) {
-					x=2*now.x;
-				}
-
-				if(x>=1 && x<=1000000000 && !visit[x]) {
-
+			int score=persons.get(0).b;
+			int cnt=1;
+			for(int i=1;i<N;++i) {
+				if(persons.get(i).b<score) {
+					score=persons.get(i).b;
+					cnt++;
 				}
 			}
+
+			System.out.println(cnt);
 		}
 
 	}
