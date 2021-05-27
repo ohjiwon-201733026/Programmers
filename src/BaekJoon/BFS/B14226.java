@@ -1,57 +1,68 @@
 // 이모티콘
 package BaekJoon.BFS;
 
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
 public class B14226 {
-	public static class Node{
-		int len; // 화면 이모티콘 길이
-		int buf; // 클립보드의 이모티콘 길이
-		int cnt; // 연산 초
-
-		Node(int len,int buf, int cnt){
-			this.len=len;
-			this.buf=buf;
-			this.cnt=cnt;
-		}
-	}
-
+	public static int S;
+	public static boolean [][] visit;
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
-		int S=sc.nextInt();
+		S=sc.nextInt();
+		visit=new boolean[2001][2001];
 
-		boolean [][] visited=new boolean[2002][2002]; //???
+		bfs(1);
+
+	}
+
+	private static void bfs(int n) {
+		// TODO Auto-generated method stub
 		Queue<Node> q=new LinkedList<>();
-
-		visited[1][0]=true;
-		q.add(new Node(1,0,0));
+		visit[n][0]=true;
+		q.add(new Node(n,0,0));
 
 		while(!q.isEmpty()) {
-			Node cur=q.poll();
-
-			if(cur.len==S) {
-				System.out.println(cur.cnt);
+			Node p=q.poll();
+			if(p.screen==S) {
+				System.out.println(p.cnt);
 				return;
 			}
 
-			// copy
-			q.add(new Node(cur.len,cur.len,cur.cnt+1));
+			// 1. 화면 이모티콘 모두 복사, 클립보드 저장
+			if(!visit[p.screen][p.screen]) {
+				q.add(new Node(p.screen,p.screen,p.cnt+1));
+				visit[p.screen][p.screen]=true;
+			}
 
-			// paste
-			if(!visited[cur.len+cur.buf][cur.buf] && cur.buf!=0 && cur.len+cur.buf!=0)
-				q.add(new Node(cur.len+cur.buf,0,cur.cnt+1));
+			// 2. 클립보드에 있는 모든 이모티콘 화면 붙이기
+			if(!visit[p.screen+p.clipboard][p.clipboard] && p.clipboard!=0 && p.screen+p.clipboard<=1000) {
+				q.add(new Node(p.screen+p.clipboard,p.clipboard,p.cnt+1));
+				visit[p.screen+p.clipboard][p.clipboard]=true;
+			}
 
-			//delete
-			if(cur.len>0 && !visited[cur.len-1][cur.buf]&& cur.len-1<=1000) {
-				visited[cur.len-1][cur.buf]=true;
-				q.add(new Node(cur.len-1,cur.buf,cur.cnt+1));
+			// 3. 화면에 하나 삭제
+			if(p.screen>0&&!visit[p.screen-1][p.clipboard]&& p.screen-1<=1000) {
+				q.add(new Node(p.screen-1,p.clipboard,p.cnt+1));
+				visit[p.screen-1][p.clipboard]=true;
+			}
 			}
 		}
 
+
+	public static class Node{
+		int screen;
+		int clipboard;
+		int cnt;
+
+		public Node(int screen,int clipboard, int cnt) {
+			this.screen=screen;
+			this.clipboard=clipboard;
+			this.cnt=cnt;
+		}
 	}
 
 
