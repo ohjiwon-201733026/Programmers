@@ -1,50 +1,37 @@
 package BaekJoon;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Scanner;
 
 public class Review {
-	public static class Person implements Comparable<Person>{
-		int a;
-		int b;
-
-		Person(int a, int b){
-			this.a=a;
-			this.b=b;
-		}
-
-		@Override
-		public int compareTo(Person o) {
-			// TODO Auto-generated method stub
-			return this.a-o.a;
-		}
-
-
-	}
 
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
-		int T=sc.nextInt();
-		while(T-->0) {
-			int N=sc.nextInt();
-			ArrayList<Person> persons=new ArrayList<>();
-			for(int i=0;i<N;++i) {
-				persons.add(new Person(sc.nextInt(),sc.nextInt()));
-			}
+		int tc=1;
+		while(true) {
+			int L=sc.nextInt();
+			int P=sc.nextInt();
+			int V=sc.nextInt();
 
-			Collections.sort(persons);
 
-			int score=persons.get(0).b;
-			int cnt=1;
-			for(int i=1;i<N;++i) {
-				if(persons.get(i).b<score) {
-					score=persons.get(i).b;
-					cnt++;
+			if(L==0) break;
+			int cnt=0;
+
+			while(V>0) {
+				int token=0;
+				if(V>=P) {
+					token=P;
+					V-=P;
 				}
+				else {
+					token=V;
+					V=0;
+				}
+				if(token>=L) cnt+=L;
+				else cnt+=token;
 			}
+			System.out.println("Case "+tc+": "+cnt);
+			tc++;
 
-			System.out.println(cnt);
 		}
 
 	}
