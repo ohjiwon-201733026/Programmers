@@ -19,16 +19,14 @@ public class B17626_FourSquares {
 
 	}
 
-	private static void recur(int n) {
-		// TODO Auto-generated method stub
-		for (int i = 2; i <= N; ++i) {
+	static void recur(int n) {
+		for (int i = 2; i <= n; i++) {
 			int min = Integer.MAX_VALUE;
 			for (int j = 1; j * j <= i; j++) {
 				min = Math.min(min, dp[i - j * j]);
 			}
-			dp[i]=min+1;
+			dp[i] = min + 1;
 		}
-
 	}
 
 }
