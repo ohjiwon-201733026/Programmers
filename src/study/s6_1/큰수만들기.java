@@ -18,6 +18,7 @@ public class 큰수만들기 {
 		for(int i=0;i<number.length();++i) {
 			num[i]=number.charAt(i)-'0';
 		}
+		int K=k;
 		Stack<Integer> stack=new Stack<>();
 		stack.push(num[0]);
 		int i=1;
@@ -30,19 +31,11 @@ public class 큰수만들기 {
 			stack.push(num[i]);
 		}
 
-		System.out.println(stack);
 		StringBuilder sb=new StringBuilder();
-		Stack<Integer> tmp=new Stack<>();
-		while(!stack.isEmpty()) {
-			tmp.add(stack.pop());
+		for(int j=0;j<num.length-K;++j){
+			sb.append(stack.get(j));
 		}
-
-		while(!tmp.isEmpty()) {
-			sb.append(tmp.pop());
-		}
-
 		return sb.toString();
-
 	}
 
 }
