@@ -1,6 +1,9 @@
 package study.week5;
 
 public class 카펫 {
+    //  b b b b
+    //  b y y b
+    //  b b b b
     public static void main(String[] args) {
         int brown=14;
         int yellow=4;
