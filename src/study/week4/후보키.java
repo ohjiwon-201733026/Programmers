@@ -1,4 +1,4 @@
-package study.s6_1;
+package study.week4;
 
 public class 후보키 {
 
