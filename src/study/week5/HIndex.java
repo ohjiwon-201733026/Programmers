@@ -4,9 +4,10 @@ import java.util.Arrays;
 import java.util.Collections;
 
 public class HIndex {
+    // n편 중 h번 이상 인용된 논문이 h편 이상
     // i   0 1 2 3 4
 //   cit   0 1 3 5 6
-//포함개수   5 4 3 2 1  cit.length-i
+//포함개수h  5 4 3 2 1  cit.length-i
     
     public static void main(String[] args) {
         int [] citations={3, 0, 6, 1, 5};

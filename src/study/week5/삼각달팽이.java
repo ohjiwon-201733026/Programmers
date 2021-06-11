@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class 삼각달팽이 {
-
+// n=4
+// 1
+// 2  9
+// 3 10 8
+// 4  5 6 7
     public static void main(String[] args) throws IOException {
         int n = 6;
         int[] result = solution(n);
