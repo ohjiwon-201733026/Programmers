@@ -9,6 +9,12 @@ public class 프렌즈4블록 {
         int answer =solution(m,n,board);
         System.out.println(answer);
     }
+    // T - - A N T
+    // - - - A C C
+    // - - T F C C
+    // T - F R A A
+    // T T M M M F
+    // T M M T T J
     public static boolean [][] visit;
     public static char [][] map;
     private static int solution(int m, int n, String[] board) {
@@ -37,11 +43,12 @@ public class 프렌즈4블록 {
             if (score == 0) break; // 더 블록 없으면 끝
             answer += score;
 
-
+            // 0번째 줄
             for(int j=0;j<n;++j){
                 if(visit[0][j]) map[0][j]='-';
             }
-
+            
+            // 옮기기
             for(int i=1;i<m;++i){
                 for(int j=0;j<n;++j){
                     if(visit[i][j]){

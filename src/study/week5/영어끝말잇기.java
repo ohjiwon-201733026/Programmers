@@ -10,7 +10,7 @@ public class 영어끝말잇기 {
         int [] answer=solution(n,words);
         System.out.println(answer[0]+" "+answer[1]);
     }
-
+// list -> set 검색 시간복잡도
     private static int[] solution(int n, String[] words) {
         int [] answer =new int [2];
         ArrayList<String> list=new ArrayList<>();

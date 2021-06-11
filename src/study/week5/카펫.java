@@ -11,7 +11,10 @@ public class 카펫 {
 
         System.out.println(answer[0]+ " "+ answer[1]);
     }
-
+    // 8
+    // 가로 1 2 3 4 5 6 7 8
+    // 세로 8 4   2       1
+    // sqrt(8) = 2.xx
     private static int[] solution(int brown, int yellow) {
         int [] answer=new int [2];
         int r=(int)Math.sqrt(yellow)+1;

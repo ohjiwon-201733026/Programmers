@@ -3,7 +3,7 @@ package study.week5;
 public class 두개이하로다른비트 {
 
     public static void main(String[] args) {
-        long [] numbers={4};
+        long [] numbers={3,7,8};
         long [] answer=solutions(numbers);
         for(int i=0;i< answer.length;++i){
             System.out.println(answer[i]);
@@ -12,29 +12,29 @@ public class 두개이하로다른비트 {
 
     private static long[] solutions(long[] numbers) {
         long [] answer=new long [numbers.length];
-        for(int i=0;i<numbers.length;++i){
-            String s=String.format("%050d",Integer.parseInt(Long.toBinaryString(numbers[i]).toString()));
-            long diff=0;
-            long n=numbers[i];
-            while(true){
-                n++;
-                String next=String.format("%050d",Integer.parseInt(Long.toBinaryString(n).toString()));
-                diff=bitDiff(s,next);
-                if(diff==2||diff==1) break;
-            }
-            answer[i]=n;
 
+        for(int i=0;i< numbers.length;++i){
+            Long x=numbers[i];
+
+            
+            if(x%2==0){ //  짝수인 경우
+                answer[i]=x+1;
+            }
+            else{
+                String binary="0"+Long.toBinaryString(numbers[i]);
+                int lastIndex=binary.lastIndexOf("0");
+                StringBuilder result=new StringBuilder(binary);
+                result.setCharAt(lastIndex,'1');
+                result.setCharAt(lastIndex+1,'0');
+                answer[i]=Long.parseLong(result.toString(),2);
+            }
+
+            
         }
+
 
         return answer;
 
     }
 
-    private static long bitDiff(String s, String next) {
-        long diff=0;
-        for(int i=0;i<s.length();++i){
-            if(s.charAt(i)!=next.charAt(i)) diff++;
-        }
-        return diff;
-    }
 }
