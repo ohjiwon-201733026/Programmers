@@ -1,6 +1,6 @@
 package study.week6;
 
-public class 이진변환반복하기 {
+public class 이진변환반복하기_ {
     public static void main(String[] args) {
         String s="110010101001";
         int [] answer=solution(s);

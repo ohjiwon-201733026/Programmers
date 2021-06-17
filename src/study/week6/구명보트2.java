@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.Collections;
 
 
-public class 구명보트 {
+public class 구명보트2 {
 
     public static void main(String[] args) {
         int [] people={70, 80, 50};

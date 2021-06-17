@@ -1,7 +1,5 @@
 package study.week6;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Stack;
 
 public class 스킬트리 {
