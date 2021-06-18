@@ -14,7 +14,7 @@ public class 스킬트리 {
 
     private static int solution(String skill, String[] skill_trees) {
         int answer=0;
-
+// C, B, D
         String [] skills=skill.split("");
         Stack<String> stack=new Stack<>();
 
@@ -27,11 +27,11 @@ public class 스킬트리 {
             for(int k= skills.length-1;k>=0;--k){
                 stack.push(skills[k]);
             }
-
+// D B C
             String [] temp=s.split("");
-
+// BACDE
             for(int i=0;i<temp.length;++i){
-                if(skill.indexOf(temp[i])!=-1){
+                if(skill.indexOf(temp[i])!=-1){ // skill에 있으면
                     if(stack.peek().equals(temp[i])) stack.pop();
                     else{
                         flag=true;
@@ -39,7 +39,7 @@ public class 스킬트리 {
                     }
                 }
             }
-
+//
             if(!flag) answer++;
         }
 
