@@ -11,29 +11,16 @@ public class 방금그곡 {
         System.out.println(answer);
     }
 
-    public static class Music {
-        String start; // 시작 시간
-        String end; // 종료시간
-        String 제목;
-        String 악보;
-
-        public Music(String start, String end, String 제목, String 악보) {
-            this.start = start;
-            this.end = end;
-            this.제목 = 제목;
-            this.악보 = 악보;
-        }
-    }
-
     private static String solution(String m, String[] musicinfos) {
-        String l;
-        l=m.replace("C#","c");
-        l=m.replace("D#","d");
-        l=m.replace("F#","f");
-        l=m.replace("G#","g");
-        l=m.replace("A#","a");
-        Music [] musics=new Music[musicinfos.length];
-        int i=0;
+        String answer="(None)";
+        int max=0;
+
+        m=m.replaceAll("C#","c");
+        m=m.replaceAll("D#","d");
+        m=m.replaceAll("F#","f");
+        m=m.replaceAll("G#","g");
+        m=m.replaceAll("A#","a");
+
         for (String musicinfo : musicinfos) {
             String[] music = musicinfo.split(",");
             String 시작시각 = music[0];
@@ -41,36 +28,28 @@ public class 방금그곡 {
             String 제목 = music[2];
             String 악보 = music[3];
 
-            악보=악보.replace("C#","c");
-            악보=악보.replace("D#","d");
-            악보=악보.replace("F#","f");
-            악보=악보.replace("G#","g");
-            악보=악보.replace("A#","a");
-            System.out.println(악보);
-            musics[i]=new Music(시작시각,끝시각,제목,악보);i++;
-        }
+            악보=악보.replaceAll("C#","c");
+            악보=악보.replaceAll("D#","d");
+            악보=악보.replaceAll("F#","f");
+            악보=악보.replaceAll("G#","g");
+            악보=악보.replaceAll("A#","a");
 
-        for(int j=0;j<musics.length;++j){
-            Music music=musics[j];
-            int time = timeCount(music.start, music.end); // 재생시간
-            System.out.println(time);
-            StringBuilder 재생=new StringBuilder();
-            if(time>music.악보.length()){
-                for(int k=0;k<time/music.악보.length();++k)
-                    재생.append(music.악보);
-                재생.append(music.악보.substring(0,time%music.악보.length()));
-            }
-            else{
-                재생.append(music.악보.substring(0,time));
+            int time=timeCount(시작시각,끝시각);
+            String mel="";
+            for(int i=0;i<time;++i){
+                mel+=악보.charAt(i%악보.length());
             }
 
-            for(int k=0;k<재생.length();++k){
-
+            if(mel.contains(m)){
+                if(max<mel.length()) {
+                    max=mel.length();
+                    answer=제목;
+                }
             }
 
         }
 
-        return "";
+        return answer;
 
     }
 
