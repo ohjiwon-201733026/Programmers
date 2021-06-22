@@ -41,7 +41,8 @@ public class 압축 {
             i--;
 
         }
-        System.out.println(list);
-        return new int []{0,0};
+       int [] answer=new int [list.size()];
+        for(int j=0;j< list.size();++j) answer[j]=list.get(j);
+        return answer;
     }
 }
