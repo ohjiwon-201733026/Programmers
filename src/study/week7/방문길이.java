@@ -1,13 +1,10 @@
 package study.week7;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class 방문길이 {
 
     public static void main(String[] args) {
-        String dirs="ULURRDLLU";
+        String dirs="LULLLLLLU";
         int answer=solution(dirs);
         System.out.println(answer);
     }
@@ -16,7 +13,7 @@ public class 방문길이 {
     private static int solution(String dirs) {
         int answer=0;
 
-        int [][] map=new int [11][11];
+        int [][][] map=new int [11][11][4];
         int curX=5; // 원래 좌표 0 +5
         int curY=5; // 원래 좌표 0 +5
 
@@ -24,15 +21,24 @@ public class 방문길이 {
             char dir=dirs.charAt(i);
             int nextX=curX;
             int nextY=curY;
+            int dirNum=0;
             switch (dir){
-                case 'U':nextY=curY+1;break;
-                case 'D':nextY=curY-1;break;
-                case 'R':nextX=curX+1;break;
-                case 'L':nextX=curX-1;break;
+                case 'U':nextY=curY-1;dirNum=0;break;
+                case 'D':nextY=curY+1;dirNum=1;break;
+                case 'R':nextX=curX+1;dirNum=2;break;
+                case 'L':nextX=curX-1;dirNum=3;break;
             }
 
-            if(map[nextX][nextY]!=0 && map[curX][curY]>=1) continue;
-//            else
+            if(0<=nextX && nextX <11 &&0<=nextY && nextY<11) {
+                if (map[nextX][nextY][dirNum] == 0) {
+
+                    answer++;
+                    map[nextX][nextY][dirNum] = 1;
+                }
+                curX=nextX;
+                curY=nextY;
+            }
+
         }
         return answer;
     }
