@@ -22,13 +22,13 @@ public class 압축 {
         }
 
         for(int i=0;i<msg.length();++i){
-            String w=msg.charAt(i)+"";
+            String w=msg.charAt(i)+"";//K
             while(dictionary.containsKey(w)){
                 i++;
                 if(i==msg.length()){ // 마지막 idx 넘음 ( 마지막은 length()-1)
                     break;
                 }
-                w+=msg.charAt(i);
+                w+=msg.charAt(i); // KA
             }
 
             if(i==msg.length()){
@@ -36,8 +36,8 @@ public class 압축 {
                 break;
             }
 
-            list.add(dictionary.get(w.substring(0,w.length()-1)));
-            dictionary.put(w,++cnt);
+            list.add(dictionary.get(w.substring(0,w.length()-1))); //K:11
+            dictionary.put(w,++cnt); // KA 27
             i--;
 
         }
