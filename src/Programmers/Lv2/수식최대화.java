@@ -6,68 +6,72 @@ import java.util.Map;
 
 public class 수식최대화 {
 
-    static Long [] n;
-    static ArrayList<Character> oper;
-    static int[][] operPr = { { 0, 1, 2 }, { 0, 2, 1 }, { 1, 0, 2 }, { 1, 2, 0 }, { 2, 0, 1 }, { 2, 1, 0 } };
-    static Map<Character, Integer> map; // 연산자와 인덱스를 연결시켜줄 맵
 
     public static void  main(String[] args) {
         String s="100-200*300-500+20";
         long ans=solution(s);
         System.out.println(ans);
     }
-
+    // 1: +, 2 :- , 3: *
+    public static int [][] oprPr={{1,2,3},{1,3,2},{2,1,3},{2,3,1},{3,1,2},{3,2,1}};
+    public static HashMap<Integer,Character> map=new HashMap<>();
     public static long solution(String expression) {
-        long answer = 0;
-        oper=new ArrayList<>();
-        map=new HashMap<>();
-        map.put('-',0);
-        map.put('+',1);
-        map.put('*',2);
+        map.put(1,'+');
+        map.put(2,'-');
+        map.put(3,'*');
+        long answer=0;
+
+//        String [] num=expression.split("[0-9]{1,3}");
+//        String [] opr=expression.split("[^0-9]");
+//        for(String s:num) System.out.println(":"+s);
 
         String [] nums=expression.split("[0-9]{1,3}");
         String [] operTmp=expression.split("[^0-9]");
-        for(int i=0;i<operTmp.length;++i) oper.add(operTmp[i].charAt(0));
-        n=new Long[nums.length];
-        for(int i=0;i<nums.length;++i) n[i]=Long.parseLong(nums[i]);
-
-
-        for(int i=0;i<operPr.length;++i){
-            long result=Math.abs(getValue(operPr[i]));
-            answer=Math.max(answer,result);
-        }
-
+//        for(int i=0;i<operTmp.length;++i) oper.add(operTmp[i].charAt(0));
+//        n=new Long[nums.length];
+//        for(int i=0;i<nums.length;++i) n[i]=Long.parseLong(nums[i]);
+//
+//        long answer=0;
+//        for(int i=0;i<oprPr.length;++i){
+//            answer=Math.max(answer,calc(oprPr[i],num,opr));
+//        }
 
         return answer;
+
     }
-    private static long getValue(int [] ops){
-        ArrayList<Long> number=new ArrayList<>();
-        ArrayList<Character> opers=new ArrayList<>();
 
-        for(Character op:oper) opers.add(op);
-        for(Long num:n) number.add(num);
+    public static long calc(int [] oprPr, String [] num, String [] opr){
+        long ans=0;
+        ArrayList<Long> n=new ArrayList<>();
+        ArrayList<Character> o=new ArrayList<>();
 
-        for(int i=2;i>-1;--i){
-            for(int j=0;j<opers.size();j++){
-                if(ops[map.get(opers.get(j))]==i){
-                    long a=number.remove(j);
-                    long b=number.remove(j);
-                    long result=doOperation(opers.get(j),a,b);
-                    number.add(j,result);
-                    opers.remove(j);
-                    j--;
+        for(String a:num) n.add(Long.parseLong(a));
+        for(String a:opr) o.add(a.charAt(0));
+
+        for(int i=0;i< oprPr.length;++i){
+            char operator=map.get(oprPr[i]);
+            for(int j=0;j<opr.length;++j){
+                if(o.get(j)==operator){
+                    long a=n.remove(j);
+                    long b=n.remove(j+1);
+                    n.add(j,getVal(a,b,operator));
+                    o.remove(j);
                 }
             }
         }
-        return number.remove(0);
+
+        return n.get(0);
+
     }
 
-    private static long doOperation(char op,long a, long b){
-        switch(op){
-            case '+': return a+b;
-            case '-': return a-b;
-            case '*': return a*b;
+    private static Long getVal(long a, long b, char operator) {
+        long num=0;
+        switch (operator){
+            case '+': num= a+b; break;
+            case '-': num= a-b; break;
+            case '*': num= a*b; break;
         }
-        return 0;
+
+        return num;
     }
 }
