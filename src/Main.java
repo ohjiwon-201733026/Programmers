@@ -5,30 +5,16 @@ public class Main {
 	public static void main(String[] args) {
 		Scanner sc=new Scanner(System.in);
 
-		while(sc.hasNext()){
+		int T=sc.nextInt();
+		String regex="[A-F]?A+F+C+[A-F]?$";
+		while(T-->0){
 			String s=sc.next();
-			String t=sc.next();
 
-			System.out.println(solution(s,t));
+			if(s.matches(regex)) System.out.println("Infected!");
+			else System.out.println("Good");
 		}
 
-
-
 	}
-
-	public static String solution(String s, String t){
-		int k=0; // s index
-		int i=0; // t index
-		while(true){
-			if(k==s.length())  return "Yes";
-			if(i==t.length()) break;
-			if(s.charAt(k)==t.charAt(i)) k++;
-			i++;
-		}
-
-		return "No";
-	}
-
 
 
 }
