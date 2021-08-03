@@ -9,124 +9,59 @@ public class 셔틀버스 {
         int t=60;
         int m=45;
         String [] timetable={"23:59","23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59"};
-
-
-//        for(String s: timetable){
-//            System.out.println(s);
-//        }
         String ans=solution(n,t,m,timetable);
         System.out.println(ans);
     }
 
-    public static int sorting(String o1, String o2) {
-        String [] a =o1.split(":");
-        String [] b=o2.split(":");
-
-        if(( o1.equals("23:59")|| a[0].equals("24") )&& ( o2.equals("23:59")|| b[0].equals("24")) ){
-
-            if(a[0].equals(b[0])) return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-
-            return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
+    public static HashMap<Integer, Stack<Integer>> map;
+    public static Queue<Integer> queue;
+    public static int[] keys;
+    public static int[] times;
+    public static String solution(int n, int t, int m, String[] timetable) {
+        map = new HashMap<>();
+        queue = new LinkedList<>();
+        keys = new int[n];
+        times = new int[timetable.length];
+        for(int i = 0; i < times.length; i++){
+            times[i] = changeTimeToInt(timetable[i]);
+        }
+        Arrays.sort(times);
+        for(int time: times){
+            queue.add(time);
         }
 
-        if(( o1.equals("23:59")|| a[0].equals("24") )&& ( ! o2.equals("23:59")|| !b[0].equals("24")) ){
-            return -1;
+        for(int i = 0; i < n; i++){
+            map.put(540 + t * i, new Stack<>());
+            keys[i] = 540 + t * i;
         }
 
-        if(( !o1.equals("23:59")|| !a[0].equals("24") )&& (o2.equals("23:59")|| b[0].equals("24")) ){
-            return 1;
+        int key_cnt = 0;
+        while (key_cnt < n){
+            if(queue.isEmpty())
+                break;
+            if(keys[key_cnt] >= queue.peek() && map.get(keys[key_cnt]).size() < m){
+                map.get(keys[key_cnt]).push(queue.poll());
+            }else{
+                key_cnt++;
+            }
         }
 
-        if(Integer.parseInt(a[0])==Integer.parseInt(b[0])) return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-
-        return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
+        if(map.get(keys[keys.length-1]).size() < m){
+            return changeTimeToString(keys[keys.length-1]);
+        }
+        else{
+            return changeTimeToString(map.get(keys[keys.length-1]).peek()-1);
+        }
+    }
+    public static int changeTimeToInt(String time){
+        return Integer.parseInt(time.substring(0,2)) * 60 + Integer.parseInt(time.substring(3,5));
     }
 
-
-    public static String solution(int n, int t, int m, String [] timetable){
-        String answer="";
-        HashMap<String, ArrayList<String>> map=new HashMap<>();
-        ArrayList<String> shuttleTime=new ArrayList<>();
-
-        // 버스 도착 시간
-        int busH=9;
-        int busM=0;
-        map.put("09:00",new ArrayList<>());
-        shuttleTime.add("09:00");
-        for(int i=1;i<n;++i){
-            busM+=60;
-            if(busM>=60) { busM-=60; busH++; };
-            String time=String.format("%02d:%02d",busH,busM);
-            shuttleTime.add(time);
-            map.put(time,new ArrayList<>());
-        }
-        // 셔틀 순서대로
-        Collections.sort(shuttleTime, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                String [] a =o1.split(":");
-                String [] b=o2.split(":");
-
-                if(a[0].equals(b[0])) return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-                return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
-            }
-        });
-
-        // 크루 온 순서대로 정렬
-        Arrays.sort(timetable, new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                String [] a =o1.split(":");
-                String [] b=o2.split(":");
-
-                if(( o1.equals("23:59")|| a[0].equals("24") )&& ( o2.equals("23:59")|| b[0].equals("24")) ){
-
-                    if(a[0].equals(b[0])) return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-
-                    return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
-                }
-
-                if(( o1.equals("23:59")|| a[0].equals("24") )&& ( ! o2.equals("23:59")|| !b[0].equals("24")) ){
-                    return -1;
-                }
-
-                if(( !o1.equals("23:59")|| !a[0].equals("24") )&& (o2.equals("23:59")|| b[0].equals("24")) ){
-                    return 1;
-                }
-
-                if(Integer.parseInt(a[0])==Integer.parseInt(b[0])) return Integer.parseInt(a[1])-Integer.parseInt(b[1]);
-
-                return Integer.parseInt(a[0])-Integer.parseInt(b[0]);
-            }
-        });
-
-        int j=0; // shuttle idx
-        for(int i=0;i< timetable.length;++i){
-            if(map.get(shuttleTime.get(j)).size()==m) j++;
-            String [] a=timetable[i].split(":");
-            String [] b=shuttleTime.get(j).split(":");
-            // 23:59에는 집으로 돌아감
-            if(timetable[i].equals("23:59")) continue;
-            int num=sorting(timetable[i],shuttleTime.get(j));
-            if(num>0) j++;
-            if(j>shuttleTime.size()) break;
-            map.get(shuttleTime.get(j)).add(timetable[i]);
-        }
-
-        String lastTime=shuttleTime.get(shuttleTime.size()-1);
-        if(map.get(lastTime).size()<m) answer=lastTime;
-        else {
-            String [] lastCrew=map.get(lastTime).get(m-1).split(":");
-            int lastCrewH=Integer.parseInt(lastCrew[0]);
-            int lastCrewM=Integer.parseInt(lastCrew[1]);
-            lastCrewM--;
-            if(lastCrewM<0) { lastCrewM+=60; lastCrewH--; };
-            answer=String.format("%02d:%02d",lastCrewH,lastCrewM);
-        }
-
-
-
-
-        return answer;
+    public static String changeTimeToString(int time){
+        String hours = Integer.toString(time/60);
+        String minutes = Integer.toString(time%60);
+        hours = hours.length() < 2 ? "0"+hours : hours;
+        minutes = minutes.length() < 2 ? "0"+minutes : minutes;
+        return hours+":"+minutes;
     }
 }
