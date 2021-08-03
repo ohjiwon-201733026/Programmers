@@ -11,30 +11,18 @@ public class B10809 {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
 		String s=sc.next();
-
 		HashMap<Character,Integer> hm=new HashMap<>();
-		HashMap<Character,Integer> test=new HashMap<>();
 
-		for(int i=0;i<s.length();++i) {
-			if(!test.containsKey(s.charAt(i)))
-				test.put(s.charAt(i), i);
+
+		for(char c:s.toCharArray()){
+			if(hm.containsKey(c)) hm.put(c,hm.get(c)+1);
+			else hm.put(c,1);
 		}
 
-		for(char c='a';c<='z';++c) {
-			if(test.containsKey(c))
-				hm.put(c, test.get(c));
-			else hm.put(c, -1);
+		for(char c='a';c<='z';++c){
+			if(hm.containsKey(c)) System.out.print(hm.get(c)+" ");
+			else System.out.print("0 ");
 		}
-
-
-		Set<Character> keys=hm.keySet();
-		Iterator<Character> it=keys.iterator();
-
-		while(it.hasNext()){
-			char c=it.next();
-			System.out.print(hm.get(c)+" ");
-		}
-
 	}
 
 }

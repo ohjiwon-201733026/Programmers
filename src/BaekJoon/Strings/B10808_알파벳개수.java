@@ -5,7 +5,7 @@ import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
 
-public class B10808 {
+public class B10808_알파벳개수 {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
