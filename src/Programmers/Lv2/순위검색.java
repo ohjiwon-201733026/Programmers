@@ -2,11 +2,12 @@ package Programmers.Lv2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class 순위검색 {
     public static int [][] arr={{1,1,1,1},{0,1,1,1},{1,0,1,1},{1,1,0,1},{1,1,1,0},{0,0,1,1},{0,1,0,1},{0,1,1,0},
             {1,0,0,1},{1,0,1,0},{1,1,0,0},{0,0,0,1},{0,0,1,0},{0,1,0,0},{1,0,0,0},{0,0,0,0}};
-    public static HashMap<Integer, ArrayList<String>> idx;
+    public static HashMap<String, ArrayList<Integer>> idx;
     public static int [] score;
     public static void main(String[] args) {
         String [] info={"java backend junior pizza 150",
@@ -26,18 +27,16 @@ public class 순위검색 {
         for(int n:answer) System.out.println(n);
 
     }
-    public static void comb(int j,String info){
-
-        idx.put(j,new ArrayList<>());
+    public static void comb(String info){
         String [] t=info.split(" ");
-        score[j]=Integer.parseInt(t[4]);
+
         for(int i=0;i<arr.length;++i){
             StringBuilder sb=new StringBuilder();
             for(int k=0;k<4;++k){
                 if(arr[i][k]==0) sb.append("-");
                 else sb.append(t[k]);
             }
-            idx.get(j).add(sb.toString());
+            idx.put(sb.toString(),new ArrayList<>());
         }
     }
 
@@ -45,7 +44,7 @@ public class 순위검색 {
         int [] answer=new int [query.length];
         score=new int [info.length];
         idx=new HashMap<>();
-        for(int i=0;i< info.length;++i) comb(i,info[i]);
+        for(int i=0;i< info.length;++i) comb(info[i]);
 
         // query
         for(int i=0;i< query.length;++i){
@@ -63,10 +62,6 @@ public class 순위검색 {
             answer[i]=cnt;
 
         }
-//        for(int key:idx.keySet()){
-//            System.out.println(key+" "+idx.get(key).size());
-//
-//        }
 
         return answer;
     }
