@@ -1,5 +1,7 @@
 package Programmers.Lv3;
-
+// 0 0 0
+// 1 0 0
+// 0 1 1
 public class 자물쇠와열쇠 {
     public static void main(String[] args) {
         int [][] key={{0,0,0},{1,0,0},{0,1,1}};
@@ -57,20 +59,22 @@ public class 자물쇠와열쇠 {
         return tmp;
     }
 
-    public static boolean check(int [][] arr){
+    public static boolean check(int [][] arr) {
 
-        for(int i=0;i<arr.length ;++i){
-            for(int j=0;j<arr[0].length;++j){
-                if(flag[i][j]){
-                    if(arr[i][j]==2) return false;
-                    if(arr[i][j]==0) return false;
+        for (int i = 0; i < arr.length; ++i) {
+            for (int j = 0; j < arr[0].length; ++j) {
+                if (flag[i][j]) {
+                    if (arr[i][j] == 2) return false;
+                    if (arr[i][j] == 0) return false;
                 }
             }
         }
 
         return true;
     }
-
+    // 1 2 3
+// 1 0 0
+// 0 1 1
     public static int [][]  rotation(int [][] arr){
         int n= arr.length;
         int [][] rot=new int [n][n];

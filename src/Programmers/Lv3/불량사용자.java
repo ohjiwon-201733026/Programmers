@@ -56,7 +56,9 @@ public class 불량사용자 {
         }
     }
 // comb 다시 풀어보기
-    
+    //5
+    // 0 1 2 3 4
+    //
     private static void comb(String[] user_id,String [] baned_id, boolean[] visited, int r) {
         if(r==-1){ // 다 골랐을 경우
             StringBuilder sb=new StringBuilder();
@@ -67,7 +69,8 @@ public class 불량사용자 {
             return;
         }
         // r번째 baned_id에 해당하는 user_id 리스트
-        ArrayList<String> list=hm.get(baned_id[r]);
+        ArrayList<String> list=hm.get(baned_id[r]); //3 abc123,frodoc
+
         for(int i=0;i< list.size();++i){
             if(!visited[index.get(list.get(i))]){ // 방문하지 않았으면 
                 visited[index.get(list.get(i))]=true; // user_id 사용
