@@ -13,100 +13,53 @@ public class 광고삽입 {
     }
 
     public static String solution(String play_time,String adv_time,String [] logs){
-        int playTime=timeToSec(play_time);
-        int advTime=timeToSec(adv_time);
-        int num=0; // 시청자 수
-        PriorityQueue<Log> pq=new PriorityQueue<>();
-        for(String log:logs){ // pq에 넣기
-            String [] s=log.split("-");
-            pq.add(new Log(timeToSec(s[0]),'s'));
-            pq.add(new Log(timeToSec(s[1]),'e'));
+        int playTime=strToSec(play_time);
+        int advTime=strToSec(adv_time);
+        int [] count=new int [playTime+1]; // 영상 재생 시간 00:00:00 ~ playTime까지
+
+        for(String log : logs){
+            String [] splits=log.split("-");
+            int startViewTime=strToSec(splits[0]);
+            int endViewTime=strToSec(splits[1]);
+
+            // 시청 시간 +1, endViewTime 포함하지 않음
+            for(int i=startViewTime;i<endViewTime;++i){
+                count[i]++;
+            }
         }
 
-        ArrayList<Time> times=new ArrayList<Time>();
-        while(!pq.isEmpty()){
-            Log l=pq.poll();
-            if(l.time>playTime) break;
-            if(l.c=='s') num++;
-            else num--;
-            int term=0;
-            if(pq.isEmpty()) term=playTime-l.time;
-            else term=pq.peek().time-l.time;
-
-            times.add(new Time(l.time,term,num));
+        // 0초에 관고를 넣는다 가정했을 때 누적값 계산
+        int startTime=0;
+        int endTime=advTime;
+        long sum=0;
+        for(int i=startTime;i<endTime;++i){
+            sum+=count[i];
         }
 
-
-        int answer=0;
-        int MAX=0;
-        for(int i=0;i<times.size();++i){
-            Time t=times.get(i);
-            int sum=times.get(i).term;
-            int j=i+1;
-
-            int max=t.term*t.num;
-            while(sum!=advTime){
-                if(j>=times.size()) break;
-                if(sum>advTime) break;
-                Time tmp=times.get(j);
-                sum+=times.get(j).term;
-                max+=(tmp.term*tmp.num);
-                j++;
+        // 누적값에서 앞에 값을 빼고 뒤에 값을 추가하면서 각초마다 광고를 넣었을 때의 누적값을 구하고 비교
+        long max=sum;
+        int maxStartTime=0;
+        while(endTime<=playTime){
+            sum-=count[startTime];
+            sum+=count[endTime];
+            if(sum>max){
+                max=sum;
+                maxStartTime=startTime+1;
             }
-            if(sum>advTime){
-                j--;
-               sum-=times.get(j).term;
-               max-=(times.get(j).term*times.get(j).num);
-               max+=(advTime-sum)*times.get(j).num;
-            }
-            if(j>=times.size()) continue;
-
-
-            if(MAX<max) {
-                MAX=max;
-                answer=t.startTime;
-            }
-
+            startTime++;
+            endTime++;
         }
-        int H=answer/3600;
-        int M=(answer%3600)/60;
-        int S=(answer%3600)%60;
+        return secondToStr(maxStartTime);
+
+    }
+    public static String secondToStr(int time){
+        int H=time/3600;
+        int M=(time%3600)/60;
+        int S=(time%3600)%60;
+
         return String.format("%02d:%02d:%02d",H,M,S);
-
     }
-    public static class Time{
-        int startTime;
-        int term;
-        int num;
-
-        public Time(int startTime,int term,int num) {
-            this.startTime=startTime;
-            this.term = term;
-            this.num=num;
-        }
-        // 누적 재생시간 계산 함수
-        public int playTime(){
-            return term*num;
-        }
-    }
-
-    public static class Log implements Comparable<Log> {
-        String startTime;
-        int time;
-        char c; // s(start) or e(end)
-
-        public Log(int time, char c) {
-            this.time = time;
-            this.c = c;
-        }
-
-        @Override
-        public int compareTo(Log o) {
-            return this.time-o.time;
-        }
-    }
-
-    public static int timeToSec(String time){
+    public static int strToSec(String time){
         String [] t=time.split(":");
         return Integer.parseInt(t[0])*3600+Integer.parseInt(t[1])*60+Integer.parseInt(t[2]);
     }
