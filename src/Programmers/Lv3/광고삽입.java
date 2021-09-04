@@ -11,10 +11,12 @@ public class 광고삽입 {
         };
         System.out.println(solution(play_time,adv_time,logs));
     }
-
+    // 2-4 , 3~5
+    // 0 1 2 3 4 5 6 7
+    // 0 0 1 2 1 0 0 0
     public static String solution(String play_time,String adv_time,String [] logs){
         int playTime=strToSec(play_time);
-        int advTime=strToSec(adv_time);
+        int advTime=strToSec(adv_time); // 2
         int [] count=new int [playTime+1]; // 영상 재생 시간 00:00:00 ~ playTime까지
 
         for(String log : logs){
