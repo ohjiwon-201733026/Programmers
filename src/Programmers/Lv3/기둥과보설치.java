@@ -1,76 +1,108 @@
 package Programmers.Lv3;
 
+import java.util.ArrayList;
+
 public class 기둥과보설치 {
+
+    public static class Solution {
+        int N;
+        boolean[][][] obj; // obj[x][y][a]  a: 0 기둥, 1 보
+
+        boolean 기둥(int x, int y) {
+            if (x < 0 ||x>= N || y < 0 || y >= N) return false;
+            return obj[x][y][0];
+        }
+
+        boolean 보(int x, int y) {
+            if (x < 0 || x >= N || y < 0 || y >= N) return false;
+            return obj[x][y][1];
+        }
+
+        boolean 기둥설치가능(int x, int y) {
+            if (x < 0 || x >= N || y < 0 || y >= N) return false;
+            if (y == N-1) return false;
+            if (y>0 && !기둥(x,y-1) && !보(x-1,y) && !보(x,y)) return false;
+            return true;
+        }
+
+        boolean 보설치가능(int x, int y) {
+            if (x < 0 || x >= N || y < 0 || y >= N) return false;
+            if (y == 0 || x == N-1) return false;
+            if (!기둥(x,y-1) && !기둥(x+1,y-1) && !(보(x-1,y) && 보(x+1,y))) return false;
+            return true;
+        }
+
+        boolean 다시설치가능() {
+            for (int x = 0; x < N; ++x) {
+                for (int y = 0; y < N; ++y) {
+                    if (기둥(x, y) && !기둥설치가능(x, y)) return false;
+                    if (보(x, y) && !보설치가능(x, y)) return false;
+                }
+            }
+            return true;
+        }
+
+        boolean 기둥삭제가능(int x, int y) {
+            if (x < 0 || x >= N || y < 0 || y >= N) return false;
+            if (!기둥(x,y)) return false;
+            obj[x][y][0] = false;
+            boolean result = 다시설치가능();
+            obj[x][y][0] = true;
+            return result;
+        }
+
+        boolean 보삭제가능(int x, int y) {
+            if (x < 0 || x >= N || y < 0 || y >= N) return false;
+            if (!보(x,y)) return false;
+            obj[x][y][1] = false;
+            boolean result = 다시설치가능();
+            obj[x][y][1] = true;
+            return result;
+        }
+
+        public int[][] solution(int n, int[][] build_frame) {
+            N = n + 1;
+            obj = new boolean[N][N][2];
+            for (int[] c : build_frame) {
+                int x = c[0], y = c[1], a = c[2], cmd = c[3];
+                if (cmd==1 && (a==0 ? 기둥설치가능(x,y) : 보설치가능(x,y))) obj[x][y][a] = true;
+                if (cmd==0 && (a==0 ? 기둥삭제가능(x,y) : 보삭제가능(x,y))) obj[x][y][a] = false;
+            }
+
+            ArrayList<int[]> list = new ArrayList<>();
+            for (int x = 0; x < N; ++x) {
+                for (int y = 0; y < N; ++y) {
+                    for (int a = 0; a < 2; ++a) {
+                        if (obj[x][y][a]) list.add(new int[]{x, y, a});
+                    }
+                }
+            }
+            return list.toArray(new int[0][]);
+        }
+
+    }
+
+
+
     public static void main(String [] args){
-        int n=5;
-        int [][] build_frame={
-                {1,0,0,1},
-                {1,1,1,1},
-                {2,1,0,1},
-                {2,2,1,1},
-                {5,0,0,1},
-                {5,1,0,1},
-                {4,2,1,1},
-                {3,2,1,1}
-        };
-        int [] result=solution(n,build_frame);
-    }
-    public static int [][] 보;
-    public static int [][] 기둥;
-    public static int N;
-    public static int [] solution(int n, int [][] build_frame){
-        // 가로 세로
-        // 0 기둥, 1 보
-        // 0 삭제, 1 설치
-        N=n;
-        보=new int [n][n];
-        기둥=new int [n][n];
-        for(int [] build:build_frame){
-            int x=build[0];
-            int y=build[1];
-            int k=build[2]; // 설치 재료
-            int l=build[3]; // 설치/ 삭제 여부
+            int n=5;
+            int [][] build_frame={
+                    {1,0,0,1},
+                    {1,1,1,1},
+                    {2,1,0,1},
+                    {2,2,1,1},
+                    {5,0,0,1},
+                    {5,1,0,1},
+                    {4,2,1,1},
+                    {3,2,1,1}
+            };
+            Solution s=new Solution();
+            int [][] result=s.solution(n,build_frame);
+            for(int [] r: result){
+                System.out.println(r[0]+" "+r[1]+" "+r[2]);
+            }
 
-            if(l==1){ // 설치인 경우
-                if(k==0){ // 기둥 설치
-                    if(기둥설치가능(x,y)){
-                        기둥[y][x]=1;
-                    }
-                }
-                if(k==1){ // 보 설치
-                    if(보설치가능(x,y)){
-                        보[y][x]=1;
-                    }
-                }
-            }
-            else if(l==0){ // 삭제인 경우
-                if(k==0){ // 기둥 삭제
-                    if(기둥삭제가능(x,y)){
-                        기둥[y][x]=0;
-                    }
-                }
-            }
         }
+
     }
 
-    public static boolean 기둥설치가능(int x, int y){
-        if(y==0) return true;
-        else if(x-1>=0 && (보[y][x]!=0 || 보[y][x-1]!=0)) return true;
-        else if(y-1>=0 && 보[y-1][x]!=0) return true;
-        else return false;
-    }
-    public static boolean 보설치가능(int x,int y){
-        if(x+1<N && y-1>=0 && (기둥[y-1][x]==1 || 기둥[y-1][x+1]==1)) return true;
-        else if(x-1>=0 && x+1<N && (보[y][x-1]==0 && 보[y][x+1]==0)) return true;
-        return false;
-    }
-    public static boolean 기둥삭제(int x, int y){
-        if(y+1<N && 기둥[y+1][x]==1){ // 기둥위에 기둥 있는 경우
-            if(x-1>=0 && (보[y+1][x-1]==0 && 보[y+1][x]==0)) return false;
-        }
-        if(y+1<N && x+1<N && 보[y+1][x]!=0){
-            if(기둥[y][x+1]==0) return false;
-            else if()
-        }
-    }
-}
