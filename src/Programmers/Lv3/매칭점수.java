@@ -2,96 +2,111 @@ package Programmers.Lv3;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class 매칭점수 {
     public static void main(String [] args){
         String word="Muzi";
         String [] pages={
-                "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://careers.kakao.com/interview/list\"/>\n</head>  \n<body>\n<a href=\"https://programmers.co.kr/learn/courses/4673\"></a>#!MuziMuzi!)jayg07con&&\n\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://www.kakaocorp.com\"/>\n</head>  \n<body>\ncon%\tmuzI92apeach&2<a href=\"https://hashcode.co.kr/tos\"></a>\n\n\t^\n</body>\n</html>"
+                "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://a.com\"/>\n</head>  \n<body>\nBlind Lorem Blind ipsum dolor Blind test sit amet, consectetur adipiscing elit. \n<a href=\"https://b.com\"> Link to b </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://b.com\"/>\n</head>  \n<body>\nSuspendisse potenti. Vivamus venenatis tellus non turpis bibendum, \n<a href=\"https://a.com\"> Link to a </a>\nblind sed congue urna varius. Suspendisse feugiat nisl ligula, quis malesuada felis hendrerit ut.\n<a href=\"https://c.com\"> Link to c </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://c.com\"/>\n</head>  \n<body>\nUt condimentum urna at felis sodales rutrum. Sed dapibus cursus diam, non interdum nulla tempor nec. Phasellus rutrum enim at orci consectetu blind\n<a href=\"https://a.com\"> Link to a </a>\n</body>\n</html>"
         };
         System.out.println(solution(word,pages));
     }
-
     public static int solution(String word, String [] pages){
-        word=word.toLowerCase();
-        HashMap<String, Integer> page=new HashMap<>();
-        // 웹페이지 HashMap에 저장
-        for(int k=0;k<pages.length;++k){
-            String p=pages[k];
-            int i=p.indexOf("<meta",2);
-            int j=p.indexOf("</head>");
-            String s=p.substring(i,j);
-            pages[k]=p.substring(j)
-                    .replaceAll("</head>","")
-                    .replaceAll("\\n<body>\\n","")
-                    .replaceAll("\\n</body>\\n</html>","");
-            String [] arr=s.split(" ");
-            for(int x=0;x< arr.length;++x){
-                if(arr[x].contains("content=")){
-                    String [] tmp=arr[x].split("\"");
-                   page.put(tmp[1].substring(8),k);
-                };
-            }
+        HashMap<String, Double> basicScore = new HashMap<String, Double>();                //기본 점수
+        HashMap<String, Double> linkScore = new HashMap<String, Double>();                //링크 점수
+        ArrayList<String> names = new ArrayList<String>();                                //페이지 순서
+        int answer = 0;                                                                    //최소 인덱스
+        word = word.toLowerCase();                                                        //키워드 소문자 만들기
+
+        for(int i = 0; i < pages.length; i++) {
+            pages[i] = pages[i].toLowerCase();            //전부 소문자 만들기
         }
-        int [] 기본=new int [page.size()];
-        int [] 외부=new int [page.size()];
-        ArrayList<Integer> [] 링크=new ArrayList[page.size()];
-        for(int i=0;i<page.size();++i) 링크[i]=new ArrayList<>();
-        // a 태그
-        for(int k=0;k<pages.length;++k) {
-            String p = pages[k];
-            int n=0;
-            while(true){
-                n=p.indexOf("<a href=");
-                if(n==-1) break;
-                int m=p.indexOf("</a>");
-                String [] s=p.substring(n,m).split("\"");
-                String key=s[1].substring(8);
-                if(page.containsKey(key)) {
-                    int i = page.get(key);
-                    링크[i].add(k);
+
+        for(int i = 0; i < pages.length; i++) {            //링크 점수 만들기
+            int basic = 0;                                //기본점수
+            int outlinkCount = 0;                        //외부 개수
+            int hit = 0;                                //키워드 매칭
+            ArrayList<String> links = new ArrayList<String>();
+            String pName = "";
+            //자기 사이트 이름 구하기
+            Pattern pageName = Pattern.compile("<meta property=\"og:url\" content=\\S+/>");
+            Matcher pageNameMatcher = pageName.matcher(pages[i].split("</head>")[0]);
+            if(pageNameMatcher.find()) {
+                pName = pageNameMatcher.group();                                                    //content="https://a.com"/>
+            }
+            pName = pName.substring(32);                                                            //"https://a.com"/>
+            pName = pName.substring(0,pName.length()-2);                                            //"https://a.com"
+            names.add(pName);
+
+            //hashMap
+            String temp = pages[i];
+            temp = temp.split("<body>")[1].replaceAll("[0-9]", " ");
+
+            Pattern pattern = Pattern.compile("\\b"+word+"\\b");
+            Matcher    matcher = pattern.matcher(temp);
+            while(matcher.find()) {
+                matcher.group();
+                hit++;
+            }
+            basic = hit;                                        //현재 페이지 기본점수
+            basicScore.put(pName, (double)basic);                //기본 점수 구함
+
+            // 연결된 링크 이름 구하고, 그 개수만큼 그 링크에 링크점수 던지기
+            temp = pages[i];
+            temp = temp.split("<body>")[1];                        //바디 부분만 외부링크 확인
+            Pattern linkPattern = Pattern.compile("<a href=\\S+>");
+            Matcher linkMatcher = linkPattern.matcher(temp);
+
+            while(linkMatcher.find()) {
+                String tempGroup = linkMatcher.group();                            //<a href="https://b.com">\
+                tempGroup = tempGroup.substring(8);
+                tempGroup = tempGroup.substring(0, tempGroup.length() -1);
+                if(tempGroup.charAt(tempGroup.length()-1) == 'a') {
+                    tempGroup = tempGroup.substring(0, tempGroup.length()-4);
                 }
-                외부[k]++;
-                p=p.substring(0,n)+p.substring(m+4);
+                System.out.println(tempGroup);                                    //"https://b.com"
+
+                links.add(tempGroup);
             }
-            pages[k]=p;
+            outlinkCount = links.size();
+            for(int j = 0; j < links.size(); j++) {
+                linkScore.put(links.get(j), linkScore.getOrDefault(links.get(j), 0.0) + ((double)basic / outlinkCount));
+            }
+
         }
 
+        //기본 점수 + 링크 점수
+        Iterator<String> iter = basicScore.keySet().iterator();
+        HashMap<String, Double> result = new HashMap<String, Double>();
+        double maxV = 0;
+        while(iter.hasNext()) {
+            Double value = 0.0;
+            String page = iter.next();
+            if(linkScore.containsKey(page)) {
+                value = linkScore.get(page);
+            }
+            if(basicScore.containsKey(page)) {
+                value += basicScore.get(page);
+            }
+            result.put(page,value);
 
-
-        // 기본 점수
-        for(int k=0;k<pages.length;++k){
-            String p=pages[k];
-            p=p.toLowerCase();
-            String [] words=p.split("[^a-z]");
-            for(String w:words){
-                if(w.equals(word)) 기본[k]++;
+            if(value > maxV) {
+                maxV = value;
             }
         }
-
-        for(int i=0;i<pages.length;++i){
-            System.out.println(i+" "+기본[i]+" "+외부[i]);
-        }
-
-        double max=0;
-        double []링크점수=new double [기본.length];
-        for(int i=0;i<기본.length;++i){
-            ArrayList<Integer> l=링크[i];
-            for(int j=0;j<l.size();++j){
-                int n=l.get(j);
-                링크점수[i]+=((double) 기본[n]/외부[n]);
-            }
-        }
-        int idx=0;
-        for(int i=0;i<링크점수.length;++i){
-            double n=링크점수[i]+기본[i];
-            if(max<n) {
-                max=n;
-                idx=i;
+        for(int i = 0; i < names.size(); i++) {                    //가장 큰 값 중 가장 빠른 값 찾기
+            if(result.get(names.get(i)) == maxV) {
+                answer =  i;
+                break;
             }
         }
 
-        return idx;
+        return answer;
+
+
     }
 }

@@ -10,104 +10,38 @@ public class 신규아이디추천 {
     }
 
     private static String solution(String new_id) {
-        // 1. 대문자 -> 소문자
+        // 1. new_id의 모든 대문자를 대응되는 소문자로 치환합니다.
         new_id=new_id.toLowerCase();
-        System.out.println("1 "+new_id);
-        // 2. 제외 문자 빼기
-        new_id=second(new_id);
-        System.out.println("2 "+new_id);
-        //3. 마침표 2개이상 -> 1개로 치환
-        new_id=third(new_id);
-        System.out.println("3 "+new_id);
-        //4. 마침표 처음,끝이면 제거
-        new_id=fourth(new_id);
-        System.out.println("4 "+new_id);
-        //5. 빈문자열이면 a 대입
-        new_id=fifth(new_id);
-        System.out.println("5 "+new_id);
-        //6. 길이 16자 이상이면 첫 15자 제외 모두 제거
-        new_id=sixth(new_id);
-        System.out.println("6 "+new_id);
-        //7. 길이 2자 이하면 마지막 문자 반복해서 3자 채움
-        new_id=seventh(new_id);
-        System.out.println("7 "+new_id);
 
-        return new_id;
-    }
+        // 2. new_id에서 알파벳 소문자, 숫자, 빼기(-), 밑줄(_), 마침표(.)를 제외한 모든 문자를 제거합니다.
+        new_id=new_id.replaceAll("[^a-z0-9-_\\.]","");
+        // 3. new_id에서 마침표(.)가 2번 이상 연속된 부분을 하나의 마침표(.)로 치환합니다.
+        new_id=new_id.replaceAll("[\\.]{2,}",".");
 
-    private static String second(String new_id) {
-        StringBuilder sb=new StringBuilder();
-        for(int i=0;i<new_id.length();++i){
-            char c=new_id.charAt(i);
+        // 4. new_id에서 마침표(.)가 처음이나 끝에 위치한다면 제거합니다.
+        if(new_id.startsWith(".")) new_id=new_id.substring(1);
+        if(new_id.endsWith(".")) new_id=new_id.substring(0,new_id.length()-1);
 
-            if(('a'<=c && c<='z') || 0<=c-'0' && (int)c-'0'<=9 || c=='-' || c=='_' || c=='.'){
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-
-    private static String third(String new_id) {
-        StringBuilder sb=new StringBuilder();
-        boolean flag=false;
-        for(int i=0;i<new_id.length();++i){
-            char c=new_id.charAt(i);
-            if(c=='.') {
-                flag=true;
-            }
-            else {
-                if(flag) {
-                    sb.append(".");
-                    flag=false;
-                }
-                sb.append(c);
-            }
-        }
-        if(new_id.equals(".")) return ".";
-        return sb.toString();
-    }
-
-    private static String fourth(String new_id) {
-        if(new_id.equals("")) return new_id;
-        if(new_id.charAt(0)=='.') {
-            if(new_id.length()==1) return new_id="";
-            else new_id=new_id.substring(1);
-        }
-        if(new_id.charAt(new_id.length()-1)=='.') {
-            new_id=new_id.substring(0,new_id.length()-1);
-        }
-        return new_id;
-    }
-
-    private static String fifth(String new_id) {
+        // 5. new_id가 빈 문자열이라면, new_id에 "a"를 대입합니다.
         if(new_id.length()==0) new_id="a";
 
-        return new_id;
-    }
-
-    private static String sixth(String new_id) {
+        // 6. new_id의 길이가 16자 이상이면, new_id의 첫 15개의 문자를 제외한 나머지 문자들을 모두 제거합니다.
+        //     만약 제거 후 마침표(.)가 new_id의 끝에 위치한다면 끝에 위치한 마침표(.) 문자를 제거합니다.
         if(new_id.length()>=16) {
-            new_id = new_id.substring(0,15);
-            System.out.println(new_id);
-            new_id = fourth(new_id);
+            new_id=new_id.substring(0,15);
+            if(new_id.endsWith(".")) new_id=new_id.substring(0,new_id.length()-1);
+        }
+        // new_id의 길이가 2자 이하라면, new_id의 마지막 문자를 new_id의 길이가 3이 될 때까지 반복해서 끝에 붙입니다.
+        if(new_id.length()<=2){
+            char c=new_id.charAt(new_id.length()-1);
+            while(new_id.length()!=3){
+                new_id+=c+"";
+            }
         }
 
         return new_id;
+
     }
-
-    private static String seventh(String new_id) {
-        StringBuilder sb=new StringBuilder();
-        for(int i=0;i<new_id.length();++i){
-            sb.append(new_id.charAt(i));
-        }
-        while(new_id.length()<=2){
-            sb.append(new_id.charAt(new_id.length()-1));
-            new_id=sb.toString();
-        }
-
-        return new_id;
-    }
-
 
 
 

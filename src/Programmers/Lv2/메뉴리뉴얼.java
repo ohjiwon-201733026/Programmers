@@ -1,6 +1,8 @@
 package Programmers.Lv2;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class 메뉴리뉴얼 {
@@ -11,59 +13,56 @@ public class 메뉴리뉴얼 {
 
         for(String a:answer) System.out.println(a);
     }
-    public static String [] o;
-    public static boolean [] visit;
-    public static HashMap<String,Integer> hm=new HashMap<>();
-    public static String [] solution(String [] orders, int [] course){
+    public static HashMap<String, Integer> map=new HashMap<>();
+    public static String[] solution(String[] orders, int[] course) {
 
-        for(int i=0;i<course.length;++i){
-            for(String order : orders){
-                o=order.split("");
-                Arrays.sort(o);
-                visit=new boolean[o.length];
-                combination(o.length,course[i],0,0);
+        for(String order:orders) {
+            String[] o = order.split("");
+            Arrays.sort(o);
+            for (int c : course) {
+                combination(o, new boolean[o.length], 0,o.length,c);
             }
         }
-
-
-
-        StringBuilder sb=new StringBuilder();
+        ArrayList<String> list=new ArrayList<>();
         for(int i=0;i<course.length;++i){
             int max=0;
-            for(String key:hm.keySet()){
-                if(key.length()==course[i] && hm.get(key)>=2) {
-                    if (max < hm.get(key)) max = hm.get(key);
+            for(String key:map.keySet()){
+                if(map.get(key)>=2 && key.length()==course[i]){
+                    if(max<map.get(key)) max=map.get(key);
                 }
             }
 
-            for(String key:hm.keySet()){
-                if(key.length()==course[i] && max==hm.get(key) && hm.get(key)>=2) sb.append(key+",");
+            for(String key:map.keySet()){
+                if(map.get(key)>=2 && key.length()==course[i] && map.get(key)==max) list.add(key);
             }
         }
-
-        String [] answer=sb.toString().split(",");
-        Arrays.sort(answer);
+        Collections.sort(list);
+        String [] answer=new String[list.size()];
+        for(int i=0;i< answer.length;++i){
+            answer[i]=list.get(i);
+        }
         return answer;
     }
 
-    public static void combination(int n, int r, int depth,int start){
-        if(depth==r){
+    private static void combination(String [] arr, boolean[] visited, int start, int n, int r) {
+        if(r==0){
             StringBuilder sb=new StringBuilder();
-            for(int i=0;i<visit.length;++i){
-                if(visit[i]) sb.append(o[i]);
+            for(int i=0;i<visited.length;++i){
+                if(visited[i]) sb.append(arr[i]);
             }
             String key=sb.toString();
-            if(!hm.containsKey(key)) hm.put(key,1);
-            else hm.put(key,hm.get(key)+1);
+            if(!map.containsKey(key)) map.put(key,1);
+            else map.put(key,map.get(key)+1);
             return;
         }
 
         for(int i=start;i<n;++i){
-            if(visit[i]==false){
-                visit[i]=true;
-                combination(n,r,depth+1,i);
-                visit[i]=false;
+            if(visited[i]!=true){
+                visited[i]=true;
+                combination(arr,visited,i+1,n,r-1);
+                visited[i]=false;
             }
         }
     }
+
 }
