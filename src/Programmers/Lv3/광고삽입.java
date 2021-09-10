@@ -5,64 +5,59 @@ import java.util.PriorityQueue;
 
 public class 광고삽입 {
     public static void main(String [] args){
-        String play_time="50:00:00";
-        String adv_time="50:00:00";
-        String [] logs={"15:36:51-38:21:49", "10:14:18-15:36:51", "38:21:49-42:51:45"
+        String play_time="02:03:55";
+        String adv_time="00:14:15";
+        String [] logs={"01:20:15-01:45:14", "00:40:31-01:00:00", "00:25:50-00:48:29", "01:30:59-01:53:29", "01:37:44-02:02:30"
         };
         System.out.println(solution(play_time,adv_time,logs));
     }
-    // 2-4 , 3~5
-    // 0 1 2 3 4 5 6 7
-    // 0 0 1 2 1 0 0 0
-    public static String solution(String play_time,String adv_time,String [] logs){
-        int playTime=strToSec(play_time);
-        int advTime=strToSec(adv_time); // 2
-        int [] count=new int [playTime+1]; // 영상 재생 시간 00:00:00 ~ playTime까지
 
-        for(String log : logs){
-            String [] splits=log.split("-");
-            int startViewTime=strToSec(splits[0]);
-            int endViewTime=strToSec(splits[1]);
+    public static String solution(String play_time,String adv_time,String [] logs) {
+        int playTime=stringToSec(play_time);
+        int advTime=stringToSec(adv_time);
+        int [] time=new int [playTime+1];
+        for(String log:logs){
+            String [] s=log.split("-");
+            int startTime=stringToSec(s[0]);
+            int endTime=stringToSec(s[1]);
 
-            // 시청 시간 +1, endViewTime 포함하지 않음
-            for(int i=startViewTime;i<endViewTime;++i){
-                count[i]++;
+            for(int i=startTime;i<endTime;++i){
+                time[i]++;
             }
         }
 
-        // 0초에 관고를 넣는다 가정했을 때 누적값 계산
-        int startTime=0;
-        int endTime=advTime;
+        int startPlayTime=0;
+        int endPlayTime=advTime;
         long sum=0;
-        for(int i=startTime;i<endTime;++i){
-            sum+=count[i];
+        for(int i=startPlayTime;i<endPlayTime;++i){
+            sum+=time[i];
         }
 
-        // 누적값에서 앞에 값을 빼고 뒤에 값을 추가하면서 각초마다 광고를 넣었을 때의 누적값을 구하고 비교
         long max=sum;
         int maxStartTime=0;
-        while(endTime<=playTime){
-            sum-=count[startTime];
-            sum+=count[endTime];
+        while(endPlayTime<=playTime){
+            sum-=time[startPlayTime];
+            sum+=time[endPlayTime];
             if(sum>max){
                 max=sum;
-                maxStartTime=startTime+1;
+                maxStartTime=startPlayTime+1;
             }
-            startTime++;
-            endTime++;
+            startPlayTime++;
+            endPlayTime++;
         }
-        return secondToStr(maxStartTime);
-
+        return secondToString(maxStartTime);
     }
-    public static String secondToStr(int time){
-        int H=time/3600;
-        int M=(time%3600)/60;
-        int S=(time%3600)%60;
 
+    private static String secondToString(int maxStartTime) {
+        int H=maxStartTime/3600;
+        int M=(maxStartTime%3600)/60;
+        int S=((maxStartTime%3600)%60);
         return String.format("%02d:%02d:%02d",H,M,S);
     }
-    public static int strToSec(String time){
-        String [] t=time.split(":");
-        return Integer.parseInt(t[0])*3600+Integer.parseInt(t[1])*60+Integer.parseInt(t[2]);
+
+    public static int stringToSec(String play_time){
+        String [] s=play_time.split(":");
+        return Integer.parseInt(s[0])*3600 + Integer.parseInt(s[1])*60
+                +Integer.parseInt(s[2]);
     }
 }

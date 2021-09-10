@@ -14,37 +14,69 @@ public class 합승택시요금 {
                 {2, 4, 66}, {2, 3, 22}, {1, 6, 25}};
         System.out.println(solution(n,s,a,b,fares));
     }
-    static class Node implements Comparable<Node>{
-        int idx,dist;
-        public Node(int idx, int dist){
-            this.idx=idx;
-            this.dist=dist;
+
+    public static int [][] map;
+    public static PriorityQueue<Node> pq=new PriorityQueue<>();
+    public static int INF;
+    public static int N;
+
+    public static class Node implements Comparable<Node>{
+        int idx;
+        int d;
+
+        public Node(int idx, int d) {
+            this.idx = idx;
+            this.d = d;
         }
 
         @Override
         public int compareTo(Node o) {
-            return this.dist-o.dist;
+            return this.d-o.d;
         }
     }
-    static int N,INF;
-    static int [][] graph;
 
-    public static int solution(int n,int s, int a, int b,int [][] fares){
+    public static int [] dijkstra(int s){
+        int [] dist=new int [N+1];
+        boolean [] visited=new boolean[N+1];
+        pq.add(new Node(s,0));
+        Arrays.fill(dist,INF);
+        dist[s]=0;
+        visited[s]=true;
+
+        while(!pq.isEmpty()){
+            Node p=pq.poll();
+
+            for(int i=1;i<=N;++i){
+                if(map[p.idx][i]!=INF && !visited[i]){
+                        if(dist[i]>(dist[p.idx]+map[p.idx][i])) {
+                            dist[i] = (dist[p.idx] + map[p.idx][i]);
+                            pq.add(new Node(i,dist[i]));
+                        }
+                }
+            }
+
+            visited[p.idx]=true;
+
+        }
+        return dist;
+    }
+    public static int solution(int n, int s, int a, int b, int [][] fares){
+        INF=Integer.MAX_VALUE;
         N=n;
-        INF=987654321;
-        graph=new int [N+1][N+1];
+        map=new int [N+1][N+1];
 
         for(int i=0;i<=N;++i){
-            Arrays.fill(graph[i],INF);
+            for(int j=0;j<=N;++j){
+                map[i][j]=INF;
+            }
         }
+        for(int[] fare:fares){
+            int p1=fare[0];
+            int p2= fare[1];
+            int d=fare[2];
 
-        for(int [] far : fares){
-            int n1=far[0];
-            int n2=far[1];
-            int dist=far[2];
-
-            graph[n1][n2]=dist;
-            graph[n2][n1]=dist;
+            map[p1][p2]=d;
+            map[p2][p1]=d;
         }
 
         int [] sDist=dijkstra(s);
@@ -54,44 +86,13 @@ public class 합승택시요금 {
         int noShared=sDist[a]+sDist[b];
 
         int shared=Integer.MAX_VALUE;
+
         for(int i=1;i<=N;++i){
             if(sDist[i]==INF || aDist[i]==INF || bDist[i]==INF) continue;
-
             shared=Math.min(shared,sDist[i]+aDist[i]+bDist[i]);
         }
 
-        return Math.min(noShared,shared);
-    }
+        return Math.min(shared, noShared);
 
-    private static int[] dijkstra(int from) {
-        PriorityQueue<Node> pq=new PriorityQueue<>();
-
-        int [] dist=new int [N+1];
-        boolean [] visited=new boolean[N+1];
-
-        Arrays.fill(dist,INF);
-
-        dist[from]=0;
-        pq.add(new Node(from,0));
-
-        while(!pq.isEmpty()){
-            int here=pq.peek().idx;
-            int cost=pq.peek().dist;
-            pq.poll();
-
-//            if(cost<dist[here]) continue;
-
-            for(int i=1;i<=N;++i){
-                if(graph[here][i]!=INF && !visited[i]){
-                    if(dist[i]>(dist[here]+graph[here][i])){
-                        dist[i]=(dist[here]+graph[here][i]);
-                        pq.add(new Node(i,dist[i]));
-                    }
-                }
-            }
-
-            visited[here]=true;
-        }
-        return dist;
     }
 }
