@@ -30,15 +30,23 @@ public class 카드짝맞추기 {
         }
         n/=2; // 같은 카드 2장씩 있으니까 전체 /2
         int [] temp=new int [n];
-        for(int i=0;i<n;++i) temp[i]=i+1;
+        for(int i=0;i<n;++i) temp[i]=i+1; // 0:1, 1:2 ,2:3
         orders=new ArrayList<>();
-        perm(temp,new int [n],new boolean[n],0,n,n);
+        perm(temp,new int [n],new boolean[n],0,n,n); // 어떤 숫자부터 제거할지 조합
+        /*
+            1,2,3
+            1,3,2
+            2,1,3
+            2,3,1
+            3,1,2
+            3,2,1
+         */
 
         for(int [] order:orders){
             int total=0;
             int [] point=new int [2]; // 최초 커서 위치(r,c)
-            point[0]=r;
-            point[1]=c;
+            point[0]=r; // 현재위치 r
+            point[1]=c; // 현재위치 c
             int [][] cBoard=new int[4][4];
             for(int i=0;i<4;++i){
                 for(int j=0;j<4;++j){
@@ -49,8 +57,8 @@ public class 카드짝맞추기 {
             for(int card:order){ // 조합결과 123 , 132, ...
                 int cnt=0;
                 // 목표 카드 찾기
-                cnt+=bfs(cBoard,card,point)+1;
-                cBoard[point[0]][point[1]]=0;
+                cnt+=bfs(cBoard,card,point)+1; // enter
+                cBoard[point[0]][point[1]]=0; // 0으로
                 System.out.println(point[0]+" "+point[1]);
                 // 짝찾기
                 cnt+=bfs(cBoard,card,point)+1;
@@ -75,7 +83,7 @@ public class 카드짝맞추기 {
         Queue<int []> que=new LinkedList<>();
         boolean [][] visited=new boolean[4][4];
 
-        que.offer(new int []{r,c,0});
+        que.offer(new int []{r,c,0}); // r,c, distance
         visited[r][c]=true;
 
         while(!que.isEmpty()){
@@ -86,7 +94,7 @@ public class 카드짝맞추기 {
                 return p[2];
             }
 
-            for(int d=0;d<4;++d){
+            for(int d=0;d<4;++d){ // right, left, up, down
                 int nr=p[0]+dx[d];
                 int nc=p[1]+dy[d];
 
