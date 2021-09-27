@@ -15,44 +15,53 @@ public class 다단계칫솔판매 {
     static HashMap<String, ArrayList<String>> refer=new HashMap<>();
     static HashMap<String,Integer> sum=new HashMap<>();
     public static int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
-
+        /*
+            john : -
+            mary : -
+            edward : mary ,-
+            sam : edward, mary ,-
+            emily: mary
+            jaimie : mary
+            tod : jaimie
+            young : edward
+         */
         for(int i=0;i< enroll.length;++i){
             String referName=referral[i];
             ArrayList<String> tmp=new ArrayList<>();
             tmp.add(referName);
             if(refer.containsKey(referName)) tmp.addAll(refer.get(referName));
-            refer.put(enroll[i],tmp);
-            sum.put(enroll[i],0);
+            refer.put(enroll[i],tmp); // enroll , ArrayList
+            sum.put(enroll[i],0); // enroll, price
         }
         sum.put("-",0); // center 넣어주기
 
         for(int i=0;i< seller.length;++i){
             ArrayList<String> referArr=refer.get(seller[i]);
-            int cost=amount[i]*100;
+            int cost=amount[i]*100; // 칫솔 1개당 100원
 
             String sell=seller[i]; // 판사람
-            if(cost-cost*0.1>0) {
+            if(cost-cost*0.1>0) { // 추천인에게 줄 수 있다면
                 sum.put(sell,sum.get(sell)+(cost-(int)(cost*0.1)));
-                cost=(int)(cost*0.1);
+                cost=(int)(cost*0.1); // 추천인 받을 돈 
             }
-            else {
+            else { // 줄 수 없는 경우 다 가짐
                 sum.put(sell,sum.get(sell)+cost);
                 continue;
             }
             // 추천인
             for(int j=0;j<referArr.size();++j){ // edward, marry, -
                 if(cost-cost*0.1>0) {
-                    if(referArr.get(j).equals("-")) {
+                    if(referArr.get(j).equals("-")) { // 추천인이 center면 앞으로 더 추천인 없으므로 center가 다 가짐
                         sum.put(referArr.get(j),sum.get(referArr.get(j))+cost);
                         break;
                     }
-                    else{
+                    else{ // center(-) 아니면 추천인에게 줘야함
                         sum.put(referArr.get(j),sum.get(referArr.get(j))+(cost-(int)(cost*0.1)));
                         cost=(int)(cost*0.1);
                     }
 
                 }
-                else{
+                else{ // 추천인에게 줄 수 없는 경우
                     sum.put(referArr.get(j),sum.get(referArr.get(j))+cost);
                     break;
                 }

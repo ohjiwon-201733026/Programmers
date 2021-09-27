@@ -1,22 +1,23 @@
 package Programmers.Lv3;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class 카드짝맞추기 {
+    @Test
+    public  void test() {
+        Assertions.assertEquals(14,solution(new int [][] { {1,0,0,3}, {2,0,0,0}, {0,0,0,2}, {3,0,1,0}},1,0));
+//        Assertions.assertEquals(16,solution(new int [][] { {3,0,0,2},{0,0,1,0},{0,1,0,0},{2,0,0,3}},0,1));
 
-    public static void main(String[] args) {
-        int [][] board={
-                {1,0,0,3},
-                {2,0,0,0},
-                {0,0,0,2},
-                {3,0,1,0}
-        };
-        int r=1;
-        int c=0;
-        System.out.println(solution(board,r,c));
     }
+    // 1003
+    // 2000
+    // 0002
+    // 3010
     public static ArrayList<int []> orders=new ArrayList<>();
     public static int [] dx={0,1,0,-1};
     public static int [] dy={1,0,-1,0};
@@ -42,7 +43,7 @@ public class 카드짝맞추기 {
             3,2,1
          */
 
-        for(int [] order:orders){
+        for(int [] order:orders){ // 1 2 3
             int total=0;
             int [] point=new int [2]; // 최초 커서 위치(r,c)
             point[0]=r; // 현재위치 r
@@ -54,7 +55,7 @@ public class 카드짝맞추기 {
                 }
             }
 
-            for(int card:order){ // 조합결과 123 , 132, ...
+            for(int card:order){ // 조합결과 1
                 int cnt=0;
                 // 목표 카드 찾기
                 cnt+=bfs(cBoard,card,point)+1; // enter
@@ -113,7 +114,6 @@ public class 카드짝맞추기 {
                 }
             }
 
-
         }
         return 0;
     }
@@ -133,6 +133,9 @@ public class 카드짝맞추기 {
     }
 
     private static void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r) {
+        for(int i=0;i<output.length;++i)
+        System.out.print(output[i]+" ");
+        System.out.println();
         if(depth==r) {
             int [] temp=new int [r];
             for (int i = 0; i < r; ++i) {
