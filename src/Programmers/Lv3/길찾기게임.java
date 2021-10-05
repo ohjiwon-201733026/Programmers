@@ -22,9 +22,6 @@ public class 길찾기게임 {
         }
     }
 
-    public static void main(String[] args) {
-
-    }
     static int [][] answer;
     static int i;
     public int [][] solution(int [][] nodeinfo){
@@ -34,13 +31,17 @@ public class 길찾기게임 {
             nodeList.add(new Node(node[0],node[1],i+1));
         }
         Collections.sort(nodeList);
-
+        // {5,3},{11,5},{13,3},{3,5},{6,1},{1,3},{8,6},{7,2},{2,2}
+        // 7:{8,6} 2:{11,5} 4:{3,5} 1:{5,3} 3:{13,3} 6:{1,3} 8:{7,2} 9:{2,2} 5:{6,1}
         Node root=nodeList.get(0);
+
         // 트리 만들기
         for(int i=1;i<nodeList.size();++i){
             Node child=nodeList.get(i);
             connectNode(root,child);
         }
+        System.out.println(root.right);
+        System.out.println(root.left);
         System.out.println("===========");
         System.out.println(root);
         answer=new int [2][nodeList.size()];
@@ -54,7 +55,7 @@ public class 길찾기게임 {
 
         return answer;
     }
-
+    // 후위순회
     private void postOrder(int[][] arr, Node node) {
         if(node!=null){
             if(node.left!=null) postOrder(arr,node.left);
@@ -62,7 +63,7 @@ public class 길찾기게임 {
             arr[1][i++]=node.val;
         }
     }
-
+    // 전위 순회
     private void preOrder(int[][] arr, Node node) {
         if(node!=null){
             arr[0][i++]=node.val;
@@ -106,4 +107,5 @@ public class 길찾기게임 {
             return o.y-this.y;
         }
     }
+
 }
