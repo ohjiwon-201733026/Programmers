@@ -1,41 +1,45 @@
 package Programmers.Lv3;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Stack;
 
 public class 표편집 {
-    public static void main(String [] args){
-        int n=8;
-        int k=2;
-        String [] cmd={"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"};
-        System.out.println(solution(n,k,cmd));
+
+    @Test
+    public void test(){
+        Assertions.assertEquals("OOOOXOOO",solution(8,2,new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z"}));
+        Assertions.assertEquals("OOXOXOOO",solution(8,2,new String[]{"D 2","C","U 3","C","D 4","C","U 2","Z","Z","U 1","C"}));
     }
 
-    public static String solution(int n, int k, String [] cmd) {
-
+    public String solution(int n, int k, String[] cmd) {
         Stack<Integer> stack=new Stack<>();
 
-        for(String c: cmd){
-            String [] s=c.split(" ");
-            if(s[0].equals("U")){
-                int a=Integer.parseInt(s[1]);
-                k-=a;
+        for(String s:cmd){
+            String [] c=s.split(" ");
+            if(c[0].equals("U")){
+                int num=Integer.parseInt(c[1]);
+                k-=num;
                 if(k<0) k+=n;
             }
-            else if(s[0].equals("D")){
-                int a=Integer.parseInt(s[1]);
-                k+=a;
-                if(k>=n) k-=n;
+            if(c[0].equals("D")){
+                int num=Integer.parseInt(c[1]);
+                k+=num;
+                if(k>n-1) k-=n;
             }
-            else if(s[0].equals("C")){
-                stack.add(k);
-                if(k==n-1){
-                    k--;
-                }
+
+            if(c[0].equals("C")){
+                stack.push(k);
+                if(k==n-1) k--;
                 n--;
             }
-            else{
+
+            if(c[0].equals("Z")){
                 int r=stack.pop();
-                if(k>=r) k+=1;
+                if(k>=r) k+=1; // pop한게 현재위치보다 앞에있으면 현재위치 밀려남
                 n++;
             }
         }
@@ -44,11 +48,13 @@ public class 표편집 {
             sb.append("O");
         }
 
-        while(!stack.isEmpty()){
-            int a=stack.pop();
-            sb.insert(a,"X");
+        while(!stack.isEmpty()) {
+            sb.insert(stack.pop(),"X");
+
         }
+
         return sb.toString();
+
     }
 
 }
