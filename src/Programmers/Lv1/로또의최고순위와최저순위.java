@@ -1,37 +1,46 @@
 package Programmers.Lv1;
 
-import java.util.ArrayList;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
+import java.util.HashSet;
 
 public class 로또의최고순위와최저순위 {
 
-    public static void main(String[] args) {
-        int [] lottos={45, 4, 35, 20, 3, 9};
-        int [] win_nums={20, 9, 3, 45, 4, 35};
-        int [] answer=solution(lottos,win_nums);
-        for(int i=0;i<2;++i) {
-            System.out.println(answer[i]);
-        }
+    @Test
+    public void test(){
+        int [] lottos1={44, 1, 0, 0, 31, 25};
+        int [] lottos2={0, 0, 0, 0, 0, 0};
+        int [] lottos3={45, 4, 35, 20, 3, 9};
+
+        int [] win_nums1={31, 10, 45, 1, 6, 19};
+        int [] win_nums2={38, 19, 20, 40, 15, 25};
+        int [] win_nums3={20, 9, 3, 45, 4, 35};
+
+        int [] result=solution(lottos3,win_nums3);
+        System.out.println(result[0]+" "+result[1]);
     }
-    public static int[] solution(int[] lottos, int[] win_nums) {
-        int [] answer = new int [2];
-        ArrayList<Integer> list=new ArrayList<>();
-        for(int i=0;i<win_nums.length;++i){
-            list.add(win_nums[i]);
+
+    public int [] solution(int [] lottos, int [] win_nums){
+        HashSet<Integer> win=new HashSet<>();
+
+        for(int i:win_nums){ // win
+            win.add(i);
         }
-        int cnt=0;
-        int zeroCount=0;
-        for(int i=0;i<lottos.length;++i){
-            if(list.contains(lottos[i])) cnt++;
-            if(lottos[i]==0) zeroCount++;
+        int count=0;
+        int zero=0;
+        for(int i:lottos){
+            if(win.contains(i)) count++;
+            if(i==0) zero++;
         }
 
-        int first=6-(cnt+zeroCount)+1;
-        if(first>=6) first=6;
-        int last=6-cnt+1;
-        if(last>=6) last=6;
-        answer[0]=first;
-        answer[1]=last;
+        int max=7-(count+zero);
+        int min=7-count;
 
-        return answer;
+        if(max>=6) max=6;
+        if(min>=6) min=6;
+
+        return new int []{max,min};
+
     }
 }

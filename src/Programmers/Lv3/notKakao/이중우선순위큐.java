@@ -38,17 +38,16 @@ public class 이중우선순위큐 {
             }
             if(o[0].equals("D")){
                 int op=Integer.parseInt(o[1]);
+                if(!asc.isEmpty()) {
+                    if (op == 1) {
+                        int max = des.poll();
+                        asc.remove(max);
+                    }
 
-                if(op==1){
-                    if(des.isEmpty()) return new int[]{0,0};
-                    int max=des.poll();
-                    asc.remove(max);
-                }
-
-                if(op==-1){
-                    if(asc.isEmpty()) return new int[]{0,0};
-                    int min=asc.poll();
-                    des.remove(min);
+                    if (op == -1) {
+                        int min = asc.poll();
+                        des.remove(min);
+                    }
                 }
             }
         }
