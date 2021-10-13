@@ -26,20 +26,27 @@ public class 퍼즐조각채우기 {
         len= game_board.length;
         g=new int [len][len];
         t=new int [len][len];
-        
+
         for(int i=0;i<len;++i){
             for(int j=0;j<len;++j){
                 g[i][j]=game_board[i][j];
                 t[i][j]=table[i][j];
             }
         }
-        
+
         for(int i=0;i<len;++i){
             for(int j=0;j<len;++j){
                 if(g[i][j]==0){ // 빈공간 발생
                     temp=new int [len][len]; // 빈공간 복사할 배열
                     p[0]=i;p[1]=j;count=0;
                     findBlock(i,j,0);
+                    for(int a=0;a< temp.length;++a){
+                        for(int b=0;b< temp.length;++b){
+                            System.out.print(temp[a][b]+" ");
+                        }
+                        System.out.println();
+                    }
+                    System.out.println("================");
                     b_list.add(new Block(temp,count,p[0],p[1])); // 찾은 빈 공간 리스트 추가
                 }
                 if(t[i][j]==1){ // 블록 발생
@@ -72,7 +79,7 @@ public class 퍼즐조각채우기 {
         return answer;
     }
     // 빈 공간 혹은 블록의 모양을 탐색
-    public void findBlock(int i, int j, int choice){ 
+    public void findBlock(int i, int j, int choice){
         // choice 0: 빈공간 찾기, 1:블록 찾기
         count++;
         if(choice==0) g[i][j]=1;
@@ -100,7 +107,7 @@ public class 퍼즐조각채우기 {
             for(int x=0;x<6;++x){ // rotate 배열의 시작점을 지정
                 for(int y=0;y<6;++y){
                     count=0;
-                    for(int i=0;i<6;++i){ // 처음부터 끝까지 겹치는 모든 부분을 탐색
+                    for(int i=0;i<6;++i){ // 처음부터 끝까지 겹치는 모든 부분을 탐색 ( game_board 탐색 )
                         for(int j=0;j<6;++j){
                             if(0<=x+i && x+i<6 && 0<=y+j && y+j<6){
                                 if(o1[i][j]==1 && rotate[x+i][y+j]==1) count++;
@@ -112,7 +119,7 @@ public class 퍼즐조각채우기 {
                     }
                     if(count==n) return true; // 딱 맞는 모양일 경우 true 반환
                 }
-                
+
             }
         }
         return false;
@@ -132,7 +139,7 @@ public class 퍼즐조각채우기 {
         }
         return rotate;
     }
-    
+
     class Block{ // 빈칸과 블록을 담을 블록 객체 정의
         public int [][] arr; // 배열
         public Integer n;  // 빈칸 혹은 블록의 갯수
@@ -150,6 +157,4 @@ public class 퍼즐조각채우기 {
             this.n=n;
         }
     }
-
-
 }

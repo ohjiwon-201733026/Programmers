@@ -43,11 +43,12 @@ public class 표편집 {
                 n++;
             }
         }
+        // n=7 stack =4
         StringBuilder sb=new StringBuilder();
         for(int i=0;i<n;++i){
             sb.append("O");
         }
-
+        // sb= "OOOOXOOO"
         while(!stack.isEmpty()) {
             sb.insert(stack.pop(),"X");
 
