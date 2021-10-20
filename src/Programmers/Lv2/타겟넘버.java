@@ -1,29 +1,34 @@
 package Programmers.Lv2;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 public class 타겟넘버 {
-    public static void main(String[] args) {
-        int [] numbers={1,1,1,1,1};
-        int target=3;
-        int answer=solution(numbers,target);
-        System.out.println(answer);
-    }
-    public static int count=0;
-    private static int solution(int[] numbers, int target) {
 
-        int answer=dfs(numbers,target,0,0);
-        return answer;
+    @Test
+    public void test(){
+        Assertions.assertEquals(5,solution(new int []{1, 1, 1, 1, 1},3));
     }
 
-    public static int dfs(int [] numbers, int target, int idx, int val) {
-        if (idx == numbers.length){
-            if(val==target) return 1;
-            else return 0;
+    static int count=0;
+    static int N;
+    static int [] num;
+    public int solution(int [] numbers, int target){
+        N=numbers.length;
+        num=numbers;
+        dfs(0,0,target);
+
+        return count;
+    }
+
+    private void dfs(int i, int sum, int target){
+
+        if(i==N){
+            if(sum==target) count++;
+            return;
         }
 
-
-        return dfs(numbers, target, idx + 1, val + numbers[idx] * -1)
-            +dfs(numbers, target, idx + 1, val + numbers[idx]);
-
-
+        dfs(i+1,sum+num[i],target);
+        dfs(i+1,sum-num[i],target);
     }
 }
