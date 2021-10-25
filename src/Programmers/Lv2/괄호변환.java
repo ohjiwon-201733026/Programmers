@@ -1,74 +1,78 @@
 package Programmers.Lv2;
 
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+
 public class 괄호변환 {
 
-    public static void main(String[] args){
-        String p="()))((()";
-
-        String answer=solution(p);
-        System.out.println(answer);
+    @Test
+    public void test(){
+        Assertions.assertEquals("(()())()",solution("(()())()"));
+        Assertions.assertEquals("()",solution(")("));
+        Assertions.assertEquals("()(())()",solution("()))((()"));
     }
 
+    public String solution(String p){
+        // 1.
+        if(p.equals("")) return "";
 
-    public static String solution(String p){
+        // 2.
+        int bal=balancedIdx(p);
+        String u=p.substring(0,bal+1);
+        String v=p.substring(bal+1);
+        // 3.
+        if(isRight(u)) return u+solution(v);
 
-
-            if(p.length()==0) return "";
-            // 2
-            int i=makeBalancedString(p);
-            String u=p.substring(0,i+1);
-            String v=p.substring(i+1);
-
-            // 3
-            if(correctString(u)) return u+solution(v);
-            // 4
-            StringBuilder sb=new StringBuilder("(");
-            sb.append(solution(v)); // 4-2
-            sb.append(")");
-            sb.append(reverse(u));
-            return sb.toString();
-
-
-    }
-
-    public static String reverse(String u){
-        u=u.substring(1,u.length()-1);
+        // 4.
         StringBuilder sb=new StringBuilder();
-        for(int i=0;i<u.length();++i){
-            char c=u.charAt(i);
-            if(c=='(') sb.append(")");
-            else sb.append("(");
-        }
+        sb.append("(");
+        sb.append(solution(v));
+        sb.append(")");
+        u=u.substring(1,u.length()-1);
+        sb.append(reverse(u));
 
         return sb.toString();
     }
 
-    public static int makeBalancedString(String s){
-        int num=0;
-        int i;
-        for(i=0;i<s.length();++i){
-            char c=s.charAt(i);
-            if(c=='(') num++;
-            else num--;
-            if(num==0) break;
+    private String reverse(String u) {
+
+        StringBuilder sb=new StringBuilder();
+        for(int i=0;i<u.length();++i){
+            char c=u.charAt(i);
+            if(c=='(') sb.append(')');
+            else sb.append('(');
         }
-        return i;
+        return sb.toString();
     }
 
+    private boolean isRight(String u) {
 
-    public static boolean correctString(String s){
-        if(s.charAt(0)==')') return false;
-        int num=0;
-        for(int i=0;i<s.length();++i){
-            char c=s.charAt(i);
-            if(c=='(') num++;
-            else num--;
+        if(u.charAt(0)==')') return false;
+        int cnt=0;
+        for(int i=0;i<u.length();++i){
+            char c= u.charAt(i);
+            if(c=='(') cnt++;
+            else cnt--;
 
-            if(num<0) return false;
+            if(c<0) return false;
+        }
+
+        if(cnt==0) return true;
+        else return false;
+    }
+
+    private int balancedIdx(String p) {
+        int count=0;
+        for(int i=0;i<p.length();++i){
+            char c=p.charAt(i);
+            if(c=='(') count++;
+            else if(c==')') count--;
+
+            if(count==0) return i;
 
         }
 
-        return true;
+        return p.length();
     }
 
 }

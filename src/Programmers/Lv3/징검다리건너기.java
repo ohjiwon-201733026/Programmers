@@ -23,7 +23,7 @@ public class 징검다리건너기 {
 
     private static int binarySearch(int max, int[] stones, int k) {
         int start=0;
-        int end=max;
+        int end=max; //5
         int mid=0;
         int answer=0;
         while(start<=end){
@@ -40,7 +40,7 @@ public class 징검다리건너기 {
         return answer;
 
     }
-
+    // 0, 2, 3, 0, 1, 0, 2, 0, 3, 0
     private static boolean cross(int mid, int[] stones, int k) {
         int count=0;
         for (int stone : stones) {

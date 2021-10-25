@@ -34,6 +34,14 @@ public class 가장먼노드 {
             arr[a].add(b);
             arr[b].add(a);
         }
+        /**
+         * 1
+         * 2
+         * 3 -6
+         * 4
+         * 5
+         * 6 -3
+         */
 
         dijkstra();
         int max=0;

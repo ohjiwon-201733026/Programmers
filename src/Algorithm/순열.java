@@ -11,11 +11,11 @@ package Algorithm;
 public class 순열 {
     //4개중 3개 뽑음
     public static void main(String[] args) {
-        int [] arr={1,2,3,4};
+        int [] arr={1,2,3,4,5,6,7,8};
         int [] output=new int [arr.length];
         boolean [] visited=new boolean [arr.length];
-        int n=4;
-        perm(arr,output,visited,0,n,3);
+        int n=8;
+        perm(arr,output,visited,0,n,8);
     }
 
     private static void perm(int[] arr, int[] output, boolean[] visited, int depth, int n, int r) {
