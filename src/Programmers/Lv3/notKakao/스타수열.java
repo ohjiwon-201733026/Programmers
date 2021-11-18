@@ -15,7 +15,8 @@ public class 스타수열 {
         Assertions.assertEquals(4,solution(new int []{5,2,3,3,5,3}));
         Assertions.assertEquals(8,solution(new int []{0,3,3,0,7,2,0,2,2,0}));
     }
-
+    // 5 2 3 3 5 3
+    // 5:2 3:3 2:1
     public int solution(int [] a){
         int answer = 0;
         Map<Integer, Integer> map = new HashMap<>(a.length);
