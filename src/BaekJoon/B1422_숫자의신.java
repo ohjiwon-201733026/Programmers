@@ -1,86 +1,57 @@
 package BaekJoon;
 
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
 
 public class B1422_숫자의신 {
-    private static ArrayList<int []> list=new ArrayList<>();
-    public static void main(String[] args) {
-        Scanner sc=new Scanner(System.in);
-        int k=sc.nextInt();
-        int n=sc.nextInt();
-        long [] arr=new long[k];
+    static BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
+    static StringTokenizer st;
+    static int N,K;
+    static int max;
+    static String [] numList;
+    static String answer="";
 
-        for(int i=0;i<k;++i) arr[i]=sc.nextLong();
+    public static void main(String[] args) throws IOException {
+        setData();
+        getMaxValue();
+        System.out.println(answer);
+    }
 
-        int [] output=new int [k];
-        int [] t=new int [k];
-        for (int i=0;i<k;i++) {
-            t[i]=i;
+    public static void setData() throws IOException {
+        st=new StringTokenizer(br.readLine());
+        K=Integer.parseInt(st.nextToken());
+        N=Integer.parseInt(st.nextToken());
+        numList=new String[K];
+        for(int i=0;i<K;++i){
+            String sv=br.readLine();
+            int value=Integer.parseInt(sv);
+
+            if(max<value) max=value;
+            numList[i]=sv;
         }
 
-        perm(t,output,0,k,n);
-        System.out.println(list.size());
+        Arrays.sort(numList, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                String o=o1+o2;
+                return -o.compareTo(o2+o1);
+            }
+        });
+    }
 
-        for (int[] a : list) {
-            long [] tmp=new long [n];
-            int x=0;
-            for (int i=0;i<a.length;++i) {
-                int y=a[i];
-                for(int l=0;l<y;++l){
-                    tmp[x]=arr[i];
-                    x++;
+    private static void getMaxValue(){
+        boolean flag=false;
+        for(int i=0;i<K;++i){
+            answer+=numList[i];
+            if(max==Integer.parseInt(numList[i]) && flag==false){
+                flag=true;
+                for(int j=0;j<N-K;++j){
+                    answer+=numList[i];
                 }
             }
-            int r= tmp.length;
-            boolean [] visited=new boolean[r];
-            perm2(tmp,new long [r],visited,0,r,r);
-        }
-
-        System.out.println(answer);
-
-
-    }
-    private static long answer=0;
-    private static void perm2(long[] arr, long[] output, boolean[] visited, int depth, int n, int r) {
-        if(depth==r) {
-            StringBuilder sb=new StringBuilder();
-            for (int i = 0; i < r; ++i) {
-                sb.append(output[i]);
-            }
-            answer=Math.max(answer,Integer.parseInt(sb.toString()));
-            return;
-        }
-
-        for(int i=0;i<n;++i){
-            if(!visited[i]==true){
-                visited[i]=true;
-                output[depth]=arr[i];
-                perm2(arr,output,visited,depth+1,n,r);
-                visited[i]=false;
-            }
-        }
-
-
-    }
-
-    private static void perm(int[] arr, int[] output,  int depth, int n, int r) {
-        if(depth==r){
-            int [] tmp=new int [output.length];
-            for(int i=0;i<output.length;++i){
-//                if(output[i]==0) return;
-                System.out.print(output[i]+" ");
-                tmp[i]=output[i];
-            }
-            System.out.println();
-            list.add(tmp);
-            return;
-        }
-
-        for(int i=0;i<n;++i){
-            output[arr[i]]++;
-            perm(arr,output,depth+1,n,r);
-            output[arr[i]]--;
         }
     }
 }
+
