@@ -37,15 +37,20 @@ public class B1238_파티 {
         for(int i=1;i<=N;++i) arr[i]=new ArrayList<>();
         for(int i=1;i<=N;++i) tmp[i]=INF;
 
+        while(M-->0){
+            int a=sc.nextInt();
+            int b=sc.nextInt();
+            int w=sc.nextInt();
+            arr[a].add(new Node(b,w));
+        }
+
 
         for(int i=1;i<=N;++i){
             if(i==X) continue;
             for(int j=1;j<=N;++j) tmp[j]=INF;
             int n=dijkstra(i);
-            System.out.println(n);
             dist[i]+=n; // i-> X로 가는 길
         }
-
 
 
         for(int i=1;i<=N;++i) tmp[i]=INF;
@@ -61,7 +66,7 @@ public class B1238_파티 {
             answer=Math.max(answer,dist[i]);
         }
 
-//        System.out.println(answer);
+        System.out.println(answer);
 
     }
 
@@ -85,6 +90,8 @@ public class B1238_파티 {
                 }
             }
         }
+
+
 
         return tmp[X];
     }
