@@ -17,31 +17,37 @@ public class 문자열압축 {
     }
 
     public int solution(String s){
-        int answer=s.length();
-        StringBuilder sb = null;
-        for(int length=1;length<s.length();++length){
-            sb=new StringBuilder();
-            String pattern=s.substring(0,length);
-            int cnt=1;
-            for(int i=length;i<=s.length()-length;i+=length){
-                String tmp=s.substring(i,i+length);
-                if(tmp.equals(pattern)){
-                    cnt++;
-                }else{
-                    if(cnt>1) sb.append(cnt);
-                    sb.append(pattern);
-                    pattern=tmp;
-                    cnt=1;
-                }
-            }
-            if(cnt>1) sb.append(cnt);
-            sb.append(pattern);
-            int tail=s.length()%length;
-            if(tail>0) sb.append(s.substring(s.length()-tail));
-            answer= Math.min(answer,sb.toString().length());
-        }
+      int n=s.length();
+      int answer=n;
 
-        return answer;
+      for(int len=1;len<s.length();++len){
+          String pattern=s.substring(0,len);
+          int hit=1;
+          StringBuilder sb=new StringBuilder();
+
+          for(int i=len;i<=n-len;i+=len){
+              String tmp=s.substring(i,i+len);
+              if(pattern.equals(tmp)) hit++;
+              else{
+                  if(hit>1){
+                        sb.append(hit);
+                  }
+                  sb.append(pattern);
+                  hit=1;
+                  pattern=tmp;
+              }
+          }
+          if(hit>1) sb.append(hit);
+          sb.append(pattern);
+          int tail=n%len;
+          if(tail>0) sb.append(s.substring(n-tail));
+
+          answer=Math.min(sb.toString().length(),answer);
+      }
+
+
+
+      return answer;
 
     }
 }
