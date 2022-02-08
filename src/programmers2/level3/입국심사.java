@@ -14,27 +14,28 @@ public class 입국심사 {
 
     public long solution(int n, int [] times){
         Arrays.sort(times);
-        long answer=0;
+
         long left=1;
         long right=(long)times[times.length-1]*n;
+        long answer=right;
 
         while(left<=right){
             long mid=(left+right)/2;
             long sum=0;
-            for(int i=0;i<times.length;++i) sum+=mid/times[i];
+            for (int time : times) {
+                sum+=mid/time;
+            }
 
             if(sum<n){
                 left=mid+1;
-
             }
             else{
                 right=mid-1;
-                answer=mid;
+                answer=Math.min(mid,answer);
             }
         }
 
         return answer;
     }
-
 
 }
