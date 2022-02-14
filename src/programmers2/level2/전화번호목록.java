@@ -22,12 +22,13 @@ public class 전화번호목록 {
             set.add(s);
         }
 
+
         for(int i=0;i<phone_book.length;++i){
-            for(int j=0;j<phone_book[i].length();++j){
-                if(set.contains(phone_book[i].substring(0,j))) return false;
+            String piv=phone_book[i];
+            for(int j=0;j<piv.length();++j){
+                if(set.contains(piv.substring(0,j))) return false;
             }
         }
-
         return true;
     }
 }

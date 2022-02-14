@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class 스타수열 {
 
@@ -17,46 +18,43 @@ public class 스타수열 {
     }
 
     public int solution(int [] a){
-        int answer=0;
         HashMap<Integer,Integer> map=new HashMap<>();
         for (int i : a) {
             if(map.containsKey(i)) map.put(i,map.get(i)+1);
             else map.put(i,1);
         }
-        int maxCnt=0;
         int max=0;
+        int maxKey=0;
+        ArrayList<Integer> list=new ArrayList<>();
         for (Integer key : map.keySet()) {
-            if(map.get(key)>maxCnt){
-                maxCnt=map.get(key);
-                max=key;
+            if(map.get(key)>max) {
+                max=map.get(key);
             }
         }
 
-        int cnt=0;
+        for (Integer key : map.keySet()) {
+            if(map.get(key)==max) list.add(key);
+        }
+        int answer=0;
         for (Integer key : map.keySet()) {
             if(map.get(key)*2<=answer) continue;
-            max=key;
-            boolean [] visited=new boolean[a.length];
-            cnt=0;
+            int cnt=0;
+            boolean [] flag=new boolean[a.length];
             for(int i=0;i<a.length;++i){
-                if(a[i]==max){
-                    if(i-1>=0 && !visited[i-1] && !visited[i] && a[i-1]!=a[i]){
-                        visited[i-1]=true;
-                        visited[i]=true;
+                if(key==a[i]){
+                    if(i-1>=0 && !flag[i-1]&&!flag[i] && a[i-1]!=a[i]) {
                         cnt+=2;
-                    }else if(i+1<a.length && !visited[i] && !visited[i+1] && a[i]!=a[i+1]){
-                        visited[i]=true;
-                        visited[i+1]=true;
+                        flag[i-1]=flag[i]=true;
+                    }
+                    else if(i+1<a.length && !flag[i+1] && !flag[i] && a[i]!=a[i+1]) {
                         cnt+=2;
+                        flag[i]=flag[i+1]=true;
                         i++;
                     }
-
                 }
             }
-            answer=Math.max(cnt,answer);
-
+            answer=Math.max(answer,cnt);
         }
-
 
 
         return answer;
