@@ -16,24 +16,21 @@ public class 숫자게임 {
     }
 
     public int solution(int [] A, int [] B){
-        PriorityQueue<Integer> q=new PriorityQueue<>();
         Arrays.sort(A);
+        Arrays.sort(B);
+        int cnt=0;
         int i=0;
-        int j=0;
-        for(i=0;i<A.length;++i){
-            int a=A[i];
-            int b=B[j];
-            while (true) {
-                if (a > b) j++;
-                else break;
-                if(j>B.length) break;
-                b=B[j];
+        int j=0;// B의 인덱스
+
+        while (i<A.length){
+            if(j>=B.length) break;
+            if(A[i]<B[j]){
+                cnt++;
+                i++;
             }
-            if(j>B.length) break;
-
+            j++;
         }
-
-        return i;
+        return cnt;
 
     }
 }
