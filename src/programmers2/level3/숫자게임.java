@@ -18,19 +18,26 @@ public class 숫자게임 {
     public int solution(int [] A, int [] B){
         Arrays.sort(A);
         Arrays.sort(B);
-        int cnt=0;
-        int i=0;
-        int j=0;// B의 인덱스
 
-        while (i<A.length){
+        int i=0,j=0;
+        int answer=0;
+        while(i<A.length){
             if(j>=B.length) break;
-            if(A[i]<B[j]){
-                cnt++;
-                i++;
+
+            while (true){
+                System.out.println(i+" "+j);
+                if(j>=B.length) break;
+                if(A[i]<B[j]) {
+                    answer++;
+                    break;
+                }
+                else j++;
             }
+            i++;
             j++;
+
         }
-        return cnt;
+        return answer;
 
     }
 }
