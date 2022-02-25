@@ -17,38 +17,61 @@ public class 순위검색 {
             Assertions.assertEquals(result[i], answer[i]);
         }
     }
+
     static int [] answer;
-    static ArrayList<ArrayList<Integer>> list=new ArrayList<>();
-    static Map<String, List<Integer>> map=new HashMap<>();
-
-
+    static HashMap<String,ArrayList<Integer>> map=new HashMap<>();
     public static int[] solution(String[] info, String[] query) {
-        answer = new int[query.length];
-        setInfo(info);
-        makeAnswer(query);
-        return answer;
+      answer=new int[query.length];
+      setInfo(info);
+      makeAnswer(query);
+      return answer;
     }
 
-    static void setInfo(String [] info){
-        for(int i=0;i<info.length;++i){
-            dfs("",0,info[i].split(" "));
+    public static void makeAnswer(String [] query){
+
+        for(int i=0;i< query.length;++i){
+            String q=query[i].replaceAll(" and ","");
+            String [] tmp=q.split(" ");
+            String key=tmp[0];
+            int score=Integer.parseInt(tmp[1]);
+
+            answer[i]=counting(key,score);
         }
-        Iterator<String> it=map.keySet().iterator();
-        while (it.hasNext()){
+
+    }
+
+    public static int counting(String key, int score){
+        if(!map.containsKey(key)) return 0;
+        ArrayList<Integer> list=map.get(key);
+        int left=0,right=list.size()-1;
+
+        while (left<=right){
+            int mid=(left+right)/2;
+            if(list.get(mid)<score) left=mid+1;
+            else right=mid-1;
+
+        }
+
+        return list.size()-left;
+    }
+
+    public static void setInfo(String [] info){
+        for(int i=0;i<info.length;++i) dfs("",0,info[i].split(" "));
+        Iterator<String> it= map.keySet().iterator();
+        while(it.hasNext()){
             String key=it.next();
             List<Integer> li=map.get(key);
             Collections.sort(li);
         }
     }
 
-    static void dfs(String str,int depth,String [] info){
+    public static void dfs(String str, int depth, String [] info){
         if(depth==4){
-            if(!map.containsKey(str)){
-                List<Integer> list=new ArrayList<>();
-                list.add(Integer.parseInt(info[4]));
-                map.put(str,list);
-            }else{
-                map.get(str).add(Integer.parseInt(info[4]));
+            if(map.containsKey(str)) map.get(str).add(Integer.parseInt(info[4]));
+            else{
+                ArrayList<Integer> tmp=new ArrayList<>();
+                tmp.add(Integer.parseInt(info[4]));
+                map.put(str,tmp);
             }
             return;
         }
@@ -56,34 +79,5 @@ public class 순위검색 {
         dfs(str+"-",depth+1,info);
         dfs(str+info[depth],depth+1,info);
     }
-
-    static void makeAnswer(String [] query){
-        for(int i=0;i<query.length;++i){
-            String str="";
-            String [] arr=query[i].split(" ");
-
-
-            for(int j=0;j<arr.length-1;++j){
-                if(arr[j].equals("and")) continue;
-                str+=arr[j];
-            }
-            answer[i]=counting(str,Integer.parseInt(arr[arr.length-1]));
-        }
-    }
-
-    static int counting(String str, int score){
-        if(!map.containsKey(str)) return 0;
-
-        List<Integer> list=map.get(str);
-
-        int start=0,end=list.size()-1;
-
-        while (start<=end){
-            int mid=(start+end)/2;
-            if(list.get(mid)<score) start=mid+1;
-            else end=mid-1;
-        }
-
-        return list.size()-start;
-    }
 }
+
