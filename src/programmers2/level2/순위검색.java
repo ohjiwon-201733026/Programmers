@@ -17,57 +17,58 @@ public class 순위검색 {
             Assertions.assertEquals(result[i], answer[i]);
         }
     }
-
+    static HashMap<String,ArrayList<Integer>> map;
     static int [] answer;
-    static HashMap<String,ArrayList<Integer>> map=new HashMap<>();
     public static int[] solution(String[] info, String[] query) {
-      answer=new int[query.length];
-      setInfo(info);
-      makeAnswer(query);
-      return answer;
+        answer=new int [query.length];
+        setInfo(info);
+        makeAnswer(query);
+
+        return answer;
     }
 
     public static void makeAnswer(String [] query){
 
-        for(int i=0;i< query.length;++i){
-            String q=query[i].replaceAll(" and ","");
-            String [] tmp=q.split(" ");
-            String key=tmp[0];
-            int score=Integer.parseInt(tmp[1]);
-
+        for(int i=0;i<query.length;++i){
+            String[] q=query[i].replaceAll(" and ","").split(" ");
+            String key=q[0];
+            int score=Integer.parseInt(q[1]);
             answer[i]=counting(key,score);
         }
-
     }
 
     public static int counting(String key, int score){
         if(!map.containsKey(key)) return 0;
+
         ArrayList<Integer> list=map.get(key);
+
         int left=0,right=list.size()-1;
 
         while (left<=right){
             int mid=(left+right)/2;
             if(list.get(mid)<score) left=mid+1;
-            else right=mid-1;
-
+                else right=mid-1;
         }
 
         return list.size()-left;
     }
 
     public static void setInfo(String [] info){
-        for(int i=0;i<info.length;++i) dfs("",0,info[i].split(" "));
-        Iterator<String> it= map.keySet().iterator();
-        while(it.hasNext()){
-            String key=it.next();
-            List<Integer> li=map.get(key);
-            Collections.sort(li);
+        map=new HashMap<>();
+        for (String s : info) {
+            dfs("",s.split(" "),0);
+        }
+
+        for (String s : map.keySet()) {
+            Collections.sort(map.get(s));
         }
     }
 
-    public static void dfs(String str, int depth, String [] info){
+    public static void dfs(String str, String [] info, int depth){
         if(depth==4){
-            if(map.containsKey(str)) map.get(str).add(Integer.parseInt(info[4]));
+            if(map.containsKey(str)){
+                map.get(str).add(Integer.parseInt(info[4]));
+            }
             else{
                 ArrayList<Integer> tmp=new ArrayList<>();
                 tmp.add(Integer.parseInt(info[4]));
@@ -76,8 +77,8 @@ public class 순위검색 {
             return;
         }
 
-        dfs(str+"-",depth+1,info);
-        dfs(str+info[depth],depth+1,info);
+        dfs(str+"-",info,depth+1);
+        dfs(str+info[depth],info,depth+1);
     }
 }
 

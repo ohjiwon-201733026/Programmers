@@ -19,20 +19,21 @@ public class 큰수만들기 {
         Stack<Integer> stack=new Stack<>();
 
         stack.add(number.charAt(0)-'0');
-        for(int i=1;i<number.length();++i){
-            int c=number.charAt(i)-'0';
 
-            while (k>0 && !stack.isEmpty() && stack.peek()<c){
+        for(int i=1;i<number.length();++i){
+            int n=number.charAt(i)-'0';
+
+            while (k>0 && !stack.isEmpty() && stack.peek()<n){
                 stack.pop();
                 k--;
             }
-            stack.push(c);
+            stack.push(n);
         }
         StringBuilder sb=new StringBuilder();
         for(int i=0;i<number.length()-K;++i){
             sb.append(stack.get(i));
         }
-
         return sb.toString();
+
     }
 }
