@@ -1,98 +1,73 @@
 package BaekJoon;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Scanner;
 
 public class B1043_거짓말 {
 
     static int [] parent;
+    static ArrayList<Integer>[] party;
     public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        String [] inputs=br.readLine().split(" ");
-
-        int n=Integer.parseInt(inputs[0]);
-        int m=Integer.parseInt(inputs[1]);
-
-        boolean[] people_know=new boolean[n+1];
-
-        HashSet<Integer> [] parties=new HashSet[m+1];
-        for(int i=1;i<=m;++i){
-            parties[i]=new HashSet<>();
-        }
-
-        inputs=br.readLine().split(" ");
-        int known_num=Integer.parseInt(inputs[0]);
-
-        for(int i=1;i<=known_num;++i){
-            int tmp=Integer.parseInt(inputs[i]);
-            people_know[tmp]=true;
-        }
-
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int m=sc.nextInt();
+        boolean [] known_true=new boolean[n+1];
+        party=new ArrayList[n+1];
         parent=new int [n+1];
-        for(int i=1;i<=n;++i){
+        int t=sc.nextInt();
+        while (t-->0){
+            int a=sc.nextInt();
+            known_true[a]=true;
+        }
+        for(int i=0;i<parent.length;++i) {
             parent[i]=i;
+            party[i]=new ArrayList<>();
         }
 
-        for(int p=1;p<=m;++p){
-            inputs=br.readLine().split(" ");
-            int party_num=Integer.parseInt(inputs[0]);
-
-            if(party_num<=1){
-                parties[p].add(Integer.parseInt(inputs[1]));
-                continue;
+        for(int i=0;i<m;++i){
+            String [] a=sc.nextLine().split(" ");
+            for (String s : a) {
+                System.out.println(s);
             }
-
-            for(int j=1;j<party_num;++j){
-                int a=Integer.parseInt(inputs[j]);
-                int b=Integer.parseInt(inputs[j+1]);
-                if(find(a)!=find(b)) union(a,b);
-
-                parties[p].add(a);
-                parties[p].add(b);
-            }
-        }
-
-        boolean [] visited=new boolean[n+1];
-        for(int i=1;i<=n;++i){
-                if(people_know[i] && !visited[i]) {
-                    int root = find(i);
-                    for (int j = 1; j <= n; ++j) {
-                        if (find(j) == root) {
-                            people_know[j] = true;
-                            visited[j] = true;
-                        }
-                    }
+            int y=0;
+            for(int j=1;j<a.length;++j){
+                int x=Integer.parseInt(a[j]);
+                party[i].add(x);
+                if(j==1) {
+                    y=x;
+                    continue;
                 }
+                else {
+                    union(getParent(x), getParent(y));
+                    y=x;
+                }
+
+            }
         }
 
-        int result=0;
-        for(int i=1;i<=m;++i){
-            boolean flag=false;
-            for(int person:parties[i]){
-                if(people_know[person]){
-                    flag=true;
-                    break;
-                }
-            }
-            if(!flag) result++;
+        for (int i : parent) {
+            System.out.println(i);
         }
-        System.out.println(result);
+
+
+
 
     }
 
-    public static int find(int idx){
-        if(parent[idx]==idx) return idx;
-
-        parent[idx]=find(parent[idx]);
-        return parent[idx];
+    public static int getParent(int a){
+        if(a==parent[a]) return a;
+        return parent[a]=getParent(parent[a]);
     }
 
     public static void union(int a, int b){
-        int parent_b=find(b);
-        parent[parent_b]=a;
+        System.out.println(a+" "+b);
+        a=getParent(a);
+        b=getParent(b);
+
+        if(a<b){
+            parent[b]=a;
+        }
+        else parent[a]=b;
     }
 }
