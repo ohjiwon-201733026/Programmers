@@ -10,23 +10,9 @@ public class 디스크컨트롤러 {
 
     @Test
     public void test(){
-        Assertions.assertEquals(9,solution(new int [][]{{0,3},{1,9},{2,6},{1,2}}));
+        Assertions.assertEquals(9,solution(new int [][]{{0,3},{1,9},{2,6}}));
     }
-    public class Job implements Comparable<Job>{
-        int arrivedTime;
-        int workingTime;
 
-        public Job(int arrivedTime, int workingTime) {
-            this.arrivedTime = arrivedTime;
-            this.workingTime = workingTime;
-        }
-
-        @Override
-        public int compareTo(Job o) {
-            if(this.arrivedTime==o.arrivedTime) return this.workingTime-o.workingTime;
-            return this.arrivedTime-o.arrivedTime;
-        }
-    }
     public int solution(int [][] jobs){
         int answer=0;
         int end=0; // 수행 직후 시간
