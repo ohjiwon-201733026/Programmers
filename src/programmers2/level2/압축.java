@@ -17,22 +17,20 @@ public class 압축 {
         }
     }
 
-    HashMap<String,Integer> dic=new HashMap<>();
     public int [] solution(String msg){
+        HashMap<String,Integer> dic=new HashMap<>();
         char a='A';
         for(int i=1;i<=26;++i){
             dic.put(a+"",i);
             a++;
         }
+        int num=27;
         ArrayList<Integer> ans=new ArrayList<>();
-        int cnt=27;
-
         for(int i=0;i<msg.length();++i){
             String s=msg.charAt(i)+"";
-
             while (dic.containsKey(s)){
                 i++;
-                if(i==msg.length()) break;
+                if(msg.length()==i) break;
                 s+=msg.charAt(i);
             }
             if(i==msg.length()){
@@ -41,9 +39,10 @@ public class 압축 {
             }
 
             ans.add(dic.get(s.substring(0,s.length()-1)));
-            dic.put(s,cnt);
-            cnt++;
+            dic.put(s,num);
+            num++;
             i--;
+
         }
 
         int [] answer=new int [ans.size()];
