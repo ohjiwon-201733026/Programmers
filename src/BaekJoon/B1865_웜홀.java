@@ -3,55 +3,39 @@ package BaekJoon;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.Scanner;
-import java.util.StringTokenizer;
 
 public class B1865_웜홀 {
-    static class Road{
-        int end;
-        int weight;
-
-        public Road(int end, int weight) {
-            this.end = end;
-            this.weight = weight;
-        }
-    }
-
     static int N,M,W;
     static int [] dist;
-    static ArrayList<ArrayList<Road>> a;
+    static ArrayList<Road> [] list;
     static final int INF=987654321;
-
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
-        StringTokenizer st;
-
-        int TC = Integer.parseInt(br.readLine());
-        StringBuilder sb = new StringBuilder();
-        while (TC-- > 0) {
-            st = new StringTokenizer(br.readLine());
-            N = Integer.parseInt(st.nextToken());
-            M = Integer.parseInt(st.nextToken());
-            W = Integer.parseInt(st.nextToken());
+        Scanner sc=new Scanner(System.in);
+        int tc=sc.nextInt();
+        StringBuilder sb=new StringBuilder();
+        while (tc-->0){
+            N = sc.nextInt();
+            M = sc.nextInt();
+            W = sc.nextInt();
 
             dist = new int[N + 1];
-            a = new ArrayList<>();
+            list = new ArrayList[N+1];
             for (int i = 0; i <= N; ++i) {
-                a.add(new ArrayList<>());
+                list[i]=new ArrayList<>();
             }
 
             for (int i = 0; i < M + W; ++i) {
-                st = new StringTokenizer(br.readLine());
-                int start = Integer.parseInt(st.nextToken());
-                int end = Integer.parseInt(st.nextToken());
-                int weight = Integer.parseInt(st.nextToken());
+                int start = sc.nextInt();
+                int end = sc.nextInt();
+                int weight = sc.nextInt();
 
                 if (i < M) {
-                    a.get(start).add(new Road(end, weight));
-                    a.get(end).add(new Road(start, weight));
+                    list[start].add(new Road(end, weight));
+                    list[end].add(new Road(start, weight));
                 } else {
-                    a.get(start).add(new Road(end, -weight));
+                    list[start].add(new Road(end, -weight));
                 }
             }
 
@@ -68,13 +52,9 @@ public class B1865_웜홀 {
             if (!isMinusCycle) {
                 sb.append("NO\n");
             }
+       }
+        System.out.println(sb.toString());
 
-        }
-
-        bw.write(sb.toString());
-        bw.flush();
-        bw.close();
-        br.close();
     }
 
     public static boolean bellmanFord(int start){
@@ -86,20 +66,20 @@ public class B1865_웜홀 {
             update=false;
 
             for(int j=1;j<=N;++j){
-                for (Road road : a.get(j)) {
+                for (Road road : list[j]) {
                     if(dist[j]!=INF && dist[road.end]>dist[j]+road.weight){
                         dist[road.end] = dist[j] + road.weight;
                         update = true;
                     }
                 }
             }
-            
+
             if(!update) break;
         }
-        
+
         if(update){
             for(int i=1;i<=N;++i){
-                for (Road road : a.get(i)) {
+                for (Road road : list[i]) {
                     if (dist[i] != INF && dist[road.end] > dist[i] + road.weight) {
                         return true;
                     }
@@ -107,6 +87,20 @@ public class B1865_웜홀 {
             }
         }
         return false;
+    }
+
+    static class Road implements Comparable<Road>{
+        int end,weight;
+
+        public Road(int end, int weight) {
+            this.end = end;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Road o) {
+            return this.weight-o.weight;
+        }
     }
 
 }
