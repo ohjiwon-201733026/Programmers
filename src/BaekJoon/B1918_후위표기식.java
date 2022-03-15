@@ -3,62 +3,53 @@ package BaekJoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Scanner;
 import java.util.Stack;
 
 public class B1918_후위표기식 {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringBuilder sb = new StringBuilder();
+        Scanner sc=new Scanner(System.in);
+        String s=sc.next();
+        Stack<Character> stack=new Stack<>();
+        StringBuilder sb=new StringBuilder();
 
-        String str = br.readLine();
+        for(int i=0;i<s.length();++i){
+            char c=s.charAt(i);
 
-        Stack<Character> stack = new Stack<>();
-
-        for (int i = 0; i < str.length(); i++) {
-            char now = str.charAt(i);
-
-            switch (now){
+            switch (c){
                 case '+':
                 case '-':
                 case '*':
                 case '/':
-                    while (!stack.isEmpty() && priority(stack.peek()) >= priority(now)) {
+                    while (!stack.isEmpty() && priority(stack.peek())>=priority(c)){
                         sb.append(stack.pop());
                     }
-                    stack.add(now);
+                    stack.push(c);
                     break;
-                case '(':
-                    stack.add(now);
-                    break;
+                case '(': stack.push(c);break;
                 case ')':
-                    while(!stack.isEmpty() && stack.peek() != '('){
+                    while (!stack.isEmpty() && stack.peek()!='('){
                         sb.append(stack.pop());
                     }
                     stack.pop();
                     break;
-                default:
-                    sb.append(now);
+                default: sb.append(c);
+
             }
         }
 
-        while (!stack.isEmpty()) {
+        while (!stack.isEmpty()){
             sb.append(stack.pop());
         }
 
         System.out.println(sb.toString());
     }
 
-    // 연산자 별 우선순위 리턴
-    public static int priority(char operator){
-
-        if(operator=='(' || operator==')'){
-            return 0;
-        } else if (operator == '+' || operator == '-') {
-            return 1;
-        } else if (operator == '*' || operator == '/') {
-            return 2;
-        }
+    public static int priority(char c){
+        if(c=='(' || c==')') return 0;
+        if(c=='+' || c=='-') return 1;
+        if(c=='*' || c=='/') return 2;
         return -1;
     }
 }

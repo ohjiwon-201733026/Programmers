@@ -8,79 +8,80 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class B2206_벽부수고이동하기 {
-    static class Loc{
-        int i;
-        int j;
-        int cnt;
-        boolean destroyed;
-
-        public Loc(int i, int j, int cnt, boolean destroyed) {
-            this.i = i;
-            this.j = j;
-            this.cnt = cnt;
-            this.destroyed = destroyed;
-        }
-    }
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        String [] inputs=br.readLine().split(" ");
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] inputs = br.readLine().split(" ");
 
-        int n=Integer.parseInt(inputs[0]);
-        int m=Integer.parseInt(inputs[1]);
+        int N = Integer.parseInt(inputs[0]);
+        int M = Integer.parseInt(inputs[1]);
+        char[][] arr = new char[N][M];
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
 
-        char [][] map=new char[n][m];
-        for(int i=0;i<n;++i){
-            String input=br.readLine();
-            for(int j=0;j<m;++j){
-                map[i][j]=input.charAt(j);
+        for (int i = 0; i < N; ++i) {
+            String s = br.readLine();
+            for (int j = 0; j < M; ++j) {
+                arr[i][j] = s.charAt(j);
             }
         }
 
-        Queue<Loc> q=new LinkedList<>();
-        q.add(new Loc(0,0,1,false));
+        Queue<Node> q = new LinkedList<>();
+        boolean[][][] visit = new boolean[N][M][2];
+        q.add(new Node(0, 0, 1, false));
 
-        int [] mi={0,0,-1,1};
-        int [] mj={-1,1,0,0};
+        while (!q.isEmpty()) {
+            Node node = q.poll();
 
-        boolean[][][] visited=new boolean[n][m][2];
-
-        while(!q.isEmpty()){
-            Loc now=q.poll();
-
-            if(now.i==n-1 && now.j==m-1){
-                System.out.println(now.cnt);
+            if (node.i == N - 1 && node.j == M - 1) {
+                System.out.println(node.d);
                 return;
             }
 
-            for(int d=0;d<4;++d){
-                int ni=now.i+mi[d];
-                int nj=now.j+mj[d];
+            for (int k = 0; k < 4; ++k) {
+                int x = node.i + dx[k];
+                int y = node.j + dy[k];
 
-                if(ni<0 || ni>=n || nj<0 || nj>=m) continue;
+                if (0 > x || x >= N || 0 > y || y >= M) continue;
 
-                int next_cnt=now.cnt+1;
-
-                if(map[ni][nj]=='0'){ // 벽이 아니면
-                    if(!now.destroyed && !visited[ni][nj][0]){ // 부신 벽이 여태까지 없으면
-                        q.add(new Loc(ni,nj,next_cnt,false));
-                        visited[ni][nj][0]=true;
+                if (arr[x][y] == '0') {
+                    if (!node.flag && !visit[x][y][0]) {
+                        q.add(new Node(x, y, node.d + 1, false));
+                        visit[x][y][0] = true;
+                    } else if(node.flag && !visit[x][y][1]) {
+                        q.add(new Node(x, y, node.d + 1, true));
+                        visit[x][y][1] = true;
                     }
-                    else if(now.destroyed && !visited[ni][nj][1]){
-                        q.add(new Loc(ni,nj,next_cnt,true));
-                        visited[ni][nj][1]=true;
-                    }
-
                 }
-                else if(map[ni][nj]=='1'){ // 벽이면
-                    if(!now.destroyed){ // 한번도 벽을 부순적이 없다면 부순다
-                        q.add(new Loc(ni,nj,next_cnt,true));
-                        visited[ni][nj][1]=true;
-                    }
-                    // 한번 부순 적이 있따면, 또 부수고 갈 수 없게 때문에 pass
+                if (arr[x][y] == '1' && !node.flag) {
+                    q.add(new Node(x, y, node.d + 1, true));
+                    visit[x][y][1] = true;
                 }
             }
         }
-
+        System.out.println(-1);
     }
+
+    public static class Node{
+        int i,j,d;
+        boolean flag;
+
+        public Node(int i, int j, int d, boolean flag) {
+            this.i = i;
+            this.j = j;
+            this.d = d;
+            this.flag = flag;
+        }
+
+        @Override
+        public String toString() {
+            return "Node{" +
+                    "i=" + i +
+                    ", j=" + j +
+                    ", d=" + d +
+                    ", flag=" + flag +
+                    '}';
+        }
+    }
+
 }
