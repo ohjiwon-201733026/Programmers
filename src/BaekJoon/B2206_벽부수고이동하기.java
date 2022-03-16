@@ -1,8 +1,6 @@
 package BaekJoon;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -10,77 +8,78 @@ import java.util.Scanner;
 public class B2206_벽부수고이동하기 {
 
     public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String[] inputs = br.readLine().split(" ");
+        Scanner sc=new Scanner(System.in);
 
-        int N = Integer.parseInt(inputs[0]);
-        int M = Integer.parseInt(inputs[1]);
-        char[][] arr = new char[N][M];
-        int[] dx = {0, 1, 0, -1};
-        int[] dy = {1, 0, -1, 0};
+        int n=sc.nextInt();
+        int m=sc.nextInt();
 
-        for (int i = 0; i < N; ++i) {
-            String s = br.readLine();
-            for (int j = 0; j < M; ++j) {
-                arr[i][j] = s.charAt(j);
+        char [][] map=new char[n][m];
+
+        for(int i=0;i<n;++i){
+            String str=sc.next();
+            for(int j=0;j<m;++j){
+                map[i][j]=str.charAt(j);
             }
         }
 
-        Queue<Node> q = new LinkedList<>();
-        boolean[][][] visit = new boolean[N][M][2];
-        q.add(new Node(0, 0, 1, false));
+        int [] dx={0,1,0,-1};
+        int [] dy={1,0,-1,0};
 
-        while (!q.isEmpty()) {
-            Node node = q.poll();
+        boolean [][][] visited=new boolean[n][m][2];
+        Queue<Node> q=new LinkedList<>();
+        q.add(new Node(0,0,1,false));
+        visited[0][0][0]=true;
 
-            if (node.i == N - 1 && node.j == M - 1) {
-                System.out.println(node.d);
+        while (!q.isEmpty()){
+            Node cur=q.poll();
+
+            if(cur.x==n-1 && cur.y==m-1){
+                System.out.println(cur.d);
                 return;
             }
 
-            for (int k = 0; k < 4; ++k) {
-                int x = node.i + dx[k];
-                int y = node.j + dy[k];
 
-                if (0 > x || x >= N || 0 > y || y >= M) continue;
+            for(int k=0;k<4;++k){
+                int x=cur.x+dx[k];
+                int y=cur.y+dy[k];
 
-                if (arr[x][y] == '0') {
-                    if (!node.flag && !visit[x][y][0]) {
-                        q.add(new Node(x, y, node.d + 1, false));
-                        visit[x][y][0] = true;
-                    } else if(node.flag && !visit[x][y][1]) {
-                        q.add(new Node(x, y, node.d + 1, true));
-                        visit[x][y][1] = true;
+                if(x<0 || x>=n || y<0 || y>=m) continue;
+
+                if(map[x][y]=='0'){
+                    if(cur.destroyed && !visited[x][y][1]){
+                        q.add(new Node(x,y,cur.d+1,cur.destroyed));
+                        visited[x][y][1]=true;
+                    }
+
+                    if(!cur.destroyed && !visited[x][y][0]){
+                        q.add(new Node(x,y,cur.d+1,cur.destroyed));
+                        visited[x][y][0]=true;
                     }
                 }
-                if (arr[x][y] == '1' && !node.flag) {
-                    q.add(new Node(x, y, node.d + 1, true));
-                    visit[x][y][1] = true;
+
+                if(map[x][y]=='1'){
+                    if(!cur.destroyed && !visited[x][y][1]){
+                        q.add(new Node(x,y,cur.d+1,true));
+                        visited[x][y][1]=true;
+                    }
                 }
             }
+
         }
         System.out.println(-1);
+
     }
 
-    public static class Node{
-        int i,j,d;
-        boolean flag;
+    static class Node{
+        int x,y,d;
+        boolean destroyed;
 
-        public Node(int i, int j, int d, boolean flag) {
-            this.i = i;
-            this.j = j;
+
+        public Node(int x, int y, int d, boolean destroyed) {
+            this.x = x;
+            this.y = y;
             this.d = d;
-            this.flag = flag;
-        }
-
-        @Override
-        public String toString() {
-            return "Node{" +
-                    "i=" + i +
-                    ", j=" + j +
-                    ", d=" + d +
-                    ", flag=" + flag +
-                    '}';
+            this.destroyed = destroyed;
         }
     }
 
