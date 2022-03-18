@@ -7,36 +7,39 @@ public class B9935_문자열폭발 {
 
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        String origin=sc.next();
-        String remove=sc.next();
+        String str=sc.next();
+        String pattern=sc.next();
 
         Stack<Character> stack=new Stack<>();
 
-        for(int i=0;i<origin.length();++i){
-            stack.push(origin.charAt(i));
+        for(int i=0;i<str.length();++i){
+            char c=str.charAt(i);
+            stack.push(c);
 
-            if(stack.size()>=remove.length()){
-                boolean flag=true;
-                for(int j=0;j<remove.length();++j){
-                    if(stack.get(stack.size()-remove.length()+j)!=remove.charAt(j)){
-                        flag=false;
+            if(stack.size()>=pattern.length()){
+
+                boolean isSame=true;
+                for(int idx=0;idx<pattern.length();++idx){
+                    char c1=stack.get(stack.size()-pattern.length()+idx);
+                    char c2=pattern.charAt(idx);
+                    if(c1!=c2) {
+                        isSame=false;
                         break;
                     }
                 }
 
-                if(flag){
-                    for(int j=0;j<remove.length();++j){
+                if(isSame){
+                    for(int cnt=0;cnt<pattern.length();++cnt){
                         stack.pop();
                     }
                 }
             }
         }
-
         StringBuilder sb=new StringBuilder();
         for (Character character : stack) {
             sb.append(character);
         }
+        System.out.println(sb.toString().length()==0?"FRULA":sb.toString());
 
-        System.out.println(sb.length()>0?sb.toString():"FRULA");
     }
 }
