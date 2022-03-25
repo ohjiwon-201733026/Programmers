@@ -1,83 +1,98 @@
 package BaekJoon;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Scanner;
 
 public class B15686_치킨배달 {
-    static int N,M;
+
     static int [][] map;
-    static ArrayList<House> chickens;
-    static ArrayList<House> houses;
-    static Stack<House> selectChicken;
-    static int minDist=Integer.MAX_VALUE;
+    static int n,m;
+    static ArrayList<Point> house;
+    static ArrayList<Point> chicken;
+    static int answer;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        n=sc.nextInt();
+        m=sc.nextInt();
+        answer=Integer.MAX_VALUE;
 
+        map=new int [n+1][n+1];
 
-    static class House{
-        int x, y;
+        house=new ArrayList<>();
+        chicken=new ArrayList<>();
 
-        public House(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
-
-        map = new int[N + 1][N + 1];
-
-        chickens = new ArrayList<>();
-        houses = new ArrayList<>();
-        selectChicken = new Stack<>();
-
-        for (int i = 1; i <= N; ++i) {
-            st = new StringTokenizer(br.readLine());
-            for (int j = 1; j <= N; ++j) {
-                map[i][j] = Integer.parseInt(st.nextToken());
-
-                if (map[i][j] == 1) houses.add(new House(i, j));
-                else if (map[i][j] == 2) chickens.add(new House(i, j));
+        for(int i=1;i<=n;++i){
+            for(int j=1;j<=n;++j){
+                map[i][j]=sc.nextInt();
             }
         }
 
-        select(0, 0);
+        // 집 모으기
+        for(int i=1;i<=n;++i){
+            for(int j=1;j<=n;++j){
+                if(map[i][j]==1) house.add(new Point(i,j));
+                if(map[i][j]==2) chicken.add(new Point(i,j));
+            }
+        }
 
-        System.out.println(minDist);
+        int x=chicken.size();
+        // 치킨 집 x개 중 m개 고르기 (조합)
+        for(int i=1;i<=m;++i){
+            recur(new boolean[x],x,i,0);
+        }
+
+        System.out.println(answer);
 
     }
 
-    static void select(int start, int count){
-        if(count==M){
-            calcDist();
-            return ;
+    public static void recur(boolean [] visited, int x, int r,int start){
+        if(0==r){
+            chicken_distance(visited);
+            return;
         }
 
-        for(int i=start;i<chickens.size();++i){
-            selectChicken.push(chickens.get(i));
-            select(i+1,count+1);
-            selectChicken.pop();
+        for(int i=start;i<x;++i){
+            if(!visited[i]){
+                visited[i]=true;
+                recur(visited,x,r-1,i+1);
+                visited[i]=false;
+            }
         }
     }
 
-    static void calcDist(){
+    public static void chicken_distance(boolean [] visited){
         int sum=0;
-
-        for(House house:houses){
+        for(int i=0;i<house.size();++i){
+            Point h=house.get(i);
             int min=Integer.MAX_VALUE;
-            for(House chicken : selectChicken){
-                int dist=Math.abs(house.x- chicken.x)+Math.abs(house.y-chicken.y);
-                min=Math.min(min,dist);
+            for(int j=0;j<visited.length;++j){
+                if(visited[j]){
+                    Point c=chicken.get(j);
+                    int num=Math.abs(h.r-c.r)+Math.abs(h.c-c.c);
+                    min=Math.min(num,min);
+                }
             }
             sum+=min;
-
-            if(sum>minDist) return;
+            if(sum>answer) return;
         }
-        minDist=Math.min(sum,minDist);
+
+        answer=Math.min(sum,answer);
+    }
+
+    static class Point{
+        int r,c;
+
+        public Point(int r, int c) {
+            this.r = r;
+            this.c = c;
+        }
+
+        @Override
+        public String toString() {
+            return "Point{" +
+                    "r=" + r +
+                    ", c=" + c +
+                    '}';
+        }
     }
 }
