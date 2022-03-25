@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.LinkedList;
 import java.util.Queue;
-import java.util.Scanner;
 
 public class B17070_파이프옮기기1 {
 
@@ -26,34 +25,75 @@ public class B17070_파이프옮기기1 {
             }
         }
         answer=0;
-        bfs(0,0,0);
+        dfs(0,0,0);
         System.out.println(answer);
+
+    }
+    static void dfs(int i, int j, int dir){
+        // 리턴 조건
+        if(dir==0 && i==n-1 && j==n-2){
+            answer++;
+            return;
+        }
+        if(dir==1 && i==n-2 && j==n-1){
+            answer++;
+            return;
+        }
+        if(dir==2 && i==n-2 && j==n-2){
+            answer++;
+            return;
+        }
+
+        int x=i;
+        int y=j;
+
+        // 이동
+        // 가로
+        if(dir==0){
+            if(check(x,y+2)){
+                dfs(x,y+1,0);
+            }
+
+            if(check(x,y+2) && check(x+1,y+1) && check(x+1,y+2)){
+                dfs(x,y+1,2);
+            }
+        }
+
+        // 세로
+        if(dir==1){
+            if(check(x+2,y)){
+                dfs(x+1,y,1);
+            }
+            if(check(x+1,y+1) && check(x+2,y) && check(x+2,y+1)){
+                dfs(x+1,y,2);
+            }
+        }
+
+        // 대각선
+        if(dir==2){
+            if(check(x+1,y+2)){
+                dfs(x+1,y+1,0);
+            }
+
+            if(check(x+2,y+1)){
+                dfs(x+1,y+1,1);
+            }
+
+            if(check(x+1,y+2) && check(x+2,y+1) && check(x+2,y+2)){
+                dfs(x+1,y+1,2);
+            }
+        }
 
     }
 
     static void bfs(int i, int j,int d){
         Queue<Pipe> q=new LinkedList<>();
         q.add(new Pipe(i,j,d,0));
-//        visited[i][j][d]=true;
 
         while (!q.isEmpty()){
             Pipe cur=q.poll();
-//            visited[cur.x][cur.y][cur.dir]=true;
-//            System.out.println(cur.toString());
 
-            // 리턴 조건
-            if(cur.dir==0 && cur.x==n-1 && cur.y==n-2){
-                answer++;
-                continue;
-            }
-            if(cur.dir==1 && cur.x==n-2 && cur.y==n-1){
-                answer++;
-                continue;
-            }
-            if(cur.dir==2 && cur.x==n-2 && cur.y==n-2){
-                answer++;
-                continue;
-            }
+
 
             int x=cur.x;
             int y= cur.y;
