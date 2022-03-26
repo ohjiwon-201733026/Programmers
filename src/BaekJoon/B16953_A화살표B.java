@@ -1,5 +1,6 @@
 package BaekJoon;
 
+
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
@@ -8,53 +9,54 @@ public class B16953_A화살표B {
     static boolean flag=false;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        long A=sc.nextLong();
-        long B=sc.nextLong();
+        long a=sc.nextLong();
+        long b=sc.nextLong();
 
-//        bfs(A,B);
-
-        dfs(A,B,0);
+        dfs(a,b,1);
         if(!flag) System.out.println(-1);
-    }
-    static void dfs(long a, long target, int cnt){
-        if(a==target){
-            flag=true;
-            System.out.println(cnt+1);
-        }
 
-        long num=a;
-        num*=2;
-        if(num<=target) dfs(num,target,cnt+1);
-
-        num=a;
-        num=10*num+1;
-        if(num<=target) dfs(num,target,cnt+1);
+//        System.out.println(bfs(a,b));
     }
 
-
-    static void bfs(long a, long b){
-        Queue<long [] > q=new LinkedList<>();
-        q.add(new long []{a,0});
+    public static long bfs(long a, long target){
+        Queue<long[]> q=new LinkedList<>();
+        q.add(new long []{a,1});
 
         while (!q.isEmpty()){
             long [] cur=q.poll();
+            long A=cur[0];
+            long cnt=cur[1];
 
-            if(cur[0]==b){
-                System.out.println(cur[1]+1);
-                return;
+            if(A==target){
+                return cnt;
             }
+
+            if(A>target) continue;
 
             for(int i=0;i<2;++i){
-                long num=cur[0];
-
-                if(i==0) num*=2;
+                long num=A;
+                if(i==0) num=num*2;
                 if(i==1) num=10*num+1;
 
-                if(num<=b) q.add(new long[]{num,cur[1]+1});
+                if(num<=target) q.add(new long []{num,cnt+1});
             }
+
         }
 
-        System.out.println(-1);
+        return -1;
+    }
+
+    public static void dfs(long a, long b, int cnt){
+        if(a==b){
+            System.out.println(cnt);
+            flag=true;
+            return;
+        }
+
+        if(a>b) return;
+
+        dfs(a*2,b,cnt+1);
+        dfs(10*a+1,b,cnt+1);
     }
 
 }
