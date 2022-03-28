@@ -8,70 +8,88 @@ public class B2504_괄호의값 {
         Scanner sc=new Scanner(System.in);
         String s=sc.nextLine();
 
-        int answer=solution(s);
-        System.out.println(answer);
 
+        System.out.println(solution(s));
     }
 
-    private static int solution(String s) {
+    public static int solution(String s){
+        if(!rightCheck(s)) return 0;
 
         Stack<String> stack=new Stack<>();
-
-        if(s.charAt(0)=='}' || s.charAt(0)==')' ) return 0;
-        int answer=0;
-        for(int i=0;i<s.length();++i){
+        stack.push(s.charAt(0)+"");
+        for(int i=1;i<s.length();++i){
             String c=s.charAt(i)+"";
-            if(c.equals(")")){ // ) 가 나오면
-                if(stack.isEmpty()) return 0; // )만 나오면 올바르지 않음
-                if(stack.peek().equals("(")){  // 바로 () 인 경우 -> 2 넣기
+
+            if(c.equals("(") || c.equals("[")) stack.push(c);
+            else if(c.equals(")")){
+                if(stack.peek().equals("(")){
                     stack.pop();
                     stack.push("2");
-                }else{ // ) 말고
-                    int num=0;
-                    while(true){
+                }
+                else{
+                    int sum=0;
+                    while (true){
                         if(stack.isEmpty()) return 0;
                         if(stack.peek().equals("(")) break;
-                        if(isVal(stack.peek())) return 0; // 중간에 [ 있는 경우
-                        num+=Integer.parseInt(stack.pop());
+                        sum+=Integer.parseInt(stack.pop());
                     }
                     stack.pop();
-                    stack.push(2*num+"");
+                    stack.push(String.valueOf(2*sum));
                 }
             }
             else if(c.equals("]")){
-                if(stack.isEmpty()) return 0;
-                if(stack.peek().equals("[")){ // []
+                if(stack.peek().equals("[")){
                     stack.pop();
                     stack.push("3");
                 }
                 else{
-                    int num=0;
-                    while(true){
+                    int sum=0;
+                    while (true){
                         if(stack.isEmpty()) return 0;
                         if(stack.peek().equals("[")) break;
-                        if(isVal(stack.peek())) return 0;
-                        num+=Integer.parseInt(stack.pop());
+                        sum+=Integer.parseInt(stack.pop());
                     }
                     stack.pop();
-                    stack.push(3*num+"");
+                    stack.push(String.valueOf(3*sum));
                 }
             }
-            else{
-                stack.push(c);
-            }
 
         }
-        int a=0;
-        while(!stack.isEmpty()){
-            if(isVal(stack.peek())) return 0;
-            a+=Integer.parseInt(stack.pop());
+
+        int answer=0;
+        while (!stack.isEmpty()){
+            answer+=Integer.parseInt(stack.pop());
         }
-        return a;
+
+        return answer;
     }
 
-    private static boolean isVal(String peek) {
-        char c=peek.charAt(0);
-        if('0'<=c && c<='9') return false;
-        else return true;
+    public static boolean rightCheck(String s){
+
+        if(s.charAt(0)==')' || s.charAt(0)==']') return false;
+
+        Stack<Character> stack=new Stack<>();
+        stack.push(s.charAt(0));
+
+        for(int i=1;i<s.length();++i){
+            char c=s.charAt(i);
+            if(c=='(' || c=='[') stack.push(c);
+            else if(c==')'){
+                if(stack.isEmpty()) return false;
+                if(stack.peek()=='(') stack.pop();
+                else return false;
+            }
+            else if(c==']'){
+                if(stack.isEmpty()) return false;
+                if(stack.peek()=='[') stack.pop();
+                else return false;
+            }
+        }
+
+        if(!stack.isEmpty()) return false;
+
+        return true;
+
+
     }
 }
