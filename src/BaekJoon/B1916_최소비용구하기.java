@@ -1,66 +1,18 @@
 package BaekJoon;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class B1916_최소비용구하기 {
-
-    static ArrayList<Node> [] arr;
     static int N,M;
+    static ArrayList<Node>[] arr;
     static int [] dist;
-    public static void main(String[] args) {
-        Scanner sc=new Scanner(System.in);
+    static final int INF=Integer.MAX_VALUE;
 
-        N=sc.nextInt();
-        M=sc.nextInt();
-
-        arr=new ArrayList[N+1];
-        dist=new int[N+1];
-
-        for(int i=1;i<=N;++i){
-            arr[i]=new ArrayList<>();
-            dist[i]=987654321;
-        }
-
-        while (M-->0){
-            int a=sc.nextInt();
-            int b=sc.nextInt();
-            int c=sc.nextInt();
-            arr[a].add(new Node(b,c));
-        }
-
-        int start=sc.nextInt();
-        int end=sc.nextInt();
-
-        bellmanford(start);
-
-        System.out.println(dist[end]);
-    }
-
-    public static void bellmanford(int start){
-        PriorityQueue<Node> pq=new PriorityQueue<>();
-        boolean [] visited=new boolean[N+1];
-        pq.add(new Node(start,0));
-        dist[start]=0;
-
-        while (!pq.isEmpty()){
-            Node cur=pq.poll();
-
-            if(visited[cur.end]) continue;
-            visited[cur.end]=true;
-
-            for (Node node : arr[cur.end]) {
-                if(!visited[node.end] && dist[node.end]>dist[cur.end]+node.weight){
-                    dist[node.end]=dist[cur.end]+node.weight;
-                    pq.add(new Node(node.end, dist[node.end]));
-                }
-            }
-        }
-    }
-
-    public static class Node implements Comparable<Node>{
+    static class Node implements Comparable<Node>{
         int end;
         int weight;
 
@@ -71,7 +23,59 @@ public class B1916_최소비용구하기 {
 
         @Override
         public int compareTo(Node o) {
-            return this.weight-o.weight;
+            return weight-o.weight;
         }
     }
+
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        N=sc.nextInt();
+        M=sc.nextInt();
+
+        arr=new ArrayList[N+1];
+        dist=new int [N+1];
+
+        for(int i=1;i<=N;++i) arr[i]=new ArrayList<>();
+        for(int i=1;i<=N;++i) dist[i]=INF;
+
+        while(M-->0){
+            int a=sc.nextInt();
+            int b=sc.nextInt();
+            int w=sc.nextInt();
+
+            arr[a].add(new Node(b,w));
+        }
+
+        int start=sc.nextInt();
+        int end=sc.nextInt();
+
+        dijkstra(start);
+
+        System.out.println(dist[end]);
+
+    }
+
+    static void dijkstra(int start){
+        PriorityQueue<Node> pq=new PriorityQueue<>();
+        pq.add(new Node(start,0));
+        dist[start]=0;
+        boolean [] visited=new boolean[N+1];
+
+        while(!pq.isEmpty()){
+            Node cur=pq.poll();
+            int curE=cur.end;
+
+            if(visited[curE]) continue;
+            visited[curE]=true;
+
+            for (Node node : arr[curE]) {
+                if(dist[node.end]>dist[curE]+ node.weight){
+                    dist[node.end]=dist[curE]+ node.weight;
+                    pq.add(new Node(node.end,dist[node.end]));
+                }
+            }
+        }
+    }
+
+
 }
