@@ -4,75 +4,66 @@ import java.io.*;
 import java.util.*;
 
 public class B1197_최소스패닝트리 {
-    static class Edge{
-        int s,e,cost;
+    static class Edge implements Comparable<Edge>{
+        int a,b;
+        int cost;
 
-        public Edge(int s, int e, int cost) {
-            this.s = s;
-            this.e = e;
+        public Edge(int a, int b, int cost) {
+            this.a = a;
+            this.b = b;
             this.cost = cost;
         }
+
+        @Override
+        public int compareTo(Edge o) {
+            return this.cost-o.cost;
+        }
     }
-    public static int [] parent;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(System.out));
+    static int [] parent;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int v=sc.nextInt(); // 정점 개수
+        int e=sc.nextInt(); // edge 개수
 
-        StringTokenizer st=new StringTokenizer(br.readLine());
-        int V=Integer.parseInt(st.nextToken());
-        int E=Integer.parseInt(st.nextToken());
-        ArrayList<Edge> edges=new ArrayList<>();
-        int answer=0;
+        parent=new int [v+1];
+        for(int i=0;i<=v;++i) parent[i]=i;
 
-        for(int i=0;i<E;++i){
-            st=new StringTokenizer(br.readLine());
-            int start=Integer.parseInt(st.nextToken());
-            int end=Integer.parseInt(st.nextToken());
-            int cost=Integer.parseInt(st.nextToken());
+        PriorityQueue<Edge> pq=new PriorityQueue<>();
+        for(int i=0;i<e;++i){
+            int a=sc.nextInt();
+            int b=sc.nextInt();
+            int c=sc.nextInt();
 
-            edges.add(new Edge(start,end,cost));
+            pq.add(new Edge(a,b,c));
         }
+        int sum=0;
+        while (!pq.isEmpty()){
+            Edge cur=pq.poll();
 
-        edges.sort(new Comparator<Edge>() {
-            @Override
-            public int compare(Edge o1, Edge o2) {
-                return Integer.compare(o1.cost,o2.cost);
-            }
-        });
+            int a=getParent(cur.a);
+            int b=getParent(cur.b);
 
-        parent=new int [V+1];
-        for(int i=1;i<=V;++i){
-            parent[i]=i;
-        }
-
-        for(int i=0;i<E;++i){
-            Edge edge=edges.get(i);
-            if(!isSameParent(edge.s,edge.e)){
-                union(edge.s,edge.e);
-                answer+=edge.cost;
+            if(a!=b){
+                union(a,b);
+                sum+= cur.cost;
             }
         }
-        bw.write(answer+"\n");
 
-        br.close();
-        bw.flush();
-        bw.close();
+        System.out.println(sum);
+
     }
 
-    public static int find(int x){
-        if(parent[x]==x) return x;
-        else return parent[x]=find(parent[x]);
+    static int getParent(int a){
+        if(a==parent[a]) return a;
+
+        return parent[a]=getParent(parent[a]);
     }
 
-    public static boolean isSameParent(int x, int y){
-        x=find(x);
-        y=find(y);
-        return x==y;
-    }
+    static void union(int a, int b){
+        a=getParent(a);
+        b=getParent(b);
 
-    public static void union(int x, int y) {
-        x=find(x);
-        y=find(y);
-        if(x!=y) parent[y]=x;
+        if(a<b) parent[b]=a;
+        else parent[a]=b;
     }
 }
