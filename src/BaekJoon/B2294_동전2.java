@@ -16,11 +16,10 @@ public class B2294_동전2 {
 
         int [] dp=new int [k+1];
 
-        Arrays.fill(dp,Integer.MAX_VALUE);
+        Arrays.fill(dp,100001);
 
         for(int i=0;i<arr.length;++i){
-//            if(0<= arr[i] && arr[i]<=k)
-            dp[arr[i]]=1;
+            if(0<= arr[i] && arr[i]<=k) dp[arr[i]]=1;
         }
 
         for(int i=1;i<=k;++i){ // 10000
@@ -31,9 +30,6 @@ public class B2294_동전2 {
                 }
             }
         }
-
-        for(int i=0;i<=k;++i){
-            System.out.println(i+" "+dp[i]);
-        }
+        System.out.println(dp[k]==100001?-1:dp[k]);
     }
 }
