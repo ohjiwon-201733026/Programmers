@@ -6,71 +6,50 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class B12851_숨바꼭질2 {
-    static int n,k;
-    static int min,cnt;
+    static int N,K;
+    static boolean [] visited;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        n=sc.nextInt();
-        k=sc.nextInt();
+        N=sc.nextInt();
+        K=sc.nextInt();
+        visited=new boolean[100001];
 
-        min=Integer.MAX_VALUE;
-        cnt=0;
-
-        if(k<n){
-            System.out.println(n-k);
+        if(K<=N){
+            System.out.println(N-K);
             System.out.println(1);
+            return;
         }
         else{
-            bfs(n);
-            System.out.println(min);
+            bfs(N);
+            System.out.println(time);
             System.out.println(cnt);
-
         }
-
-
     }
-
+    static int time=Integer.MAX_VALUE;
+    static int cnt=0;
     public static void bfs(int start){
-        Queue<Node> q=new LinkedList<>();
-        boolean [] visited=new boolean[100001];
-
-        q.add(new Node(start,0));
+        Queue<int []> q=new LinkedList<>();
+        q.add(new int []{start,0});
         visited[start]=true;
 
         while (!q.isEmpty()){
-            Node cur=q.poll();
-            visited[cur.num]=true;
+            int [] cur=q.poll();
+            visited[cur[0]]=true;
 
-            if(cur.num==k){
-                if(min>cur.cnt) {
-                    min= cur.cnt;
-                    cnt=0;
-                }
-                if(min==cur.cnt) cnt++;
-                continue;
+            if(cur[0]==K){
+                if(time>cur[1]) time=cur[1];
+                if(time==cur[1]) cnt++;
             }
 
-
-            for(int i=0;i<3;++i){
-                int next=cur.num;
-                if(i==0) next+=1;
-                if(i==1) next-=1;
-                if(i==2) next*=2;
-
-                if(0<=next && next<=100000 && !visited[next]){
-                    q.add(new Node(next, cur.cnt+1));
+            for(int k=0;k<3;++k){
+                int x=cur[0];
+                if(k==0) x=x-1;
+                if(k==1) x=x+1;
+                if(k==2) x=2*x;
+                if(0<=x && x<=100000 && !visited[x]){
+                    q.add(new int []{x,cur[1]+1});
                 }
             }
-
-        }
-    }
-
-    public static class Node{
-        int num,cnt;
-
-        public Node(int num, int cnt) {
-            this.num = num;
-            this.cnt = cnt;
         }
     }
 }

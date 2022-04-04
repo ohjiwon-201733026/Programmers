@@ -1,70 +1,66 @@
 package BaekJoon;
 
-import java.util.LinkedList;
 import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class B13549_숨바꼭질3 {
 
-    static int n,k;
-
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        n=sc.nextInt();
-        k=sc.nextInt();
+        int n=sc.nextInt();
+        int k=sc.nextInt();
 
-        if(n>k){
+        if(k<=n){
             System.out.println(n-k);
+            return;
         }
         else{
-            bfs(n);
+            int answer=bfs(n,k);
+            System.out.println(answer);
         }
     }
 
-    public static void bfs(int start){
-        PriorityQueue<Node> q=new PriorityQueue<>();
-        q.offer(new Node(start,0));
-
+    public static int bfs(int start,int target){
+        PriorityQueue<Node> pq=new PriorityQueue<Node>();
+        pq.add(new Node(start,0));
         boolean [] visited=new boolean[100001];
         visited[start]=true;
 
-        while (!q.isEmpty()){
-            Node cur=q.poll();
-            visited[cur.num]=true;
+        while (!pq.isEmpty()){
+            Node cur=pq.poll();
+            visited[cur.x]=true;
 
-            if(cur.num==k){
-                System.out.println(cur.cnt);
-                return;
+            if(cur.x==target){
+                return cur.cost;
             }
 
-            for(int i=0;i<3;++i){
-                int next=cur.num;
-                if(i==0) next-=1;
-                if(i==1) next+=1;
-                if(i==2) next*=2;
-
-                if(0<=next && next<=100000 && !visited[next]){
-                    if(i==0 || i==1) q.add(new Node(next,cur.cnt+1));
-                    else if(i==2) q.add(new Node(next,cur.cnt));
-                }
+            for(int k=0;k<3;++k){
+                int x= cur.x;
+                int c=cur.cost;
+                if(k==0) { x=x-1; c=c+1; }
+                if(k==1) { x=x+1; c=c+1; }
+                if(k==2) { x=x*2; }
+                if(0<=x && x<=100000 && !visited[x])
+                    pq.add(new Node(x,c));
             }
-
         }
 
+        return -1;
     }
 
-    static class Node implements Comparable<Node>{
-        int num,cnt;
+    public static class Node implements Comparable<Node>{
+        int x;
+        int cost;
 
-        public Node(int num, int cnt) {
-            this.num = num;
-            this.cnt = cnt;
+        public Node(int x, int cost) {
+            this.x = x;
+            this.cost = cost;
         }
 
         @Override
         public int compareTo(Node o) {
-            return this.cnt-o.cnt;
+            return this.cost-o.cost;
         }
     }
+
 }
