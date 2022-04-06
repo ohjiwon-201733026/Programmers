@@ -7,59 +7,62 @@ import java.util.*;
 
 public class B1005_ACMCraft {
 
-
+    public static int n,k,w;
+    public static int [] d;
+    public static int [] cost;
+    public static ArrayList<Integer> [] topo;
+    public static int [] indegree;
     public static void main(String[] args) throws Exception {
         Scanner sc=new Scanner(System.in);
-        int tc=sc.nextInt();
+        int t=sc.nextInt();
         StringBuilder sb=new StringBuilder();
-        while (tc-->0){
-            int n=sc.nextInt();
-            int k=sc.nextInt();
-            int [] d=new int [n+1];
-            for(int i=1;i<=n;++i) d[i]=sc.nextInt();
-            ArrayList<Integer> [] arr=new ArrayList[n+1];
-            for(int i=0;i<=n;++i) arr[i]=new ArrayList<>();
-            int [] inDegree=new int [n+1];
+        while (t-->0){
+            n=sc.nextInt();
+            k=sc.nextInt();
+            d=new int [n];
+            cost=new int [n];
+            indegree=new int [n];
+            topo=new ArrayList[n];
+
+            for(int i=0;i<n;++i) topo[i]=new ArrayList<>();
+            for(int i=0;i<n;++i) d[i]=sc.nextInt();
+
             while (k-->0){
                 int a=sc.nextInt();
                 int b=sc.nextInt();
-                arr[a].add(b);
-                inDegree[b]++;
+                topo[a-1].add(b-1);
+                indegree[b-1]++;
             }
 
-            int w=sc.nextInt();
-
-            int num=topologySort(w,inDegree,arr,d,n);
-            sb.append(num+"\n");
+            w=sc.nextInt();
+            topologicalSort();
+            sb.append(cost[w-1]+"\n");
         }
         System.out.println(sb.toString());
+
     }
 
-    static int topologySort(int w, int [] inDegree,ArrayList<Integer> [] arr, int [] d, int n){
+    public static void topologicalSort(){
         Queue<Node> q=new LinkedList<>();
-        int [] cost=new int [n+1];
-        for(int i=1;i<=n;++i){
-            if(inDegree[i]==0){
-                q.add(new Node(i,d[i]));
+        for(int i=0;i<n;++i){
+            if(indegree[i]==0) {
                 cost[i]=d[i];
+                q.add(new Node(i,d[i]));
             }
         }
-        int answer=0;
 
         while (!q.isEmpty()){
             Node cur=q.poll();
 
-            for (Integer next : arr[cur.x]) {
-                cost[next]=Math.max(cost[cur.x]+d[next],cost[next]);
-                inDegree[next]--;
-                if(inDegree[next]==0)
-                q.add(new Node(next,cur.cost+d[next]));
+            for (Integer next : topo[cur.x]) {
+                cost[next]=Math.max(cost[next],cost[cur.x]+d[next]);
+                indegree[next]--;
+
+                if(indegree[next]==0)  q.add(new Node(next,cur.cost+d[next]));
             }
+
         }
-
-        return cost[w];
     }
-
 
     static class Node{
         int x,cost;
