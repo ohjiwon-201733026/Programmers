@@ -7,13 +7,13 @@ import java.util.Scanner;
 public class B1890_점프 {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
+        Scanner sc=new Scanner(System.in);
         int n=sc.nextInt();
-        int [][] map=new int [n][n];
+        int [][] arr= new int [n][n];
 
         for(int i=0;i<n;++i){
             for(int j=0;j<n;++j){
-                map[i][j]=sc.nextInt();
+                arr[i][j]=sc.nextInt();
             }
         }
 
@@ -22,19 +22,13 @@ public class B1890_점프 {
         loop:
         for(int i=0;i<n;++i){
             for(int j=0;j<n;++j){
-                if(i==n-1&& j==n-1) break loop;
-                int nextI=i+map[i][j];
-                int nextJ=j+map[i][j];
-                if(0<=nextI && nextI<n){
-                    dp[nextI][j]+=dp[i][j];
-                }
-                if(0<=nextJ && nextJ<n){
-                    dp[i][nextJ]+=dp[i][j];
-                }
+                if(i==n-1 && j==n-1) break loop;
+                int x=i+arr[i][j];
+                int y=j+arr[i][j];
+                if(0<=x && x<n) dp[x][j]+=dp[i][j];
+                if(0<=y && y<n) dp[i][y]+=dp[i][j];
             }
         }
-
-
 
         System.out.println(dp[n-1][n-1]);
     }
