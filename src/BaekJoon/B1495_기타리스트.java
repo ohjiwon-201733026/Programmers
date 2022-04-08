@@ -1,24 +1,25 @@
 package BaekJoon;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.Scanner;
 
 public class B1495_기타리스트 {
 
+    static int [][] dp;
     static int n,s,m;
     static int [] v;
-    static int [][] dp;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         n=sc.nextInt();
         s=sc.nextInt();
         m=sc.nextInt();
 
-        v=new int [n+1];
-        for(int i=1;i<=n;++i) v[i]=sc.nextInt();
+        v=new int [n];
         dp=new int [n+1][m+1];
+
+        for(int i=0;i<n;++i){
+            v[i]=sc.nextInt();
+        }
 
         nextVolume(1,s);
 
@@ -27,14 +28,13 @@ public class B1495_기타리스트 {
             if(dp[n][i]==1){
                 System.out.println(i);
                 check=false;
-                break;
             }
         }
 
         if(check) System.out.println(-1);
 
-
     }
+
     public static void nextVolume(int i, int vol){
         if(i==n+1) return;
         if(vol+v[i]<=m){
@@ -51,4 +51,6 @@ public class B1495_기타리스트 {
             }
         }
     }
+
+
 }
