@@ -14,12 +14,10 @@ public class B1495_기타리스트 {
         s=sc.nextInt();
         m=sc.nextInt();
 
-        v=new int [n];
-        dp=new int [n+1][m+1];
+        v=new int [n+1];
+        for(int i=1;i<=n;++i) v[i]=sc.nextInt();
 
-        for(int i=0;i<n;++i){
-            v[i]=sc.nextInt();
-        }
+        dp=new int [n+1][m+1];
 
         nextVolume(1,s);
 
@@ -28,6 +26,7 @@ public class B1495_기타리스트 {
             if(dp[n][i]==1){
                 System.out.println(i);
                 check=false;
+                break;
             }
         }
 
@@ -35,13 +34,14 @@ public class B1495_기타리스트 {
 
     }
 
-    public static void nextVolume(int i, int vol){
+    public static void nextVolume(int i,int vol){
         if(i==n+1) return;
         if(vol+v[i]<=m){
             if(dp[i][vol+v[i]]==0){
                 dp[i][vol+v[i]]=1;
                 nextVolume(i+1,vol+v[i]);
             }
+
         }
 
         if(vol-v[i]>=0){
@@ -49,7 +49,10 @@ public class B1495_기타리스트 {
                 dp[i][vol-v[i]]=1;
                 nextVolume(i+1,vol-v[i]);
             }
+
         }
+
+
     }
 
 

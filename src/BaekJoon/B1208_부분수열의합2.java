@@ -5,11 +5,12 @@ import java.util.Collections;
 import java.util.Scanner;
 
 public class B1208_부분수열의합2 {
-    static int n,s;
+    static int n, s;
     static long cnt;
     static ArrayList<Integer> leftList;
     static ArrayList<Integer> rightList;
-    static int [] arr;
+    static int[] arr;
+
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         n=sc.nextInt();
@@ -33,9 +34,7 @@ public class B1208_부분수열의합2 {
         if(s==0){
             System.out.println(cnt-1);
         }
-        else{
-            System.out.println(cnt);
-        }
+        else System.out.println(cnt);
     }
 
     public static void calcC(){
@@ -43,10 +42,10 @@ public class B1208_부분수열의합2 {
         int pointerR=rightList.size()-1;
 
         while (true){
-            if(pointerL==leftList.size() || pointerR<0) break;
+            if(pointerL== leftList.size() || pointerR<0) break;
 
-            int lv=leftList.get(pointerL);
-            int rv=rightList.get(pointerR);
+            int lv= leftList.get(pointerL);
+            int rv= rightList.get(pointerR);
 
             if(lv+rv==s){
                 long lc=0;
@@ -60,6 +59,7 @@ public class B1208_부분수열의합2 {
                     rc++;
                     pointerR--;
                 }
+
                 cnt+=lc*rc;
             }
 
@@ -81,5 +81,4 @@ public class B1208_부분수열의합2 {
         makeSum(sum,start+1,end,list);
         makeSum(sum+arr[start],start+1,end,list);
     }
-
 }
