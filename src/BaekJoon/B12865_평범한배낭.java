@@ -1,6 +1,5 @@
 package BaekJoon;
 
-
 import java.util.Scanner;
 
 public class B12865_평범한배낭 {
@@ -14,19 +13,18 @@ public class B12865_평범한배낭 {
         int [] w=new int [n+1];
         int [] v=new int [n+1];
 
-        for(int i=1;i<=n;++i){
+        int [][] dp=new int [n+1][k+1];
+        for(int i=1;i<=n;++i) {
             w[i]=sc.nextInt();
             v[i]=sc.nextInt();
         }
 
-        int [][] dp=new int [n+1][k+1];
         for(int i=1;i<=n;++i){
             for(int j=1;j<=k;++j){
                 dp[i][j]=dp[i-1][j];
-                if(0<=j-w[i] && j-w[i]<=k){
-                    dp[i][j]=Math.max(dp[i-1][j],dp[i-1][j-w[i]]+v[i]);
+                if(0<=j-w[i]){
+                    dp[i][j]=Math.max(dp[i][j],dp[i-1][j-w[i]]+v[i]);
                 }
-
             }
         }
 
@@ -34,6 +32,7 @@ public class B12865_평범한배낭 {
         for(int i=0;i<=k;++i){
             answer=Math.max(answer,dp[n][i]);
         }
+
         System.out.println(answer);
 
     }
