@@ -5,42 +5,46 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class B16197_두동전 {
+
     static int n,m;
     static char [][] map;
-    static boolean [][][][] visited;
-    static Coin [] coin;
+    static  boolean [][][][] visited;
+    static Coin[] coins;
     static int [] dx={0,1,0,-1};
     static int [] dy={1,0,-1,0};
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         n=sc.nextInt();
         m=sc.nextInt();
-
         map=new char [n][m];
         visited=new boolean[n][m][n][m];
-        coin=new Coin[2];
-        int coinIdx=0;
+        coins=new Coin[2];
+
+        int idx=0;
         for(int i=0;i<n;++i){
             String str=sc.next();
             for(int j=0;j<m;++j){
-                char c=str.charAt(j);
-                if(c=='o') coin[coinIdx++]=new Coin(i,j);
-                map[i][j]=c;
+                map[i][j]=str.charAt(j);
+                if(map[i][j]=='o'){
+                    coins[idx]=new Coin(i,j);
+                    idx++;
+                }
             }
         }
 
         System.out.println(bfs());
+
     }
 
-    public static int bfs(){
+    static int bfs(){
         Queue<TwoCoins> q=new LinkedList<>();
-        q.offer(new TwoCoins(coin[0].x,coin[0].y,coin[1].x, coin[1].y,0));
-        visited[coin[0].x][coin[0].y][coin[1].x][coin[1].y]=true;
+        q.add(new TwoCoins(coins[0].x,coins[0].y,coins[1].x,coins[1].y,0));
+        visited[coins[0].x][coins[0].y][coins[1].x][coins[1].y]=true;
 
         while (!q.isEmpty()){
             TwoCoins cur=q.poll();
 
-            if(cur.cnt>=10) break;
+            if(cur.cnt>=10) return -1;
 
             for(int k=0;k<4;++k){
                 int nx1=cur.x1+dx[k];
@@ -48,33 +52,42 @@ public class B16197_두동전 {
                 int nx2=cur.x2+dx[k];
                 int ny2=cur.y2+dy[k];
 
-                if(!canMoveCoin(nx1,ny1)){
-                    nx1=cur.x1; ny1=cur.y1;
-                }
-                if(!canMoveCoin(nx2,ny2)){
-                    nx2=cur.x2; ny2=cur.y2;
+                if(!canMove(nx1,ny1)){
+                    nx1=cur.x1;
+                    ny1=cur.y1;
                 }
 
-                int flag=0;
-                if(nx1>=0 && ny1>=0 && nx1<n && ny1<m) flag++;
-                if(nx2>=0 && ny2>=0 && nx2<n && ny2<m) flag++;
+                if(!canMove(nx2,ny2)){
+                    nx2=cur.x2;
+                    ny2=cur.y2;
+                }
+
+                int flag=0; // 보드 위에 있는 동전 수
+                if(in(nx1,ny1)) flag++;
+                if(in(nx2,ny2)) flag++;
 
                 if(flag==1) return cur.cnt+1;
-                else if(flag==2 && !visited[nx1][ny1][nx2][ny2]){
+
+                if(flag==2 && !visited[nx1][ny1][nx2][ny2]){
+                    q.add(new TwoCoins(nx1,ny1,nx2,ny2,cur.cnt+1));
                     visited[nx1][ny1][nx2][ny2]=true;
-                    q.offer(new TwoCoins(nx1,ny1,nx2,ny2, cur.cnt+1));
                 }
             }
         }
+
         return -1;
     }
 
-    public static boolean canMoveCoin(int nx, int ny){
-        if(nx>=0 && ny>=0 && nx<n && ny<m && map[nx][ny]=='#') return false;
+    static boolean in(int x, int y){
+        return 0<=x && x<n && 0<=y && y<m;
+    }
+
+    static boolean canMove(int x,int y){
+        if(0<=x && x<n && 0<=y && y<m && map[x][y]=='#') return false;
         return true;
     }
 
-    public static class TwoCoins{
+    static class TwoCoins{
         int x1,y1,x2,y2;
         int cnt;
 
@@ -87,7 +100,7 @@ public class B16197_두동전 {
         }
     }
 
-    public static class Coin{
+    static class Coin{
         int x,y;
 
         public Coin(int x, int y) {

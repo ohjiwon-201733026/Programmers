@@ -6,12 +6,10 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class B9470_Strahler순서 {
-
-    static int [] inDegree;
-    static ArrayList<Integer>[] list;
-    static int [][] arr;
     static int m;
-    static boolean [] visited;
+    static ArrayList<Integer> [] arr;
+    static int [][] d;
+    static int [] indegree;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         int t=sc.nextInt();
@@ -21,63 +19,61 @@ public class B9470_Strahler순서 {
             m=sc.nextInt();
             int p=sc.nextInt();
 
-            list=new ArrayList[m+1];
-            inDegree=new int [m+1];
-            visited=new boolean [m+1];
-            arr=new int [m+1][2];
-            for(int i=0;i<=m;++i) list[i]=new ArrayList<>();
+            arr=new ArrayList[m+1];
+            d=new int [m+1][2];
+            indegree=new int [m+1];
+
+            for(int i=0;i<=m;++i) arr[i]=new ArrayList<>();
 
             while (p-->0){
                 int a=sc.nextInt();
                 int b=sc.nextInt();
-                list[a].add(b);
-                inDegree[b]++;
+                arr[a].add(b);
+                indegree[b]++;
             }
 
-            bfs();
-            int max=0;
-            for (int[] a : arr) {
-                max=Math.max(max,a[0]);
-            }
+            unionFind();
 
-            System.out.println(k+" "+max);
+            int ans=0;
+            for(int i=1;i<=m;++i){
+                ans=Math.max(ans,d[i][0]);
+            }
+            System.out.println(k+" "+ans);
 
         }
     }
 
-    static void bfs(){
+    public static void unionFind(){
         Queue<Integer> q=new LinkedList<>();
         for(int i=1;i<=m;++i){
-            if(inDegree[i]==0) {
-                arr[i][0]=1;
+            if(indegree[i]==0) {
                 q.add(i);
-                visited[i]=true;
+                d[i][0]=1;
             }
         }
 
         while (!q.isEmpty()){
             int num=q.poll();
 
-            for (Integer next : list[num]) {
-                if(arr[next][0]==arr[num][0]){
-                    arr[next][1]++;
-                    inDegree[next]--;
-                }
-                else if(arr[next][0]<arr[num][0]){
-                    arr[next][0]=arr[num][0];
-                    arr[next][1]=1;
-                    inDegree[next]--;
-                }
-                else if(arr[next][0]>arr[num][0]){
-                    inDegree[next]--;
+            for (Integer next : arr[num]) {
+                if(d[next][0]==d[num][0]){
+                    d[next][1]++;
                 }
 
-                if(inDegree[next]==0){
-                    if(arr[next][1]>=2) arr[next][0]++;
+                if(d[next][0]<d[num][0]){
+                    d[next][0]=d[num][0];
+                    d[next][1]=1;
+                }
+
+                indegree[next]--;
+                if(indegree[next]==0){
+                    if(d[next][1]>=2) d[next][0]++;
                     q.add(next);
                 }
-            }
 
+            }
         }
     }
+
+
 }
