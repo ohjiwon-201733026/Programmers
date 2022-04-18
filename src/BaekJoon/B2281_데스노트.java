@@ -4,41 +4,40 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class B2281_데스노트 {
-
     static int n,m;
-    static int [] names;
     static int [][] grid;
+    static int [] arr;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-
         n=sc.nextInt();
         m=sc.nextInt();
-        names=new int [n];
-        grid=new int [1000][1002]; // idx, 이름 수
+        arr=new int [n];
+        grid=new int [1000][1002];
 
-        for(int i=0;i<n;++i) names[i]=sc.nextInt();
+        for(int i=0;i<n;++i) arr[i]=sc.nextInt();
 
-        int idx=1;
-        int cnt=names[0]+1; // 이름 수
-        for(int i=0;i< grid.length;++i) Arrays.fill(grid[i],-1);
+        for(int i=0;i<n;++i) Arrays.fill(grid[i],-1);
 
-        System.out.println(check(idx,cnt));
+        System.out.println(recur(1,arr[0]+1));
+
     }
 
-    public static int check(int idx, int cnt){
-        if(idx==n) return 0;
-        int ans=grid[idx][cnt];
-        if(ans!=-1) return ans;
+    public static int recur(int i, int cnt){
+        if(i==n) return 0;
+        if(grid[i][cnt]!=-1) return grid[i][cnt];
 
-        // 1. 다음 줄에 쓰는 경우
-        int left=m-cnt+1; // 남은 칸 수
-        ans=check(idx+1,names[idx]+1)+(left*left);
+        int ans=grid[i][cnt];
+        // 1. 다음 칸에 넣을 때
+        int left= m-cnt+1;
+        ans=(left*left)+recur(i+1,arr[i]+1);
 
-        // 2. 현재 줄에 이어쓰는 경우
-       if(cnt +names[idx]<=m){
-            ans=Math.min(check(idx+1,cnt+names[idx]+1),ans);
+        // 2. 현재 칸에 넣을 때
+        if(cnt+arr[i]<=m){
+            ans=Math.min(ans,recur(i+1,cnt+arr[i]+1));
         }
-        grid[idx][cnt]=ans;
-        return ans;
+
+        return grid[i][cnt]=ans;
     }
+
+
 }

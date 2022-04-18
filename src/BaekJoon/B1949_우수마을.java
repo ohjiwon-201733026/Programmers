@@ -1,22 +1,23 @@
 package BaekJoon;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
-public class B2553_사회망서비스 {
-
+public class B1949_우수마을 {
     static int n;
+    static boolean [] visited;
     static ArrayList<Integer> [] arr;
     static int [][] dp;
-    static boolean [] visited;
+    static int [] cost;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         n=sc.nextInt();
-
+        visited=new boolean[n+1];
         arr=new ArrayList[n+1];
         dp=new int [n+1][2];
-        visited=new boolean[n+1];
+        cost=new int [n+1];
+
+        for(int i=1;i<=n;++i) cost[i]=sc.nextInt();
         for(int i=0;i<=n;++i) arr[i]=new ArrayList<>();
 
         for(int i=0;i<n-1;++i){
@@ -26,20 +27,21 @@ public class B2553_사회망서비스 {
             arr[b].add(a);
         }
 
-        dfs(1);
-        System.out.println(Math.min(dp[1][0],dp[1][1]));
+        recur(1);
+
+        System.out.println(Math.max(dp[1][0],dp[1][1]));
     }
 
-    public static void dfs(int number){
-        visited[number]=true;
-        dp[number][0]=0;
-        dp[number][1]=1;
+    static void recur(int cur){
+        visited[cur]=true;
+        dp[cur][0]=0;
+        dp[cur][1]=cost[cur];
 
-        for (Integer child : arr[number]) {
+        for (int child : arr[cur]) {
             if(!visited[child]){
-                dfs(child);
-                dp[number][0]+=dp[child][1];
-                dp[number][1]+=Math.min(dp[child][0],dp[child][1]);
+                recur(child);
+                dp[cur][0]+=Math.max(dp[child][0],dp[child][1]);
+                dp[cur][1]+=dp[child][0];
             }
         }
     }

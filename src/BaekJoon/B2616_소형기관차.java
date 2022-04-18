@@ -9,22 +9,22 @@ public class B2616_소형기관차 {
         int n=sc.nextInt();
         int [] train=new int [n+1];
         int [] sum=new int [n+1];
-
-        for(int i=1;i<=n;++i){
+        int [][] dp=new int [4][n+1];
+        for(int i=1;i<=n;++i) {
             train[i]=sc.nextInt();
             sum[i]=sum[i-1]+train[i];
         }
-
         int max=sc.nextInt();
-        int [][] dp=new int [4][n+1];
 
         for(int i=1;i<4;++i){
             for(int j=i*max;j<=n;++j){
-                dp[i][j]=Math.max(dp[i][j-1]
-                        ,dp[i-1][j-max]+sum[j]-sum[j-max]);
+                dp[i][j]=Math.max(dp[i][j-1],dp[i-1][j-max]+sum[j]-sum[j-max]);
             }
         }
 
-        System.out.println(dp[3][n]);
+        int answer=0;
+        for(int i=0;i<=n;++i) answer=Math.max(answer,dp[3][i]);
+
+        System.out.println(answer);
     }
 }
