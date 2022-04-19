@@ -20,6 +20,7 @@ public class B10775_공항 {
             if(emptyGate==0) break;
 
             ans++;
+            System.out.println(g+" "+emptyGate);
             union(emptyGate,emptyGate-1);
         }
 
@@ -27,7 +28,7 @@ public class B10775_공항 {
     }
 
     public static int find(int x){
-        if (x==parent[x]) return x;
+        if(x==parent[x]) return x;
 
         return parent[x]=find(parent[x]);
     }
@@ -35,6 +36,7 @@ public class B10775_공항 {
     public static void union(int x, int y){
         x=find(x);
         y=find(y);
+
         if(x!=y) parent[x]=y;
     }
 }
