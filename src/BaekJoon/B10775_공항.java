@@ -6,34 +6,33 @@ public class B10775_공항 {
     static int [] parent;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        int G=sc.nextInt();
-        int P=sc.nextInt();
+        int g=sc.nextInt(); // 게이트 수
+        int p=sc.nextInt(); // 비행기 수
 
-        parent=new int [G+1];
-        for(int i=1;i<=G;++i) parent[i]=i;
+        parent=new int [g+1];
+        for(int i=0;i<=g;++i) parent[i]=i;
+        int answer=0;
 
-        int ans=0;
-        for(int i=0;i<P;++i){
-            int g=sc.nextInt();
-            int emptyGate=find(g);
+        while (p-->0){
+            int gate=sc.nextInt();
+            int emptyGate=find(gate);
 
             if(emptyGate==0) break;
 
-            ans++;
-            System.out.println(g+" "+emptyGate);
+            answer++;
             union(emptyGate,emptyGate-1);
         }
 
-        System.out.println(ans);
+        System.out.println(answer);
     }
 
-    public static int find(int x){
+    static int find(int x){
         if(x==parent[x]) return x;
 
         return parent[x]=find(parent[x]);
     }
 
-    public static void union(int x, int y){
+    static void union(int x, int y){
         x=find(x);
         y=find(y);
 

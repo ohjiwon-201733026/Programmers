@@ -17,30 +17,30 @@ public class 호텔방배정 {
             Assertions.assertEquals(answer[i],result[i]);
         }
     }
-
     static HashMap<Long,Long> map;
     public long[] solution(long k, long [] room_number){
+
+        long [] answer=new long[room_number.length];
         map=new HashMap<>();
-        int n= room_number.length;
-        long [] answer=new long[n];
-        for(int i=0;i<n;++i){
-            answer[i]=findEmptyRoom(room_number[i]);
+        for(int i=0;i<room_number.length;++i){
+            answer[i]=roomAlloc(room_number[i]);
         }
 
         return answer;
     }
 
-    private long findEmptyRoom(long room){
-        if(!map.containsKey(room)){ // 즉시 방 배정
+    public long roomAlloc(long room){
+        if(!map.containsKey(room)){
             map.put(room,room+1);
             return room;
         }
 
-        long nextRoom=map.get(room);
-        long emptyRoom=findEmptyRoom(nextRoom);
+        long emptyRoom=roomAlloc(map.get(room));
         map.put(room,emptyRoom);
         return emptyRoom;
     }
+
+
 
 
 
