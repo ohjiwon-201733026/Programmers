@@ -16,42 +16,42 @@ public class 파괴되지않은건물 {
     }
 
    public int solution(int [][] board, int [][] skill){
-        int answer=0;
-        int n=board.length;
-        int m=board[0].length;
-        int [][] prefix_arr=new int [n+1][m+1];
+       int answer=0;
+       int n=board.length;
+       int m=board[0].length;
+       int [][] sum=new int [n+1][m+1];
 
-       for (int[] row : skill) {
-           int type=row[0];
-           int degree=type==1?-row[5]:row[5];
-           int r1=row[1];
-           int c1=row[2];
-           int r2=row[3];
-           int c2=row[4];
+       for (int[] arr : skill) {
+           int type = arr[0] == 1 ? -1 : 1;
+           int r1 = arr[1], c1 = arr[2];
+           int r2 = arr[3], c2 = arr[4];
+           int degree = type * arr[5];
 
-           prefix_arr[r1][c1]+=degree;
-           prefix_arr[r1][c2+1]+=-degree;
-           prefix_arr[r2+1][c1]+=-degree;
-           prefix_arr[r2+1][c2+1]+=degree;
+           sum[r1][c1] += degree;
+           sum[r1][c2 + 1] -= degree;
+           sum[r2+1][c1]-=degree;
+           sum[r2+1][c2+1]+=degree;
        }
 
-       for(int y=1;y<n;++y){
-           for(int x=0;x<m;++x){
-               prefix_arr[y][x]+=prefix_arr[y-1][x];
+       for(int i=0;i<=n;++i){
+           for(int j=1;j<=m;++j){
+               sum[i][j]+=sum[i][j-1];
            }
        }
 
-       for(int x=1;x<m;++x){
-           for(int y=0;y<n;++y){
-               prefix_arr[y][x]+=prefix_arr[y][x-1];
+       for(int i=1;i<=n;++i){
+           for(int j=0;j<=m;++j){
+               sum[i][j]+=sum[i-1][j];
            }
        }
 
        for(int i=0;i<n;++i){
            for(int j=0;j<m;++j){
-               if(board[i][j]+prefix_arr[i][j]>0) answer++;
+               if(sum[i][j]+board[i][j]>0) answer++;
            }
        }
+
+
 
        return answer;
    }
