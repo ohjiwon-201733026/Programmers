@@ -6,16 +6,16 @@ import java.util.Stack;
 public class B9935_문자열폭발 {
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        String str = sc.next();
-        String pattern = sc.next();
+        Scanner sc=new Scanner(System.in);
+        String s=sc.next();
+        String pattern=sc.next();
 
-        Stack<Character> stack = new Stack<>();
-        for (int i = 0; i < str.length(); ++i) {
-            char c = str.charAt(i);
+        Stack<Character> stack=new Stack<>();
+        for(int i=0;i<s.length();++i){
+            char c=s.charAt(i);
             stack.push(c);
+            if(stack.size()>=pattern.length()) {
 
-            if (stack.size() >= pattern.length()) {
                 boolean isSame = true;
 
                 for (int idx = 0; idx < pattern.length(); ++idx) {
@@ -34,16 +34,13 @@ public class B9935_문자열폭발 {
                 }
             }
         }
-
-        if (stack.size() == 0) System.out.println("FRULA");
-        else {
-            StringBuilder sb = new StringBuilder();
+        if(stack.size()==0) System.out.println("FRULA");
+        else{
+            StringBuilder sb=new StringBuilder();
             for (Character character : stack) {
                 sb.append(character);
             }
-
             System.out.println(sb.toString());
-
         }
     }
 }
