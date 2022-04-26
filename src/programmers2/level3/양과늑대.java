@@ -4,6 +4,7 @@ import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -14,40 +15,42 @@ public class 양과늑대 {
     public void test(){
         Assertions.assertEquals(5,solution(new int []{0,0,1,1,1,0,1,0,1,0,1,1},new int [][]{{0,1},{1,2},{1,4},{0,8},{8,7},{9,10},{9,11},{4,3},{6,5},{4,6},{8,9}}));
     }
-    static ArrayList<Integer> [] childs;
-    static int max=0;
-    static int solution(int [] info, int [][] edges){
-        childs=new ArrayList[info.length];
+
+    static ArrayList<Integer> [] arr;
+    static int ans=0;
+    public int solution(int [] info, int [][] edges){
+        arr=new ArrayList[info.length];
+        for(int i=0;i<info.length;++i) arr[i]=new ArrayList<>();
+
         for (int[] edge : edges) {
             int parent=edge[0];
             int child=edge[1];
-            if(childs[parent]==null) childs[parent]=new ArrayList<>();
-            childs[parent].add(child);
+            arr[parent].add(child);
         }
 
         ArrayList<Integer> available=new ArrayList<>();
         available.add(0);
+
         dfs(0,0,0,available,info);
 
-        return max;
+        return ans;
     }
 
-    static void  dfs(int sheepNum, int wolfNum,int cur,ArrayList<Integer> available, int [] info){
-        sheepNum+=info[cur]^1;
-        wolfNum+=info[cur];
+    void dfs(int cur, int sheep, int wolf, ArrayList<Integer> available, int [] info){
 
-        max=Math.max(sheepNum,max);
+        sheep+=info[cur]==0?1:0;
+        wolf+=info[cur];
+        if(wolf>=sheep) return;
+        ans=Math.max(ans,sheep);
 
-        if(sheepNum<=wolfNum) return;
+        ArrayList<Integer> newAvailable=new ArrayList<>();
+        newAvailable.addAll(available);
 
-        ArrayList<Integer> copyAvailable=new ArrayList<>();
-        copyAvailable.addAll(available);
+        if(arr[cur]!=null) newAvailable.addAll(arr[cur]);
+        newAvailable.remove(Integer.valueOf(cur));
 
-        if(childs[cur]!=null) copyAvailable.addAll(childs[cur]);
-        copyAvailable.remove(Integer.valueOf(cur));
-
-        for (Integer next : copyAvailable) {
-            dfs(sheepNum,wolfNum,next,copyAvailable,info);
+        for (Integer next : newAvailable) {
+            dfs(next,sheep,wolf,newAvailable,info);
         }
     }
 }
