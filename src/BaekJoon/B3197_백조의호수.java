@@ -9,24 +9,26 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 
 public class B3197_백조의호수 {
+
     static int R,C;
-    static Queue<Node> waterQ;
     static Queue<Node> q;
     static Queue<Node> nextQ;
+    static Queue<Node> waterQ;
+    static Node[] swan;
+    static boolean [][] visited;
     static char [][] map;
-    static Node [] swan;
     static int [] dx={0,1,0,-1};
     static int [] dy={1,0,-1,0};
-    static boolean [][] visited;
+
     static class Node{
         int r,c;
-        int cnt;
 
         public Node(int r, int c) {
             this.r = r;
             this.c = c;
         }
     }
+
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
@@ -44,14 +46,10 @@ public class B3197_백조의호수 {
         int swanIdx = 0;
         for(int r = 0 ; r < R ; ++r) {
             char[] line = br.readLine().toCharArray();
-            for(int c = 0 ; c < C ; ++c) {
-                map[r][c] = line[c];
-                if(map[r][c] == 'L') {
-                    swan[swanIdx++] = new Node(r, c);
-                }
-                if(map[r][c] != 'X') {
-                    waterQ.offer(new Node(r, c));
-                }
+            for(int c=0;c< line.length;++c){
+                map[r][c]=line[c];
+                if(map[r][c]=='L') swan[swanIdx++]=new Node(r,c);
+                if(map[r][c]!='X') waterQ.add(new Node(r,c));
             }
         }
 
@@ -60,7 +58,6 @@ public class B3197_백조의호수 {
 
         int day=0;
         boolean meet=false;
-
         while (true){
             nextQ=new LinkedList<>();
 
@@ -76,23 +73,20 @@ public class B3197_백조의호수 {
                     int nx=now.r+dx[k];
                     int ny=now.c+dy[k];
 
-                    if(nx<0 || nx>=R || ny<0 || ny>=C) continue;
-                    if(visited[nx][ny]) continue;
+                    if(nx<0 || nx>=R || ny<0 || ny>=C || visited[nx][ny]) continue;
                     visited[nx][ny]=true;
 
-                    if(map[nx][ny]=='X') {
-                        nextQ.add(new Node(nx,ny)); // 다음에 탐색할 부분
+                    if(map[nx][ny]=='X'){
+                        nextQ.add(new Node(nx,ny));
                         continue;
                     }
 
-                    q.add(new Node(nx,ny)); // 현재 탐색(물) 부분
+                    q.add(new Node(nx,ny));
                 }
-
             }
 
+            q=nextQ;
             if(meet) break;
-            q=nextQ; // 다음 탐색부분 변경해주기
-
             int size=waterQ.size();
 
             for(int i=0;i<size;++i){
@@ -111,13 +105,9 @@ public class B3197_백조의호수 {
                 }
             }
             day++;
-
         }
 
         System.out.println(day);
-
-
-
 
     }
 

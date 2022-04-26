@@ -1,38 +1,38 @@
 package BaekJoon;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class B7579_앱 {
 
     public static void main(String[] args) {
-       Scanner sc=new Scanner(System.in);
-       int appNum,needMemory;
-       int [][] memoryList;
-       int costMax=10000;
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int M=sc.nextInt();
+        int ans=Integer.MAX_VALUE;
+        int [] m=new int [n];
+        int [] c=new int [n];
+        int [][] dp=new int [n][100001];
+        for(int i=0;i<n;++i) m[i]=sc.nextInt();
+        for(int i=0;i<n;++i) c[i]=sc.nextInt();
 
-       int [] cost=new int [costMax+1];
-       int answer=0;
+        for(int i=0;i<n;++i){
+            int cost=c[i];
+            int memory=m[i];
 
-       appNum=sc.nextInt();
-       needMemory=sc.nextInt();
-
-       memoryList=new int [2][appNum];
-        Arrays.fill(cost,-1);
-        cost[0]=0;
-
-        for(int x=0;x<2;++x){
-            for(int y=0;y<appNum;++y){
-                memoryList[x][y]=sc.nextInt();
-            }
-        }
-
-        for(int x=0;x<appNum;++x){
-            for(int y=costMax;y>=memoryList[1][x];y--){
-                if(cost[y-memoryList[1][x]]!=-1){
-                    cost[y]=Math.max(cost[y],cost[y-memoryList[1][x]+memoryList[0][x]]);
+            for(int j=0;j<=10000;++j){
+                if(i==0){
+                    if(j>=cost) dp[i][j]=memory;
                 }
+                else{
+                    dp[i][j]=dp[i-1][j];
+                    if(j>=cost) dp[i][j]=Math.max(dp[i-1][j-cost]+memory,dp[i-1][j]);
+                }
+
+                if(dp[i][j]>=M) ans=Math.min(ans,j);
             }
         }
+        System.out.println(ans);
     }
 }

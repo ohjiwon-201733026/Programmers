@@ -8,41 +8,31 @@ public class B1141_접두사 {
         Scanner sc=new Scanner(System.in);
         int n=sc.nextInt();
         String [] arr=new String[n];
+        for(int i=0;i<n;++i) arr[i]=sc.next();
 
-        for(int i=0;i<n;++i){
-            arr[i]=sc.next();
-        }
+        Arrays.sort(arr, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return o2.length()-o1.length();
+            }
+        });
 
-        Set<String> set=new HashSet<>();
+        HashSet<String> set=new HashSet<>();
+        set.add(arr[0]);
 
-        for(int i=0;i<n;++i){
-            String origin=arr[i];
-            int cnt=0;
-            for(int j=0;j<n;++j){
-                if(i!=j){
-                    String comp=arr[j];
+        for (String prefix : arr) {
 
-                    if(origin.length()<=comp.length()){
-                        for(int k=0;k<origin.length();++k){
-                            if(origin.equals(comp)){
-                                cnt++;
-                                break;
-                            }
-                            if(origin.charAt(k)!=comp.charAt(k)){
-                                cnt++;
-                                break;
-                            }
-                        }
-                    }else{
-                        cnt++;
-                    }
+            boolean flag=true;
+            for (String s : set) {
+                if(s.startsWith(prefix)) {
+                    flag=false;
+                    break;
                 }
             }
 
-            if(cnt==n-1){
-                set.add(origin);
-            }
+            if(flag) set.add(prefix);
         }
+
         System.out.println(set.size());
 
     }
