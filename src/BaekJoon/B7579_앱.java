@@ -9,30 +9,37 @@ public class B7579_앱 {
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         int n=sc.nextInt();
-        int M=sc.nextInt();
-        int ans=Integer.MAX_VALUE;
-        int [] m=new int [n];
-        int [] c=new int [n];
+        int m=sc.nextInt();
+        int [] mem=new int [n];
+        int [] cost=new int [n];
+
+        for(int i=0;i<n;++i) mem[i]=sc.nextInt();
+        for(int i=0;i<n;++i) cost[i]=sc.nextInt();
+
         int [][] dp=new int [n][100001];
-        for(int i=0;i<n;++i) m[i]=sc.nextInt();
-        for(int i=0;i<n;++i) c[i]=sc.nextInt();
 
         for(int i=0;i<n;++i){
-            int cost=c[i];
-            int memory=m[i];
-
-            for(int j=0;j<=10000;++j){
-                if(i==0){
-                    if(j>=cost) dp[i][j]=memory;
+            int memory=mem[i];
+            int c=cost[i];
+            if(i==0){
+                dp[i][c]=memory;
+                continue;
+            }
+            for(int j=0;j<=100000;++j){
+                dp[i][j]=dp[i-1][j];
+                if(j-c>=0){
+                    dp[i][j]=Math.max(dp[i][j],dp[i-1][j-c]+memory);
                 }
-                else{
-                    dp[i][j]=dp[i-1][j];
-                    if(j>=cost) dp[i][j]=Math.max(dp[i-1][j-cost]+memory,dp[i-1][j]);
-                }
-
-                if(dp[i][j]>=M) ans=Math.min(ans,j);
             }
         }
-        System.out.println(ans);
+        int ans=Integer.MAX_VALUE;
+        for(int i=0;i<=100000;++i){
+            if(dp[n-1][i]>=m) {
+                System.out.println(i);
+                break;
+            }
+        }
+
+
     }
 }
