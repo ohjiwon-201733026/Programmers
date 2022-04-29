@@ -7,71 +7,64 @@ import java.util.*;
 
 public class B3190_뱀 {
 
-   static int n,d=0;
-   static int [][] map;
-   static Map<Integer,String> moveInfo;
-   static int [] dx={1,0,-1,0};
-   static int [] dy={0,1,0,-1};
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st=null;
-        n=Integer.parseInt(br.readLine());
-        int k=Integer.parseInt(br.readLine());
+    static int n,d=0;
+    static int [][] map;
+    static Map<Integer,String> moveInfo;
+    static int [] dx={1,0,-1,0};
+    static int [] dy={0,1,0,-1};
+    static Queue<Integer> snake;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        n=sc.nextInt();
+        int K=sc.nextInt();
+        snake=new LinkedList<>();
         map=new int [n][n];
         moveInfo=new HashMap<>();
 
-        for(int i=0;i<k;++i){
-            st=new StringTokenizer(br.readLine());
-
-            int a=Integer.parseInt(st.nextToken())-1;
-            int b=Integer.parseInt(st.nextToken())-1;
-            map[a][b]=1;
+        while (K-->0){
+            int x=sc.nextInt()-1;
+            int y=sc.nextInt()-1;
+            map[x][y]=1;
         }
 
-        int l=Integer.parseInt(br.readLine());
-        for(int i=0;i<l;++i){
-            st=new StringTokenizer(br.readLine());
-            int time=Integer.parseInt(st.nextToken());
-            String direction=st.nextToken();
-            moveInfo.put(time,direction);
+        int l=sc.nextInt();
+        while (l-->0){
+            int sec=Integer.parseInt(sc.next());
+            String dir=sc.next();
+            moveInfo.put(sec,dir);
         }
 
-        solve();
+        System.out.println(move());
+
     }
 
-    static void solve(){
-        Queue<Integer> q= new LinkedList<>();
-        q.add(0);
-        int time=0;
-        int px=0;
-        int py=0;
+    static int move(){
+        int sec=0;
+        snake.add(0);
+        int px=0;int py=0;
 
         while (true){
             int nx=px+dx[d];
             int ny=py+dy[d];
-            time++;
+            sec++;
 
-            if(nx<0 || ny<0 || nx>n-1 || ny>n-1) break; // 벽에 부딪히면 끝
+            if(snake.contains(ny*n+nx)) break;
+            if(nx<0 || nx>n-1 || ny<0 || ny>n-1) break;
 
-            if(q.contains(ny*n+nx)) break; // 자기 몸에 닿으면 끝
-
-            // 이동 가능한 경우
-            if(map[ny][nx]==1){ // 사과 먹는 경우
+            if(map[ny][nx]==1){
                 map[ny][nx]=0;
-                q.add(ny*n+nx); // 머리만 이동
-            } // 빈칸 경우
+                snake.add(ny*n+nx);
+            }
             else{
-                q.add(ny*n+nx);
-                q.poll(); // 꼬리도 이동
+                snake.add(ny*n+nx);
+                snake.poll();
             }
 
-            // 방향 전환
-            if(moveInfo.containsKey(time)){
-                String data=moveInfo.get(time);
-                if(data.equals("D")){
-                    d+=1;
-                    if(d==4) d=0;
+            if(moveInfo.containsKey(sec)){
+                String data=moveInfo.get(sec);
+                if(data.equals("D")) {
+                    d += 1;
+                    if (d == 4) d = 0;
                 }
                 else{
                     d-=1;
@@ -82,6 +75,10 @@ public class B3190_뱀 {
             px=nx;
             py=ny;
         }
-        System.out.println(time);
+
+        return sec;
+
     }
+
+
 }

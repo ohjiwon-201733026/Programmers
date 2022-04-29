@@ -3,98 +3,70 @@ package BaekJoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.lang.reflect.Array;
+import java.util.*;
 
 public class B1167_트리의지름 {
 
-    static int n;
-    static int result = 0;
-    static int max_node = 0;
-    static ArrayList<Edge>[] nodes;
+    static int v;
+    static ArrayList<int[]> [] arr;
+    static boolean [] visited;
+    static int [] dist;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        v=sc.nextInt();
 
-    static class Edge{ // 트리(그래프) 저장용
-        int end;
-        int weight;
+        arr=new ArrayList[v+1];
+        for(int i=0;i<=v;++i) arr[i]=new ArrayList<>();
 
-        public Edge(int end, int weight) {
-            this.end = end;
-            this.weight = weight;
-        }
-    }
-
-    static class Node{ // BFS 탐색용
-        int idx;
-        int cnt;
-
-        public Node(int idx, int cnt) {
-            this.idx = idx;
-            this.cnt = cnt;
-        }
-    }
-
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        n = Integer.parseInt(br.readLine());
-
-        nodes = new ArrayList[n + 1];
-        for (int i = 1; i <= n; i++) {
-            nodes[i] = new ArrayList<>();
-        }
-
-        for (int i = 1; i <= n; i++) {
-            String[] inputs = br.readLine().split(" ");
-            int idx = Integer.parseInt(inputs[0]);
-            int j = 1;
-            while(true){
-                int v_num = Integer.parseInt(inputs[j]);
-                if(v_num == -1) break;
-                int weight = Integer.parseInt(inputs[j+1]);
-
-                nodes[idx].add(new Edge(v_num, weight));
-
-                j += 2;
+        for(int i=1;i<=v;++i){
+            int ver=sc.nextInt();
+            while (true){
+                int a=sc.nextInt();
+                if(a==-1) break;
+                int b=sc.nextInt();
+                arr[ver].add(new int []{a,b});
             }
         }
 
-        bfs(1); // 임의의 노드 1
-        bfs(max_node); // 임의의 노드 1에서 가장 먼 노드부터 bfs 시작
+        int [] start=dijkstra(1);
 
-        System.out.println(result);
+        int [] answer=dijkstra(start[0]);
 
+        System.out.println(answer[1]);
     }
 
+    public static int[] dijkstra(int start){
+        PriorityQueue<int[]> q=new PriorityQueue<>((o1, o2) -> o1[1]-o2[1]);
+        visited=new boolean[v+1];
+        dist=new int [v+1];
+        Arrays.fill(dist,987654321);
+        q.add(new int []{start,0});
+        dist[start]=0;
 
-    public static void bfs(int start) {
+        while (!q.isEmpty()){
+            int [] cur=q.poll();
 
-        boolean[] visited = new boolean[n + 1];
+            if(visited[cur[0]]) continue;
+            visited[cur[0]]=true;
 
-        Queue<Node> q = new LinkedList<>();
-        q.add(new Node(start, 0));
-        visited[start] = true;
-
-        int max_cnt = 0;
-
-        while (!q.isEmpty()) {
-            Node now = q.poll();
-
-            if(now.cnt>max_cnt){
-                max_cnt = now.cnt;	// 가장 멀리 떨어진 노드의 거리
-                max_node = now.idx;	// 가장 멀리 떨어진 노드의 번호
-            }
-
-            for (Edge e : nodes[now.idx]) {
-                if(!visited[e.end]){
-                    visited[e.end] = true;
-                    q.add(new Node(e.end, now.cnt + e.weight));
-
+            for (int[] next : arr[cur[0]]) {
+                if(!visited[next[0]] &&dist[next[0]] >dist[cur[0]]+next[1] ){
+                    dist[next[0]] = dist[cur[0]]+next[1];
+                    q.add(new int []{next[0],dist[next[0]]});
                 }
             }
-
         }
 
-        result = Math.max(result, max_cnt);
+        int max=0;
+        int maxIdx=0;
+        for(int i=1;i<=v;++i){
+            if(max<dist[i]){
+                max=dist[i];
+                maxIdx=i;
+            }
+        }
 
+        return new int []{maxIdx,max};
     }
 }
