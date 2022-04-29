@@ -3,97 +3,92 @@ package BaekJoon;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Scanner;
+import java.util.*;
 
 public class B1043_거짓말 {
 
     static int [] parent;
-    public static void main(String[] args) throws IOException {
-        BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
-        String [] inputs=br.readLine().split(" ");
-
-        int n=Integer.parseInt(inputs[0]);
-        int m=Integer.parseInt(inputs[1]);
-
-        boolean [] people_know=new boolean[n+1];
-
-        HashSet<Integer> [] parties=new HashSet[m+1];
-        for(int i=1;i<=m;++i){
-            parties[i]=new HashSet<>();
-        }
-
-        inputs=br.readLine().split(" ");
-        int known_num=Integer.parseInt(inputs[0]);
-
-        for(int i=1;i<=known_num;++i){
-            int tmp=Integer.parseInt(inputs[i]);
-            people_know[tmp]=true;
-        }
+    static int knownMin;
+    static ArrayList<Integer> [] party;
+    public static void main(String[] args) {
+        Scanner sc=new Scanner(System.in);
+        int n=sc.nextInt();
+        int m=sc.nextInt();
 
         parent=new int [n+1];
-        for(int i=1;i<=n;++i){
-            parent[i]=i;
+        party=new ArrayList[m];
+        for(int i=0;i<=n;++i) parent[i]=i;
+
+        int t=sc.nextInt();
+        if(t==0) {
+            System.out.println(m);
+            return;
+        }
+        int [] known=new int [t];
+        for(int i=0;i<known.length;++i) known[i]=sc.nextInt();
+
+        Arrays.sort(known);
+        knownMin=known[0];
+
+        for(int i=1;i<t;++i){
+            union(known[i-1],known[i]);
         }
 
-        for(int p=1;p<=m;++p){
-            inputs=br.readLine().split(" ");
-            int party_num=Integer.parseInt(inputs[0]);
+        for(int i=0;i<m;++i){
+            int k=sc.nextInt();
 
-            if(party_num<=1){
-                parties[p].add(Integer.parseInt(inputs[1]));
-                continue;
-            }
+            party[i]=new ArrayList<>();
+            int pre=0;
+            for(int j=0;j<k;++j) {
+                int a=sc.nextInt();
+                if (j == 0) pre = a;
+                else {
+                    int b = a;
+                    union(pre, b);
 
-            for(int j=1;j<party_num;++j){
-                int a=Integer.parseInt(inputs[j]);
-                int b=Integer.parseInt(inputs[j+1]);
-                if(find(a)!=find(b)) union(a,b);
-
-                parties[p].add(a);
-                parties[p].add(b);
-            }
-        }
-
-        boolean [] visited=new boolean[n+1];
-        for(int i=1;i<=n;++i){
-            if(people_know[i] && !visited[i]) {
-                int root = find(i);
-                for (int j = 1; j <= n; ++j) {
-                    if (find(j) == root) {
-                        people_know[j] = true;
-                        visited[j] = true;
-                    }
                 }
+
+                party[i].add(a);
             }
+
         }
 
-        int result=0;
-        for(int i=1;i<=m;++i){
-            boolean flag=false;
-            for(int person:parties[i]){
-                if(people_know[person]){
-                    flag=true;
+        int cnt=0;
+        knownMin=parent[known[0]];
+        for (ArrayList<Integer> arr : party) {
+
+            boolean flag=true;
+
+            for (Integer num : arr) {
+                if(parent[num]==knownMin){
+                    flag=false;
                     break;
                 }
             }
-            if(!flag) result++;
+
+            if(flag) cnt++;
         }
-        System.out.println(result);
+
+        System.out.println(cnt);
+
 
     }
 
-    public static int find(int idx){
-        if(parent[idx]==idx) return idx;
+    public static int getParent(int x){
+        if(x==parent[x]) return x;
 
-        parent[idx]=find(parent[idx]);
-        return parent[idx];
+        return parent[x]=getParent(parent[x]);
     }
 
     public static void union(int a, int b){
-        int parent_b=find(b);
-        parent[parent_b]=a;
+        a=getParent(a);
+        b=getParent(b);
+
+        if(a<=b){
+            parent[b]=a;
+        }
+        else{
+            parent[a]=b;
+        }
     }
 }

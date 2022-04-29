@@ -33,7 +33,7 @@ public class B13260_구슬탈출2 {
             }
         }
 
-        move(1,new Node(rX,rY,bX,bY,0));
+//        move(0,new Node(rX,rY,bX,bY,0));
 
         visited=new boolean[N][M][N][M];
         System.out.println(bfs(rX,rY,bX,bY));
@@ -46,7 +46,6 @@ public class B13260_구슬탈출2 {
 
         while (!q.isEmpty()){
             Node cur=q.poll();
-            System.out.println(cur.toString());
 
             if(cur.cnt>10) return -1;
             if(map[cur.rX][cur.rY]=='O') return cur.cnt;
@@ -73,83 +72,132 @@ public class B13260_구슬탈출2 {
         if(dir==0){ // 오른
             boolean flag=false;
             while ( nextRy<M && map[nextRx][nextRy]!='#' ){
+                if(map[nextRx][nextRy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextRx+=dx[dir];
                 nextRy+=dy[dir];
             }
-            nextRx -= dx[dir];
-            nextRy -= dy[dir];
-
+            if(!flag) {
+                nextRx -= dx[dir];
+                nextRy -= dy[dir];
+            }
+            flag=false;
             while ( nextBy<M && map[nextBx][nextBy]!='#'){
+                if(map[nextBx][nextBy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextBx+=dx[dir];
                 nextBy+=dy[dir];
             }
-            nextBx-=dx[dir];
-            nextBy-=dy[dir];
-
-            if(nextRx==nextBx && nextRy==nextBy){
+            if(!flag) {
+                nextBx -= dx[dir];
+                nextBy -= dy[dir];
+            }
+            if(nextRx==nextBx && nextRy==nextBy && map[nextRx][nextRy]!='O'){
                 if(cur.rY<cur.bY) nextRy-=dy[dir];
                 else nextBy-=dy[dir];
             }
         }
         
         if(dir==1){ // 아래
+            boolean flag=false;
             while (nextRx<N&& map[nextRx][nextRy]!='#'){
+                if(map[nextRx][nextRy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextRx+=dx[dir];
                 nextRy+=dy[dir];
             }
-            nextRx-=dx[dir];
-            nextRy-=dy[dir];
-
+            if(!flag) {
+                nextRx -= dx[dir];
+                nextRy -= dy[dir];
+            }
+            flag=false;
             while (nextBx<N && map[nextBx][nextBy]!='#'){
+                if(map[nextBx][nextBy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextBx+=dx[dir];
                 nextBy+=dy[dir];
             }
-            nextBx-=dx[dir];
-            nextBy-=dy[dir];
-
-            if(nextRx==nextBx && nextRy==nextBy){
+            if(!flag) {
+                nextBx -= dx[dir];
+                nextBy -= dy[dir];
+            }
+            if(nextRx==nextBx && nextRy==nextBy&& map[nextRx][nextRy]!='O'){
                 if(cur.rX<cur.bX) nextRx-=dx[dir];
                 else nextBx-=dx[dir];
             }
         }
         
         if(dir==2){ // 왼
+            boolean flag=false;
             while (0<=nextRx&&map[nextRx][nextRy]!='#'){
+                if(map[nextRx][nextRy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextRx+=dx[dir];
                 nextRy+=dy[dir];
             }
-            nextRx-=dx[dir];
-            nextRy-=dy[dir];
+            if(!flag) {
+                nextRx -= dx[dir];
+                nextRy -= dy[dir];
+            }
 
+            flag=false;
             while (0<=nextBx && map[nextBx][nextBy]!='#' ){
+                if(map[nextBx][nextBy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextBx+=dx[dir];
                 nextBy+=dy[dir];
             }
-            nextBx-=dx[dir];
-            nextBy-=dy[dir];
-
-            if(nextRx==nextBx && nextRy==nextBy){
+            if(!flag) {
+                nextBx -= dx[dir];
+                nextBy -= dy[dir];
+            }
+            if(nextRx==nextBx && nextRy==nextBy&& map[nextRx][nextRy]!='O'){
                 if(cur.rY<cur.bY) nextBy-=dy[dir];
                 else nextRy-=dy[dir];
             }
         }
 
         if(dir==3){ // 위
+            boolean flag=false;
             while (nextRx>=0&& map[nextRx][nextRy]!='#'){
+                if(map[nextRx][nextRy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextRx+=dx[dir];
                 nextRy+=dy[dir];
             }
-            nextRx-=dx[dir];
-            nextRy-=dy[dir];
+            if(!flag) {
+                nextRx -= dx[dir];
+                nextRy -= dy[dir];
+            }
 
+            flag=false;
             while (nextBx>=0 && map[nextBx][nextBy]!='#'){
+                if(map[nextBx][nextBy]=='O'){
+                    flag=true;
+                    break;
+                }
                 nextBx+=dx[dir];
                 nextBy+=dy[dir];
             }
-            nextBx-=dx[dir];
-            nextBy-=dy[dir];
-
-            if(nextRx==nextBx && nextRy==nextBy){
+            if(!flag) {
+                nextBx -= dx[dir];
+                nextBy -= dy[dir];
+            }
+            if(nextRx==nextBx && nextRy==nextBy&& map[nextRx][nextRy]!='O'){
                 if(cur.rX<cur.bX) nextBx-=dx[dir];
                 else nextRx-=dx[dir];
             }
