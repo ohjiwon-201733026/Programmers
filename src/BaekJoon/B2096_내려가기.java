@@ -9,40 +9,33 @@ public class B2096_내려가기 {
     public static void main(String[] args) throws IOException {
        Scanner sc=new Scanner(System.in);
        int n=sc.nextInt();
-       int [] maxDp=new int [3];
-       int [] minDp=new int [3];
+       int [][] maxDp=new int [n][3];
+       int [][] minDp=new int [n][3];
+       int [][] arr=new int [n][3];
 
-       for(int i=0;i<n;++i){
-           int a=sc.nextInt();
-           int b=sc.nextInt();
-           int c=sc.nextInt();
+        for(int i=0;i<n;++i){
+            for(int j=0;j<3;++j){
+                arr[i][j]=sc.nextInt();
+            }
+        }
 
-           if(i==0){
-               maxDp[0]=a; minDp[0]=a;
-               maxDp[1]=b; minDp[1]=b;
-               maxDp[2]=c; minDp[2]=c;
-               continue;
-           }
-
-           int maxLeft=maxDp[0],maxRight=maxDp[2];
-           int minLeft=minDp[0],minRight=minDp[2];
-
-           // 0
-           maxDp[0]=Math.max(maxDp[0],maxDp[1])+a;
-           minDp[0]=Math.min(minDp[0],minDp[1])+a;
-
-           // 2
-           maxDp[2]=Math.max(maxDp[1],maxDp[2])+c;
-           minDp[2]=Math.min(minDp[1],minDp[2])+c;
-
-           // 1
-           maxDp[1]=Math.max(maxLeft,Math.max(maxDp[1],maxRight))+b;
-           minDp[1]=Math.min(minLeft,Math.min(minDp[1],minRight))+b;
-
+       for(int i=0;i<3;++i){
+           maxDp[0][i]=minDp[0][i]=arr[0][i];
        }
 
 
-        System.out.print(Math.max(maxDp[0],Math.max(maxDp[1],maxDp[2]))+" ");
-        System.out.println(Math.min(minDp[0],Math.min(minDp[1],minDp[2])));
+       for(int i=1;i<n;++i){
+           maxDp[i][0]=Math.max(maxDp[i-1][0],maxDp[i-1][1])+arr[i][0];
+           minDp[i][0]=Math.min(minDp[i-1][0],minDp[i-1][1])+arr[i][0];
+
+           maxDp[i][1]=Math.max(maxDp[i-1][0],Math.max(maxDp[i-1][1],maxDp[i-1][2]))+arr[i][1];
+           minDp[i][1]=Math.min(minDp[i-1][0],Math.min(minDp[i-1][1],minDp[i-1][2]))+arr[i][1];
+
+           maxDp[i][2]=Math.max(maxDp[i-1][1],maxDp[i-1][2])+arr[i][2];
+           minDp[i][2]=Math.min(minDp[i-1][1],minDp[i-1][2])+arr[i][2];
+       }
+
+        System.out.print(Math.max(maxDp[n-1][0],Math.max(maxDp[n-1][1],maxDp[n-1][2]))+" ");
+        System.out.println(Math.min(minDp[n-1][0],Math.min(minDp[n-1][1],minDp[n-1][2])));
     }
 }

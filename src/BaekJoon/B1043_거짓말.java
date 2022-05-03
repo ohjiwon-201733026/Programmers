@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 
 public class B1043_거짓말 {
-
     static int [] parent;
 
     public static void main(String[] args) throws IOException {
@@ -44,6 +43,7 @@ public class B1043_거짓말 {
             for(int j=1;j<party_num;++j){
                 int a=Integer.parseInt(inputs[j]);
                 int b=Integer.parseInt(inputs[j+1]);
+
                 if(find(a)!=find(b)) union(a,b);
 
                 parties[p].add(a);
@@ -68,13 +68,13 @@ public class B1043_거짓말 {
 
         for(int i=1;i<=m;++i){
             boolean flag=false;
+
             for (Integer person : parties[i]) {
                 if(people_know[person]){
                     flag=true;
                     break;
                 }
             }
-
             if(!flag) result++;
         }
         System.out.println(result);
@@ -87,8 +87,8 @@ public class B1043_거짓말 {
     }
 
     public static void union(int a, int b){
-        int parent_b=find(b);
         int parent_a=find(a);
+        int parent_b=find(b);
         parent[parent_b]=parent_a;
     }
 }
