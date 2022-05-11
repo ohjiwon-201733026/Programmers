@@ -1,6 +1,7 @@
 package BaekJoon.Greedy;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class B13164_행복유치원 {
@@ -8,28 +9,24 @@ public class B13164_행복유치원 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		Scanner sc=new Scanner(System.in);
-		int N=sc.nextInt();
-		int K=sc.nextInt();
-		Integer [] arr=new Integer[N];
-		int [] diff=new int [N-1];
+		int n=sc.nextInt();
+		int k=sc.nextInt();
+		int [] arr=new int [n];
+		PriorityQueue<Integer> pq=new PriorityQueue<>();
 
-		for(int i=0;i<N;++i) {
+		for(int i=0;i<n;++i){
 			arr[i]=sc.nextInt();
 		}
 
-		for(int i=0;i<N-1;++i) {
-			diff[i]=arr[i+1]-arr[i];
+		for(int i=0;i<n-1;++i){
+			pq.add(arr[i+1]-arr[i]);
+		}
+		int sum=0;
+		for(int i=0;i<n-k;++i){
+			sum+=pq.poll();
 		}
 
-		Arrays.sort(diff);
-
-		int result=0;
-		for(int i=0;i<N-K;++i) {
-			result+=diff[i];
-		}
-
-		System.out.println(result);
-
+		System.out.println(sum);
 
 	}
 
