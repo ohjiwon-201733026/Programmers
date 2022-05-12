@@ -4,43 +4,53 @@ import java.util.Scanner;
 
 public class B14888_연산자끼워넣기 {
 
-    public static int [] A;
-    public static long min,max;
+    static int [] A;
+    static int n;
+    static int min,max;
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
-        int n=sc.nextInt();
+        n=sc.nextInt();
         A=new int [n];
-        max=Integer.MIN_VALUE;
-        min=Integer.MAX_VALUE;
-
         for(int i=0;i<n;++i) A[i]=sc.nextInt();
 
         int [] op=new int [4];
         for(int i=0;i<4;++i) op[i]=sc.nextInt();
+        min=Integer.MAX_VALUE;
+        max=Integer.MIN_VALUE;
 
-        recur(1,A[0],op);
-
+        backTracking(A[0],op,1);
         System.out.println(max);
         System.out.println(min);
 
     }
 
-    public static void recur(int depth,long sum,int [] op){
-        if(depth==A.length){
-            max=Math.max(sum,max);
-            min=Math.min(sum,min);
+    public static void backTracking(int sum, int [] op,int depth){
+        if(depth==n){
+            min=Math.min(min,sum);
+            max=Math.max(max,sum);
             return;
         }
 
-        for(int i=0;i<4;++i){
-            if(op[i]>0){
-                op[i]-=1;
-                if(i==0) recur(depth+1,sum+A[depth],op);
-                if(i==1) recur(depth+1,sum-A[depth],op);
-                if(i==2) recur(depth+1,sum*A[depth],op);
-                if(i==3) recur(depth+1,sum/A[depth],op);
-                op[i]+=1;
-            }
+        if(op[0]>0) {
+            op[0]-=1;
+            backTracking(sum+A[depth],op,depth+1);
+            op[0]+=1;
         }
+        if(op[1]>0) {
+            op[1]-=1;
+            backTracking(sum-A[depth],op,depth+1);
+            op[1]+=1;
+        }
+        if(op[2]>0) {
+            op[2]-=1;
+            backTracking(sum*A[depth],op,depth+1);
+            op[2]+=1;
+        }
+        if(op[3]>0) {
+            op[3]-=1;
+            backTracking(sum/A[depth],op,depth+1);
+            op[3]+=1;
+        }
+
     }
 }

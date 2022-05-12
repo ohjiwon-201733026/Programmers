@@ -11,19 +11,21 @@ public class B13164_행복유치원 {
 		Scanner sc=new Scanner(System.in);
 		int n=sc.nextInt();
 		int k=sc.nextInt();
-		int [] arr=new int [n];
-		PriorityQueue<Integer> pq=new PriorityQueue<>();
 
-		for(int i=0;i<n;++i){
+		int [] arr=new int [n];
+		for(int i=0;i<arr.length;++i){
 			arr[i]=sc.nextInt();
 		}
 
+		int [] diff=new int [n-1];
 		for(int i=0;i<n-1;++i){
-			pq.add(arr[i+1]-arr[i]);
+			diff[i]=arr[i+1]-arr[i];
 		}
+
+		Arrays.sort(diff);
 		int sum=0;
 		for(int i=0;i<n-k;++i){
-			sum+=pq.poll();
+			sum+=diff[i];
 		}
 
 		System.out.println(sum);
